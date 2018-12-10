@@ -3,25 +3,45 @@ package net
 import (
 	"net/http"
 
+	"github.com/dkowalsky/brieefly/log"
+
 	"github.com/dkowalsky/brieefly/config"
-	"github.com/dkowalsky/brieefly/models"
+	"github.com/dkowalsky/brieefly/database"
 )
 
 // Router - hub for networking
 type Router struct {
+	mux      *http.ServeMux
 	config   *config.Config
-	database *model.Database
+	database *database.Database
 }
 
 // NewRouter - creates a new router
-func NewRouter(database *model.Database, config *config.Config) *Router {
-	return &Router{database: database, config: config}
+func NewRouter(db *database.Database, config *config.Config) *Router {
+	mux := http.NewServeMux()
+	return &Router{database: db, config: config, mux: mux}
+}
+
+func RegularCallback(w http.ResponseWriter, r *http.Request) {
+	log.Info("Performing callback.")
+}
+
+func LogMiddleware() Middleware {
+	return func(f http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			log.Info("Performing middleware.")
+			f(w, r)
+		}
+	}
 }
 
 // Run - starts the server
 func (r *Router) Run() {
-	//http.List
-	http.ListenAndServeTLS(config.ServerParams.)
+	path := config.MyPath(r.config)
+	r.mux.HandleFunc("/", WithStack(RegularCallback, LogMiddleware()))
+	err := http.ListenAndServeTLS(path, r.config.Server.Certificate, r.config.Server.Key, r.mux)
+	log.Error(err)
+
 	// go r.cmh.Run()
 
 	// r.muxRouter.HandleFunc("/account", r.GetAccountWithEmail).Methods("GET").Queries("email", "{email:.*}")
@@ -53,9 +73,4 @@ func (r *Router) Run() {
 	// if err != nil {
 	// 	panic(err)
 	// }
-}
-
-// SetHeaders - sets necessarry headers
-func SetHeaders(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json")
 }

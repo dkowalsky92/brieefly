@@ -2,7 +2,10 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
+
+	"github.com/dkowalsky/brieefly/log"
 )
 
 // Environment - defines environment
@@ -59,6 +62,7 @@ func NewConfig(environment Environment) (*Config, error) {
 	}
 
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
 
@@ -66,8 +70,15 @@ func NewConfig(environment Environment) (*Config, error) {
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&config)
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
-
+	log.Info(config)
 	return &config, nil
+}
+
+// MyPath - generates a path with parameters from given config
+func MyPath(config *Config) string {
+	address := fmt.Sprintf("%s:%s", config.Server.IP, config.Server.Port)
+	return address
 }
