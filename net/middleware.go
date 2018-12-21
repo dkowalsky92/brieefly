@@ -12,7 +12,3 @@ func WithStack(f http.HandlerFunc, middlewares ...Middleware) http.HandlerFunc {
 	}
 	return f
 }
-
-// func Next(middleware Middleware) Middleware {
-//
-// }

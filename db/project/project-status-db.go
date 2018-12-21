@@ -1,0 +1,60 @@
+package project
+
+import (
+	"database/sql"
+	"fmt"
+
+	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/log"
+	"github.com/dkowalsky/brieefly/model"
+)
+
+// GetAll - Get all agencies
+func GetAll(db *db.DB) ([]model.Project, error) {
+	projects := []model.Project{}
+	var err error
+
+	db.WithTransaction(func(tx *sql.Tx) error {
+		rows, qerr := tx.Query(`SELECT s.name FROM Project p
+								RIGHT JOIN Status s ON p.id_status = s.id_status;`)
+		err = qerr
+		if err != nil {
+			log.Error(fmt.Sprintf("Error occurred: %+v", err))
+			return err
+		}
+		for rows.Next() {
+			var p model.Project
+			var o model.Offer
+			var c model.Company
+			var s model.ProjectStatus
+			err = rows.Scan(&p.ID,
+				&p.Name,
+				&p.Type,
+				&o.Salary,
+				&p.DateCreated,
+				&o.DateDeadline,
+				&p.SubpageCount,
+				&p.OverallProgress,
+				&p.ImageURL,
+				&c.Name,
+				&c.ImageURL,
+				&s.Name)
+
+			if err != nil {
+				switch err {
+				case sql.ErrNoRows:
+					log.Error(fmt.Sprintf("No rows found"))
+				default:
+					log.Error(fmt.Sprintf("Error occurred: %+v", err))
+				}
+				return err
+			}
+
+			projects = append(projects, p)
+		}
+
+		return nil
+	})
+
+	return projects, err
+}

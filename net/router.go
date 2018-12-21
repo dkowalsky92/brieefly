@@ -2,45 +2,74 @@ package net
 
 import (
 	"net/http"
-
-	"github.com/dkowalsky/brieefly/log"
+	"time"
 
 	"github.com/dkowalsky/brieefly/config"
-	"github.com/dkowalsky/brieefly/database"
+	"github.com/dkowalsky/brieefly/ctrl/agency"
+	"github.com/dkowalsky/brieefly/ctrl/project"
+	"github.com/dkowalsky/brieefly/ctrl/user"
+	"github.com/dkowalsky/brieefly/db"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 )
 
 // Router - hub for networking
 type Router struct {
-	mux      *http.ServeMux
+	mux      *chi.Mux
 	config   *config.Config
-	database *database.Database
+	database *db.DB
 }
 
-// NewRouter - creates a new router
-func NewRouter(db *database.Database, config *config.Config) *Router {
-	mux := http.NewServeMux()
+// BrieeflyRouter - creates a new router
+func BrieeflyRouter(db *db.DB, config *config.Config) *Router {
+	mux := chi.NewRouter()
+	mux.Use(middleware.Timeout(60 * time.Second))
+	mux.Use(middleware.RequestID)
+	mux.Use(middleware.RealIP)
+	mux.Use(middleware.Logger)
+	mux.Use(middleware.Recoverer)
+
+	mux.Mount("/api/projects", project.NewRouter(db).Mux)
+	mux.Mount("/api/users", user.NewRouter(db).Mux)
+	mux.Mount("/api/agencies", agency.NewRouter(db).Mux)
+
 	return &Router{database: db, config: config, mux: mux}
-}
-
-func RegularCallback(w http.ResponseWriter, r *http.Request) {
-	log.Info("Performing callback.")
-}
-
-func LogMiddleware() Middleware {
-	return func(f http.HandlerFunc) http.HandlerFunc {
-		return func(w http.ResponseWriter, r *http.Request) {
-			log.Info("Performing middleware.")
-			f(w, r)
-		}
-	}
 }
 
 // Run - starts the server
 func (r *Router) Run() {
 	path := config.MyPath(r.config)
-	r.mux.HandleFunc("/", WithStack(RegularCallback, LogMiddleware()))
-	err := http.ListenAndServeTLS(path, r.config.Server.Certificate, r.config.Server.Key, r.mux)
-	log.Error(err)
+
+	http.ListenAndServe(path, r.mux)
+	// r.mux.HandleFunc("/", net.WithStack(RegularCallback, LogMiddleware()))
+	// err := http.ListenAndServe(path, r.mux)
+	// log.Error(err)
+
+	// Set a timeout value on the request context (ctx), that will signal
+	// through ctx.Done() that the request has timed out and further
+	// processing should be stopped.
+
+	// RESTy routes for "articles" resource
+	// r.Route("/user", func(r chi.Router) {
+	// 	r.With(paginate).Get("/", listArticles)                           // GET /articles
+	// 	r.With(paginate).Get("/{month}-{day}-{year}", listArticlesByDate) // GET /articles/01-16-2017
+
+	// 	r.Post("/", createArticle)       // POST /articles
+	// 	r.Get("/search", searchArticles) // GET /articles/search
+
+	// 	// Regexp url parameters:
+	// 	r.Get("/{articleSlug:[a-z-]+}", getArticleBySlug) // GET /articles/home-is-toronto
+
+	// 	// Subrouters:
+	// 	r.Route("/{articleID}", func(r chi.Router) {
+	// 		r.Use(ArticleCtx)
+	// 		r.Get("/", getArticle)       // GET /articles/123
+	// 		r.Put("/", updateArticle)    // PUT /articles/123
+	// 		r.Delete("/", deleteArticle) // DELETE /articles/123
+	// 	})
+	// })
+
+	// Mount the admin sub-router
 
 	// go r.cmh.Run()
 

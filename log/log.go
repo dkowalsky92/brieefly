@@ -64,7 +64,7 @@ func Debug(args ...interface{}) {
 		return
 	}
 
-	logger.stdlogger.Println(args)
+	logger.stdlogger.Println(args...)
 }
 
 // Info - slightly less verbose logging level
@@ -73,7 +73,7 @@ func Info(args ...interface{}) {
 		return
 	}
 
-	logger.stdlogger.Println(args)
+	logger.stdlogger.Println(args...)
 }
 
 // Warning - logging verbosity level displaying only crucial warnings and errors
@@ -82,7 +82,7 @@ func Warning(args ...interface{}) {
 		return
 	}
 
-	logger.stdlogger.Println(args)
+	logger.stdlogger.Println(args...)
 }
 
 // Error - logging verbosity level displaying only errors
@@ -91,5 +91,5 @@ func Error(args ...interface{}) {
 		return
 	}
 
-	logger.stdlogger.Println(args)
+	logger.stdlogger.Println(args...)
 }
