@@ -4,10 +4,10 @@ import "github.com/dkowalsky/brieefly/db"
 
 // CustomFeature - a custom feature model
 type CustomFeature struct {
-	ID          int64        `json:"id_custom_feature"`
-	Name        string       `json:"name"`
-	Description string       `json:"description"`
-	ProjectID   db.NullInt64 `json:"id_project"`
+	ID          string        `json:"id_custom_feature"`
+	Name        string        `json:"name"`
+	Description string        `json:"description"`
+	ProjectID   db.NullString `json:"id_project"`
 }
 
 // -- Table: Custom_feature

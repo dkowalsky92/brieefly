@@ -15,11 +15,23 @@ func Get(db *db.DB, id string) (*model.User, error) {
 	var err error
 
 	db.WithTransaction(func(tx *sql.Tx) error {
-		row := tx.QueryRow("SELECT * FROM user WHERE id_user = ?", id)
+		row := tx.QueryRow(`SELECT u.id_user,
+							u.login,
+							u.email, 
+							u.name, 
+							u.surname, 
+							u.phone, 
+							u.website_url, 
+							u.image_url, 
+							u.description, 
+							u.date_of_birth, 
+							u.date_last_logged, 
+							u.date_created, 
+							u.date_last_modified FROM User u
+							WHERE u.id_user = ?;`, id)
+
 		err = row.Scan(&user.ID,
 			&user.Login,
-			&user.Password,
-			&user.PasswordFailAttempts,
 			&user.Email,
 			&user.Name,
 			&user.Surname,
@@ -29,7 +41,8 @@ func Get(db *db.DB, id string) (*model.User, error) {
 			&user.Description,
 			&user.DateOfBirth,
 			&user.DateLastLogged,
-			&user.DateCreated)
+			&user.DateCreated,
+			&user.DateLastModified)
 		if err != nil {
 			switch err {
 			case sql.ErrNoRows:
@@ -52,7 +65,19 @@ func GetAll(db *db.DB) ([]model.User, error) {
 	var err error
 
 	db.WithTransaction(func(tx *sql.Tx) error {
-		rows, qerr := tx.Query("SELECT * FROM user")
+		rows, qerr := tx.Query(`SELECT u.id_user,
+								u.login,
+								u.email, 
+								u.name, 
+								u.surname, 
+								u.phone, 
+								u.website_url, 
+								u.image_url, 
+								u.description, 
+								u.date_of_birth, 
+								u.date_last_logged, 
+								u.date_created, 
+								u.date_last_modified FROM User u;`)
 		err = qerr
 		if err != nil {
 			switch err {
@@ -66,19 +91,17 @@ func GetAll(db *db.DB) ([]model.User, error) {
 			var user model.User
 			err := rows.Scan(&user.ID,
 				&user.Login,
-				&user.Password,
-				&user.PasswordFailAttempts,
 				&user.Email,
 				&user.Name,
 				&user.Surname,
-				&user.Phone,
 				&user.Phone,
 				&user.WebsiteURL,
 				&user.ImageURL,
 				&user.Description,
 				&user.DateOfBirth,
 				&user.DateLastLogged,
-				&user.DateCreated)
+				&user.DateCreated,
+				&user.DateLastModified)
 			if err != nil {
 				switch err {
 				default:
@@ -101,7 +124,19 @@ func Insert(db *db.DB, user *model.User) (*model.User, error) {
 	var err error
 
 	db.WithTransaction(func(tx *sql.Tx) error {
-		stmt, ierr := tx.Prepare("INSERT INTO user (id_user, email, password_fail_attempts, login, name, surname, phone, website_url, image_url, description, date_of_birth, date_last_logged, date_last_modified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+		stmt, ierr := tx.Prepare(`INSERT INTO user (id_user,
+								  email, 
+								  password_fail_attempts, 
+								  login, 
+								  name, 
+								  surname, 
+								  phone, 
+								  website_url, 
+								  image_url, 
+								  description, 
+								  date_of_birth, 
+								  date_last_logged, 
+								  date_last_modified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
 		err = ierr
 		if err != nil {
 
@@ -109,7 +144,6 @@ func Insert(db *db.DB, user *model.User) (*model.User, error) {
 
 		_, err = stmt.Exec(user.ID,
 			user.Email,
-			user.PasswordFailAttempts,
 			user.Login,
 			user.Name,
 			user.Surname,

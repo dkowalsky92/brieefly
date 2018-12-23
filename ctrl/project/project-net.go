@@ -7,7 +7,6 @@ import (
 	"github.com/dkowalsky/brieefly/db"
 	"github.com/dkowalsky/brieefly/db/project"
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 )
 
 // Router - a router with all user related routes
@@ -16,21 +15,20 @@ type Router struct {
 	DB  *db.DB
 }
 
-// NewRouter - creates a user subrouter to attach to the main router
+// NewRouter - creates a project subrouter to attach to the main router
 func NewRouter(db *db.DB) *Router {
 	r := &Router{DB: db}
 
 	mux := chi.NewRouter()
-	mux.Use(middleware.RequestID)
-	mux.Use(middleware.RealIP)
-	mux.Use(middleware.Logger)
-	mux.Use(middleware.Recoverer)
 
 	mux.Get("/{id}", r.GetAllForUserID)
 
-	// mainMux.Route("/{id}", func(sr chi.Router) {
-	// 	sr.Get("/", r.Get)
-	// })
+	mux.Route("/name", func(sr chi.Router) {
+		sr.Get("/{id}", r.GetNameForID)
+	})
+	mux.Mount("/cms", newCMSRouter(db).mux)
+	mux.Mount("/status", newStatusRouter(db).mux)
+	mux.Mount("/features", newFeatureRouter(db).mux)
 
 	r.Mux = mux
 
@@ -67,6 +65,22 @@ func (r *Router) GetAllForUserID(w http.ResponseWriter, req *http.Request) {
 	}
 
 	_, err = w.Write(bytes)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+}
+
+// GetNameForID - get project name for project id
+func (r *Router) GetNameForID(w http.ResponseWriter, req *http.Request) {
+	id := chi.URLParam(req, "id")
+	name, err := project.GetNameForID(r.DB, id)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	err = json.NewEncoder(w).Encode(name)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return

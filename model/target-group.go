@@ -2,13 +2,14 @@ package model
 
 import "github.com/dkowalsky/brieefly/db"
 
+// TargetGroup - a target group model
 type TargetGroup struct {
-	ID          int64         `json:"id_target"`
+	ID          string        `json:"id_target"`
 	Name        string        `json:"name"`
 	Description db.NullString `json:"description"`
 	AgeMin      db.NullInt64  `json:"age_min"`
 	AgeMax      db.NullInt64  `json:"age_max"`
-	ProjectID   db.NullInt64  `json:"id_project"`
+	ProjectID   db.NullInt64  `json:"project"`
 }
 
 // -- Table: Target_group

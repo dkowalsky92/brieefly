@@ -1,11 +1,10 @@
 package model
 
-// ProjectFeature - a custom feature model
-type ProjectFeature struct {
-	ID          int64    `json:"id_custom_feature"`
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Project     *Project `json:"project"`
+// Feature - a custom feature model
+type Feature struct {
+	ID          string `json:"id_feature"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 // -- Table: Feature

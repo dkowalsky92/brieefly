@@ -4,7 +4,7 @@ import "github.com/dkowalsky/brieefly/db"
 
 // CMS - a cms model
 type CMS struct {
-	ID          int64         `json:"id_cms"`
+	ID          string        `json:"id_cms"`
 	Name        string        `json:"name"`
 	Description db.NullString `json:"description"`
 }

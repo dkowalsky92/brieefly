@@ -27,7 +27,7 @@ func GetAllForUserID(db *db.DB, id string) ([]model.Project, error) {
 									   c.name, 
 									   c.image_url, 
 									   s.name FROM Project p
-									   INNER JOIN ClientProject up ON p.id_project = up.id_project
+									   INNER JOIN Client_project up ON p.id_project = up.id_project
 									   INNER JOIN Offer o ON p.id_project = o.id_project 
 									   INNER JOIN Agency a ON o.id_company = a.id_company 
 									   INNER JOIN Status s ON p.id_status = s.id_status 
@@ -73,4 +73,29 @@ func GetAllForUserID(db *db.DB, id string) ([]model.Project, error) {
 	})
 
 	return projects, err
+}
+
+// GetNameForID - gets the project's name for project id
+func GetNameForID(_db *db.DB, id string) (*db.NullString, error) {
+	var name db.NullString
+	var err error
+
+	_db.WithTransaction(func(tx *sql.Tx) error {
+		row := tx.QueryRow(`SELECT name FROM Project WHERE id_project = ?;`, id)
+		err = row.Scan(&name)
+
+		if err != nil {
+			switch err {
+			case sql.ErrNoRows:
+				log.Error(fmt.Sprintf("No rows found"))
+			default:
+				log.Error(fmt.Sprintf("Error occurred: %+v", err))
+			}
+			return err
+		}
+
+		return nil
+	})
+
+	return &name, err
 }

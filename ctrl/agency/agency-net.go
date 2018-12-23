@@ -7,7 +7,6 @@ import (
 	"github.com/dkowalsky/brieefly/db"
 	"github.com/dkowalsky/brieefly/db/agency"
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 )
 
 // Router - a router with all user related routes
@@ -21,16 +20,8 @@ func NewRouter(db *db.DB) *Router {
 	r := &Router{DB: db}
 
 	mux := chi.NewRouter()
-	mux.Use(middleware.RequestID)
-	mux.Use(middleware.RealIP)
-	mux.Use(middleware.Logger)
-	mux.Use(middleware.Recoverer)
 
 	mux.Get("/", r.GetAll)
-
-	// mainMux.Route("/{id}", func(sr chi.Router) {
-	// 	sr.Get("/", r.Get)
-	// })
 
 	r.Mux = mux
 

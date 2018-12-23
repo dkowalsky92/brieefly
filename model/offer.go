@@ -8,13 +8,13 @@ import (
 
 // Offer - an offer model
 type Offer struct {
-	ID           int64        `json:"id_offer"`
-	Salary       int64        `json:"salary"`
-	IsChosen     bool         `json:"is_chosen"`
-	DateDeadline time.Time    `json:"date"`
-	DateCreated  time.Time    `json:"date_created"`
-	ProjectID    db.NullInt64 `json:"id_project"`
-	CompanyID    int64        `json:"id_company"`
+	ID           string        `json:"id_offer"`
+	Salary       int64         `json:"salary"`
+	IsChosen     bool          `json:"is_chosen"`
+	DateDeadline time.Time     `json:"date"`
+	DateCreated  time.Time     `json:"date_created"`
+	ProjectID    db.NullString `json:"id_project"`
+	CompanyID    string        `json:"id_company"`
 }
 
 // -- Table: Offer

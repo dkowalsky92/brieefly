@@ -20,6 +20,7 @@ func NewRouter(db *db.DB) *Router {
 	r := &Router{DB: db}
 
 	mux := chi.NewRouter()
+
 	mux.Get("/", r.GetAll)
 
 	mux.Route("/{id}", func(sr chi.Router) {
