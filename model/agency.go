@@ -1,6 +1,6 @@
 package model
 
-import "github.com/dkowalsky/brieefly/db"
+import "github.com/brieefly/db"
 
 // Agency - an agency model
 type Agency struct {

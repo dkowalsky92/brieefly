@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/dkowalsky/brieefly/log"
+	"github.com/brieefly/log"
 )
 
 // Environment - defines environment

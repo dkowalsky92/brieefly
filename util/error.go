@@ -1,6 +1,6 @@
 package util
 
-import "github.com/dkowalsky/brieefly/log"
+import "github.com/brieefly/log"
 
 // ErrorHandler - an interface allowing custom
 type ErrorHandler interface {

@@ -1,10 +1,10 @@
-package main
+package main // import "github.com/dkowalsky/brieefly"
 
 import (
-	"github.com/dkowalsky/brieefly/config"
-	"github.com/dkowalsky/brieefly/db"
-	"github.com/dkowalsky/brieefly/log"
-	"github.com/dkowalsky/brieefly/net"
+	"github.com/brieefly/config"
+	"github.com/brieefly/db"
+	"github.com/brieefly/log"
+	"github.com/brieefly/net"
 )
 
 func main() {

@@ -1,6 +1,6 @@
 package model
 
-import "github.com/dkowalsky/brieefly/db"
+import "github.com/brieefly/db"
 
 // User - a brieefly user
 type User struct {

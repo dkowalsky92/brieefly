@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	"github.com/dkowalsky/brieefly/db"
+	"github.com/brieefly/db"
 )
 
 // ProjectPhase - a model for project phase

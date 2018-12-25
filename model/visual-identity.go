@@ -1,6 +1,6 @@
 package model
 
-import "github.com/dkowalsky/brieefly/db"
+import "github.com/brieefly/db"
 
 // VisualIdentity - visual identity model
 type VisualIdentity struct {

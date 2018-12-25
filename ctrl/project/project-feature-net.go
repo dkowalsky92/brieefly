@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/dkowalsky/brieefly/db"
-	"github.com/dkowalsky/brieefly/db/project"
+	"github.com/brieefly/db"
+	"github.com/brieefly/db/project"
 	"github.com/go-chi/chi"
 )
 

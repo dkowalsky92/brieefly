@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/dkowalsky/brieefly/config"
-	"github.com/dkowalsky/brieefly/ctrl/agency"
-	"github.com/dkowalsky/brieefly/ctrl/project"
-	"github.com/dkowalsky/brieefly/ctrl/user"
-	"github.com/dkowalsky/brieefly/db"
+	"github.com/brieefly/config"
+	"github.com/brieefly/ctrl/agency"
+	"github.com/brieefly/ctrl/project"
+	"github.com/brieefly/ctrl/user"
+	"github.com/brieefly/db"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )

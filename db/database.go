@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/dkowalsky/brieefly/config"
-	"github.com/dkowalsky/brieefly/log"
+	"github.com/brieefly/config"
+	"github.com/brieefly/log"
 	// mysql driver
 	_ "github.com/go-sql-driver/mysql"
 )

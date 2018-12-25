@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/dkowalsky/brieefly/db"
-	"github.com/dkowalsky/brieefly/log"
-	"github.com/dkowalsky/brieefly/model"
+	"github.com/brieefly/db"
+	"github.com/brieefly/log"
+	"github.com/brieefly/model"
 )
 
 // GetCMSForID - gets the project's name for project id
