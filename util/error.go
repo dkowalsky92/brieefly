@@ -10,9 +10,9 @@ const (
 
 // Error - extended error model for better error management
 type Error struct {
-	err  error
-	code int64
-	info map[string]interface{}
+	Err  error
+	Code int64
+	Info map[string]interface{}
 }
 
 // CompositeError - a model ment to collect all the errors inbetween middleware calls

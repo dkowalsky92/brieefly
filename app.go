@@ -28,6 +28,6 @@ func main() {
 
 	router := net.BrieeflyRouter(db, c)
 
-	fmt.Println("Server engine starting...")
+	fmt.Println("Server is running.")
 	router.Run()
 }
