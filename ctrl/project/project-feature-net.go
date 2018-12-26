@@ -33,7 +33,7 @@ func (r *featureRouter) getFeaturesForID(w http.ResponseWriter, req *http.Reques
 		return
 	}
 
-	bytes, err := json.Marshal(features)
+	bytes, err := json.Marshal(&features)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return

@@ -29,6 +29,7 @@ func NewRouter(db *db.DB) *Router {
 	mux.Mount("/cms", newCMSRouter(db).mux)
 	mux.Mount("/status", newStatusRouter(db).mux)
 	mux.Mount("/features", newFeatureRouter(db).mux)
+	mux.Mount("/details", newDetailsRouter(db).mux)
 
 	r.Mux = mux
 
@@ -80,7 +81,13 @@ func (r *Router) GetNameForID(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err = json.NewEncoder(w).Encode(name)
+	bytes, err := json.Marshal(&name)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	_, err = w.Write(bytes)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return

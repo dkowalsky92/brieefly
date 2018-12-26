@@ -73,7 +73,7 @@ func NewConfig(environment Environment) (*Config, error) {
 		log.Error(err)
 		return nil, err
 	}
-	log.Info(config)
+
 	return &config, nil
 }
 

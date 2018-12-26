@@ -58,8 +58,6 @@ func GetAllForUserID(db *db.DB, id string) ([]model.Project, error) {
 
 			if err != nil {
 				switch err {
-				case sql.ErrNoRows:
-					log.Error(fmt.Sprintf("No rows found"))
 				default:
 					log.Error(fmt.Sprintf("Error occurred: %+v", err))
 				}
@@ -86,8 +84,6 @@ func GetNameForID(_db *db.DB, id string) (*db.NullString, error) {
 
 		if err != nil {
 			switch err {
-			case sql.ErrNoRows:
-				log.Error(fmt.Sprintf("No rows found"))
 			default:
 				log.Error(fmt.Sprintf("Error occurred: %+v", err))
 			}

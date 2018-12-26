@@ -34,7 +34,7 @@ func (r *statusRouter) getStatusForID(w http.ResponseWriter, req *http.Request) 
 		return
 	}
 
-	bytes, err := json.Marshal(status)
+	bytes, err := json.Marshal(&status)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return

@@ -16,8 +16,8 @@ func GetFeaturesForID(db *db.DB, id string) ([]model.Feature, error) {
 
 	db.WithTransaction(func(tx *sql.Tx) error {
 		rows, err := tx.Query(`SELECT f.id_feature, f.name, f.description FROM Project p 
-							LEFT JOIN Project_feature pf ON p.id_project = pf.id_project
-							LEFT JOIN Feature f ON f.id_feature = pf.id_feature WHERE p.id_project = ?;`, id)
+							   INNER JOIN Project_feature pf ON p.id_project = pf.id_project
+							   INNER JOIN Feature f ON f.id_feature = pf.id_feature WHERE p.id_project = ?;`, id)
 
 		for rows.Next() {
 			var f model.Feature
@@ -25,8 +25,6 @@ func GetFeaturesForID(db *db.DB, id string) ([]model.Feature, error) {
 
 			if err != nil {
 				switch err {
-				case sql.ErrNoRows:
-					log.Error(fmt.Sprintf("No rows found"))
 				default:
 					log.Error(fmt.Sprintf("Error occurred: %+v", err))
 				}

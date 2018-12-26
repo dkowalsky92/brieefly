@@ -50,7 +50,7 @@ func (r *Router) GetAll(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
-	bytes, err := json.Marshal(agencies)
+	bytes, err := json.Marshal(&agencies)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return

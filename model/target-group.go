@@ -9,7 +9,7 @@ type TargetGroup struct {
 	Description db.NullString `json:"description"`
 	AgeMin      db.NullInt64  `json:"age_min"`
 	AgeMax      db.NullInt64  `json:"age_max"`
-	ProjectID   db.NullInt64  `json:"project"`
+	ProjectID   db.NullString `json:"id_project"`
 }
 
 // -- Table: Target_group

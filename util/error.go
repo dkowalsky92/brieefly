@@ -1,18 +1,21 @@
 package util
 
-import "github.com/brieefly/log"
+// SQLErr - sql related error codes
+type SQLErr int64
 
-// ErrorHandler - an interface allowing custom
-type ErrorHandler interface {
-	HandleError()
+const (
+	// ErrEmptyResult - no rows returned from query
+	ErrEmptyResult SQLErr = 4000
+)
+
+// Error - extended error model for better error management
+type Error struct {
+	err  error
+	code int64
+	info map[string]interface{}
 }
 
-func HandleError(customHandler func(error) error) {
-	defer func() {
-		if r := recover(); r != nil {
-			log.Error(r)
-		} else {
-
-		}
-	}()
+// CompositeError - a model ment to collect all the errors inbetween middleware calls
+type CompositeError struct {
+	errors []Error
 }
