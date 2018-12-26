@@ -16,8 +16,7 @@ func GetColorsForID(db *db.DB, id string) ([]model.Color, error) {
 
 	err = db.WithTransaction(func(tx *sql.Tx) error {
 		rows, err := tx.Query(`SELECT c.id_color,
-									  c.hex_value, 
-									  c.id_project 
+									  c.hex_value
 									  FROM Color c 
 								      WHERE c.id_project = ?`, id)
 		if err != nil {
@@ -31,8 +30,7 @@ func GetColorsForID(db *db.DB, id string) ([]model.Color, error) {
 		for rows.Next() {
 			var c model.Color
 			err := rows.Scan(&c.ID,
-				&c.HexValue,
-				&c.ProjectID)
+				&c.HexValue)
 			if err != nil {
 				switch err {
 				default:

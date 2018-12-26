@@ -4,8 +4,8 @@ import "github.com/brieefly/db"
 
 // Agency - an agency model
 type Agency struct {
-	AgencyCode string       `json:"agency_code"`
-	NipNumber  db.NullInt64 `json:"nip_number"`
+	AgencyCode string       `json:"agencyCode"`
+	NipNumber  db.NullInt64 `json:"nipNumber"`
 	Company    Company      `json:"company"`
 }
 

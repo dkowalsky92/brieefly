@@ -4,16 +4,16 @@ import "github.com/brieefly/db"
 
 // Company - a company struct
 type Company struct {
-	ID               string        `json:"id_company"`
+	ID               string        `json:"idCompany"`
 	Email            string        `json:"email"`
 	Name             db.NullString `json:"name"`
 	Phone            db.NullString `json:"phone"`
 	Address          db.NullString `json:"address"`
-	WebsiteURL       db.NullString `json:"website_url"`
-	ImageURL         db.NullString `json:"image_url"`
+	WebsiteURL       db.NullString `json:"websiteUrl"`
+	ImageURL         db.NullString `json:"imageUrl"`
 	Description      db.NullString `json:"description"`
-	DateLastModified db.NullTime   `json:"date_last_modified"`
-	DateCreated      db.NullTime   `json:"date_created"`
+	DateLastModified db.NullTime   `json:"dateLastModified"`
+	DateCreated      db.NullTime   `json:"dateCreated"`
 }
 
 // -- Table: Company

@@ -2,7 +2,7 @@ package model
 
 // ProjectStatus - project status model
 type ProjectStatus struct {
-	ID   string `json:"id_status"`
+	ID   string `json:"idStatus"`
 	Name string `json:"name"`
 }
 

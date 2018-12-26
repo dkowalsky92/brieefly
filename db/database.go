@@ -17,7 +17,7 @@ type DB struct {
 
 // Connect - connect to a database and return it
 func Connect(config *config.Config) (*DB, error) {
-	connectionString := fmt.Sprintf("%s:%s@/%s", config.Database.User, config.Database.Password, config.Database.Name)
+	connectionString := fmt.Sprintf("%s:%s@/%s?parseTime=true", config.Database.User, config.Database.Password, config.Database.Name)
 	db, err := sql.Open("mysql", connectionString)
 	if err != nil {
 		log.Error(err, "that connection error")

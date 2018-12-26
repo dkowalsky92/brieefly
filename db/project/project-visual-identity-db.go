@@ -16,8 +16,7 @@ func GetVisualIdentitiesForID(db *db.DB, id string) ([]model.VisualIdentity, err
 
 	db.WithTransaction(func(tx *sql.Tx) error {
 		rows, qerr := tx.Query(`SELECT vi.id_visual_identity,
-									   vi.type, 
-									   vi.id_project 
+									   vi.type 
 									   FROM Visual_identity vi 
 									   WHERE vi.id_project = ?`, id)
 		err = qerr
@@ -32,8 +31,8 @@ func GetVisualIdentitiesForID(db *db.DB, id string) ([]model.VisualIdentity, err
 		for rows.Next() {
 			var vi model.VisualIdentity
 			err := rows.Scan(&vi.ID,
-				&vi.Type,
-				&vi.ProjectID)
+				&vi.Type)
+
 			if err != nil {
 				switch err {
 				default:

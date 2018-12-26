@@ -8,14 +8,14 @@ import (
 
 // Question - a model for question
 type Question struct {
-	ID               string      `json:"id_question"`
+	ID               string      `json:"idQuestion"`
 	Type             string      `json:"type"`
 	Content          string      `json:"content"`
 	Status           string      `json:"status"`
-	DateCreated      time.Time   `json:"date_created"`
-	DateLastModified db.NullTime `json:"date_last_modified"`
-	UserID           string      `json:"id_user"`
-	ProjectPhaseID   string      `json:"id_project_phase"`
+	DateCreated      time.Time   `json:"dateCreated"`
+	DateLastModified db.NullTime `json:"dateLastModified"`
+	UserID           string      `json:"idUser"`
+	ProjectPhaseID   string      `json:"idProjectPhase"`
 }
 
 // -- Table: Question

@@ -2,17 +2,14 @@ package model
 
 import (
 	"time"
-
-	"github.com/brieefly/db"
 )
 
 // Opinion - an opinion model
 type Opinion struct {
-	ID          string        `json:"id_opinion"`
-	Grade       int64         `json:"grade"`
-	Description int64         `json:"description"`
-	DateCreated time.Time     `json:"date_created"`
-	ProjectID   db.NullString `json:"id_project"`
+	ID          string    `json:"idOpinion"`
+	Grade       int64     `json:"grade"`
+	Description int64     `json:"description"`
+	DateCreated time.Time `json:"dateCreated"`
 }
 
 // -- Table: Opinion

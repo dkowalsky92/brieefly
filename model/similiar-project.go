@@ -4,9 +4,9 @@ import "github.com/brieefly/db"
 
 // SimiliarProject - a similiar project model
 type SimiliarProject struct {
-	ID         string        `json:"id_similiar_project"`
+	ID         string        `json:"idSimiliarProject"`
 	ProjectURL string        `json:"project_url"`
-	ProjectID  db.NullString `json:"id_project"`
+	ProjectID  db.NullString `json:"idProject"`
 }
 
 // -- Table: Similar_project

@@ -2,7 +2,7 @@ package model
 
 // Feature - a custom feature model
 type Feature struct {
-	ID          string `json:"id_feature"`
+	ID          string `json:"idFeature"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }

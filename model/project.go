@@ -8,21 +8,21 @@ import (
 
 // Project - a project model
 type Project struct {
-	ID               string         `json:"id_project"`
+	ID               string         `json:"idProject"`
 	Name             string         `json:"name"`
 	Type             string         `json:"type"`
 	Description      string         `json:"description"`
-	OverallProgress  int64          `json:"overall_progress"`
+	OverallProgress  int64          `json:"overallProgress"`
 	Language         db.NullString  `json:"language"`
-	BudgetMin        db.NullInt64   `json:"budget_min"`
-	BudgetMax        db.NullInt64   `json:"budget_max"`
-	SubpageCount     db.NullInt64   `json:"subpage_count"`
-	ImageURL         db.NullString  `json:"image_url"`
-	DateDeadline     db.NullTime    `json:"date_deadline"`
-	DateCreated      time.Time      `json:"date_created"`
-	DateLastModified db.NullTime    `json:"date_last_modified"`
+	BudgetMin        db.NullInt64   `json:"budgetMin"`
+	BudgetMax        db.NullInt64   `json:"budgetMax"`
+	SubpageCount     db.NullInt64   `json:"subpageCount"`
+	ImageURL         db.NullString  `json:"imageUrl"`
+	DateDeadline     db.NullTime    `json:"dateDeadline"`
+	DateCreated      time.Time      `json:"dateCreated"`
+	DateLastModified db.NullTime    `json:"dateLastModified"`
 	Cms              *CMS           `json:"cms"`
-	Status           *ProjectStatus `json:"project_status"`
+	Status           *ProjectStatus `json:"projectStatus"`
 }
 
 // id_project int NOT NULL AUTO_INCREMENT,

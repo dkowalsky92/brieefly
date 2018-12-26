@@ -8,14 +8,13 @@ import (
 
 // ProjectPhase - a model for project phase
 type ProjectPhase struct {
-	ID            string        `json:"id_project_phase"`
+	ID            string        `json:"idProjectPhase"`
 	Value         int64         `json:"value"`
 	Progress      int64         `json:"progress"`
-	OrderPosition db.NullInt64  `json:"order_position"`
+	OrderPosition db.NullInt64  `json:"orderPosition"`
 	Status        db.NullString `json:"status"`
-	DateCreated   time.Time     `json:"date_created"`
-	PhaseID       string        `json:"id_phase"`
-	ProjectID     string        `json:"id_project"`
+	DateCreated   time.Time     `json:"dateCreated"`
+	PhaseID       string        `json:"idPhase"`
 }
 
 // -- Table: Project_phase

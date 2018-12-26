@@ -8,9 +8,9 @@ import (
 
 // ClientProject - a client-project relation model
 type ClientProject struct {
-	ID          string        `json:"id_user"`
-	ProjectID   db.NullString `json:"id_project"`
-	DateCreated time.Time     `json:"date_created"`
+	ID          string        `json:"idUser"`
+	ProjectID   db.NullString `json:"idProject"`
+	DateCreated time.Time     `json:"dateCreated"`
 }
 
 // -- Table: Client_project

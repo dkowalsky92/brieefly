@@ -15,13 +15,19 @@ func GetFeaturesForID(db *db.DB, id string) ([]model.Feature, error) {
 	var err error
 
 	db.WithTransaction(func(tx *sql.Tx) error {
-		rows, err := tx.Query(`SELECT f.id_feature, f.name, f.description FROM Project p 
-							   INNER JOIN Project_feature pf ON p.id_project = pf.id_project
-							   INNER JOIN Feature f ON f.id_feature = pf.id_feature WHERE p.id_project = ?;`, id)
+		rows, err := tx.Query(`SELECT f.id_feature,
+									  f.name,
+									  f.description 
+									  FROM Project p 
+									  INNER JOIN Project_feature pf ON p.id_project = pf.id_project
+									  INNER JOIN Feature f ON f.id_feature = pf.id_feature
+									  WHERE p.id_project = ?;`, id)
 
 		for rows.Next() {
 			var f model.Feature
-			err = rows.Scan(&f.ID, &f.Name, &f.Description)
+			err = rows.Scan(&f.ID,
+				&f.Name,
+				&f.Description)
 
 			if err != nil {
 				switch err {

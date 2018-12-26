@@ -1,20 +1,18 @@
 package model
 
 import (
-	"time"
-
 	"github.com/brieefly/db"
 )
 
 // Offer - an offer model
 type Offer struct {
-	ID           string        `json:"id_offer"`
+	ID           string        `json:"idOffer"`
 	Salary       int64         `json:"salary"`
-	IsChosen     bool          `json:"is_chosen"`
-	DateDeadline time.Time     `json:"date"`
-	DateCreated  time.Time     `json:"date_created"`
-	ProjectID    db.NullString `json:"id_project"`
-	CompanyID    string        `json:"id_company"`
+	IsChosen     bool          `json:"isChosen"`
+	DateDeadline db.NullTime   `json:"dateDeadline"`
+	DateCreated  db.NullTime   `json:"dateCreated"`
+	ProjectID    db.NullString `json:"idProject"`
+	CompanyID    string        `json:"idCompany"`
 }
 
 // -- Table: Offer

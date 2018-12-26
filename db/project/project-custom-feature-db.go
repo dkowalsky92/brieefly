@@ -16,8 +16,7 @@ func GetCustomFeaturesForID(db *db.DB, id string) ([]model.CustomFeature, error)
 	err := db.WithTransaction(func(tx *sql.Tx) error {
 		rows, err := tx.Query(`SELECT cf.id_custom_feature,
 									  cf.name,
-									  cf.description, 
-									  cf.id_project
+									  cf.description
 									  FROM Custom_feature cf 
 									  INNER JOIN Project p ON p.id_project = cf.id_project
 									  WHERE p.id_project = ?;`, id)
@@ -26,8 +25,7 @@ func GetCustomFeaturesForID(db *db.DB, id string) ([]model.CustomFeature, error)
 			var cf model.CustomFeature
 			err = rows.Scan(&cf.ID,
 				&cf.Name,
-				&cf.Description,
-				&cf.ProjectID)
+				&cf.Description)
 
 			if err != nil {
 				switch err {

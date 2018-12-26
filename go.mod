@@ -14,6 +14,18 @@ replace github.com/brieefly/log => /log
 
 replace github.com/brieefly/net => /net
 
+replace github.com/brieefly/net/agency => /net/agency
+
+replace github.com/brieefly/net/market => /net/market
+
+replace github.com/brieefly/net/panel => /net/panel
+
+replace github.com/brieefly/net/project => /net/project
+
+replace github.com/brieefly/net/process => /net/process
+
+replace github.com/brieefly/net/user => /net/user
+
 replace github.com/brieefly/model => /model
 
 replace github.com/brieefly/model/agency => /model/agency
@@ -24,17 +36,7 @@ replace github.com/brieefly/model/panel => /model/panel
 
 replace github.com/brieefly/model/project => /model/project
 
-replace github.com/brieefly/ctrl/agency => /ctrl/agency
-
-replace github.com/brieefly/ctrl/market => /ctrl/market
-
-replace github.com/brieefly/ctrl/panel => /ctrl/panel
-
-replace github.com/brieefly/ctrl/project => /ctrl/project
-
-replace github.com/brieefly/ctrl/process => /ctrl/process
-
-replace github.com/brieefly/ctrl/user => /ctrl/user
+replace github.com/brieefly/db => /db
 
 replace github.com/brieefly/db/agency => /db/agency
 

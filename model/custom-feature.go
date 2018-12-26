@@ -1,13 +1,10 @@
 package model
 
-import "github.com/brieefly/db"
-
 // CustomFeature - a custom feature model
 type CustomFeature struct {
-	ID          string        `json:"id_custom_feature"`
-	Name        string        `json:"name"`
-	Description string        `json:"description"`
-	ProjectID   db.NullString `json:"id_project"`
+	ID          string `json:"idCustomFeature"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 // -- Table: Custom_feature

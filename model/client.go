@@ -4,9 +4,9 @@ import "github.com/brieefly/db"
 
 // Client - a client model
 type Client struct {
-	ID        string        `json:"id_user"`
+	ID        string        `json:"idUser"`
 	Job       db.NullString `json:"job"`
-	CompanyID db.NullString `json:"id_company"`
+	CompanyID db.NullString `json:"idCompany"`
 }
 
 // -- Table: Client

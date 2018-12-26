@@ -29,8 +29,7 @@ func GetTargetGroupsForID(db *db.DB, id string) ([]model.TargetGroup, error) {
 									   tg.name,
 									   tg.description, 
 									   tg.age_min,
-									   tg.age_max,
-									   tg.id_project
+									   tg.age_max
 									   FROM Target_group tg 
 									   INNER JOIN Project p ON p.id_project = tg.id_project
 									   WHERE p.id_project = ?;`, id)
@@ -41,8 +40,7 @@ func GetTargetGroupsForID(db *db.DB, id string) ([]model.TargetGroup, error) {
 				&tg.Name,
 				&tg.Description,
 				&tg.AgeMin,
-				&tg.AgeMax,
-				&tg.ProjectID)
+				&tg.AgeMax)
 
 			if err != nil {
 				switch err {

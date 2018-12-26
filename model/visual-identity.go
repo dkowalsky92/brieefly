@@ -1,12 +1,9 @@
 package model
 
-import "github.com/brieefly/db"
-
 // VisualIdentity - visual identity model
 type VisualIdentity struct {
-	ID        string        `json:"id_visual_identity"`
-	Type      string        `json:"type"`
-	ProjectID db.NullString `json:"id_project"`
+	ID   string `json:"idVisualIdentity"`
+	Type string `json:"type"`
 }
 
 // -- Table: Visual_identity

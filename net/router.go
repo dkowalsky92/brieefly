@@ -5,10 +5,11 @@ import (
 	"time"
 
 	"github.com/brieefly/config"
-	"github.com/brieefly/ctrl/agency"
-	"github.com/brieefly/ctrl/project"
-	"github.com/brieefly/ctrl/user"
 	"github.com/brieefly/db"
+	"github.com/brieefly/net/agency"
+	"github.com/brieefly/net/market"
+	"github.com/brieefly/net/project"
+	"github.com/brieefly/net/user"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )
@@ -38,6 +39,7 @@ func BrieeflyRouter(db *db.DB, config *config.Config) *Router {
 	mux.Mount("/api/projects", project.NewRouter(db).Mux)
 	mux.Mount("/api/users", user.NewRouter(db).Mux)
 	mux.Mount("/api/agencies", agency.NewRouter(db).Mux)
+	mux.Mount("/api/market", market.NewRouter(db).Mux)
 
 	return &Router{database: db, config: config, mux: mux}
 }
