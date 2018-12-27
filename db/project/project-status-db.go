@@ -10,18 +10,18 @@ import (
 )
 
 // GetStatusForID - get status for project id
-func GetStatusForID(db *db.DB, id string) (model.ProjectStatus, error) {
+func GetStatusForID(db *db.DB, id string) (*model.ProjectStatus, error) {
 	var status model.ProjectStatus
-	var err error
 
-	db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) error {
 		row := tx.QueryRow(`SELECT s.id_status,
-							       p.name
+							       s.name
 							       FROM Project p
 								   INNER JOIN Status s ON p.id_status = s.id_status
 								   WHERE p.id_project = ?;`, id)
 
-		err = row.Scan(&status.ID, &status.Name)
+		err := row.Scan(&status.ID,
+			&status.Name)
 
 		if err != nil {
 			switch err {
@@ -31,8 +31,8 @@ func GetStatusForID(db *db.DB, id string) (model.ProjectStatus, error) {
 			return err
 		}
 
-		return nil
+		return err
 	})
 
-	return status, err
+	return &status, err
 }

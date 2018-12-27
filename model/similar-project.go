@@ -2,10 +2,10 @@ package model
 
 import "github.com/brieefly/db"
 
-// SimiliarProject - a similiar project model
-type SimiliarProject struct {
-	ID         string        `json:"idSimiliarProject"`
-	ProjectURL string        `json:"project_url"`
+// SimilarProject - a similiar project model
+type SimilarProject struct {
+	ID         string        `json:"idSimilarProject"`
+	ProjectURL string        `json:"projectUrl"`
 	ProjectID  db.NullString `json:"idProject"`
 }
 

@@ -32,7 +32,7 @@ func GetPendingProjects(db *db.DB) ([]market.PendingProject, error) {
 									  INNER JOIN Status s ON p.id_status = s.id_status
 									  WHERE s.name = ?
 									  GROUP BY p.id_project;`, `Pending`)
-		log.Info(err)
+
 		for rows.Next() {
 			var pp market.PendingProject
 			err = rows.Scan(&pp.ID,
