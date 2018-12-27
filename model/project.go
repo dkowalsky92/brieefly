@@ -22,7 +22,7 @@ type Project struct {
 	DateCreated      time.Time      `json:"dateCreated"`
 	DateLastModified db.NullTime    `json:"dateLastModified"`
 	Cms              *CMS           `json:"cms"`
-	Status           *ProjectStatus `json:"projectStatus"`
+	Status           *ProjectStatus `json:"status"`
 }
 
 // id_project int NOT NULL AUTO_INCREMENT,
