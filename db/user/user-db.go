@@ -11,10 +11,9 @@ import (
 
 // Get - Get user for id
 func Get(db *db.DB, id string) (*model.User, error) {
-	var user model.User
-	var err error
+	var user *model.User
 
-	db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) error {
 		row := tx.QueryRow(`SELECT u.id_user,
 							u.login,
 							u.email, 
@@ -30,19 +29,22 @@ func Get(db *db.DB, id string) (*model.User, error) {
 							u.date_last_modified FROM User u
 							WHERE u.id_user = ?;`, id)
 
-		err = row.Scan(&user.ID,
-			&user.Login,
-			&user.Email,
-			&user.Name,
-			&user.Surname,
-			&user.Phone,
-			&user.WebsiteURL,
-			&user.ImageURL,
-			&user.Description,
-			&user.DateOfBirth,
-			&user.DateLastLogged,
-			&user.DateCreated,
-			&user.DateLastModified)
+		var u model.User
+
+		err := row.Scan(&u.ID,
+			&u.Login,
+			&u.Email,
+			&u.Name,
+			&u.Surname,
+			&u.Phone,
+			&u.WebsiteURL,
+			&u.ImageURL,
+			&u.Description,
+			&u.DateOfBirth,
+			&u.DateLastLogged,
+			&u.DateCreated,
+			&u.DateLastModified)
+
 		if err != nil {
 			switch err {
 			case sql.ErrNoRows:
@@ -53,19 +55,20 @@ func Get(db *db.DB, id string) (*model.User, error) {
 			return err
 		}
 
-		return nil
+		user = &u
+
+		return err
 	})
 
-	return &user, err
+	return user, err
 }
 
 // GetAll - Get all users
 func GetAll(db *db.DB) ([]model.User, error) {
 	var users []model.User
-	var err error
 
-	db.WithTransaction(func(tx *sql.Tx) error {
-		rows, qerr := tx.Query(`SELECT u.id_user,
+	err := db.WithTransaction(func(tx *sql.Tx) error {
+		rows, err := tx.Query(`SELECT u.id_user,
 								u.login,
 								u.email, 
 								u.name, 
@@ -78,7 +81,6 @@ func GetAll(db *db.DB) ([]model.User, error) {
 								u.date_last_logged, 
 								u.date_created, 
 								u.date_last_modified FROM User u;`)
-		err = qerr
 		if err != nil {
 			switch err {
 			default:
@@ -89,6 +91,7 @@ func GetAll(db *db.DB) ([]model.User, error) {
 
 		for rows.Next() {
 			var user model.User
+
 			err := rows.Scan(&user.ID,
 				&user.Login,
 				&user.Email,
@@ -102,6 +105,7 @@ func GetAll(db *db.DB) ([]model.User, error) {
 				&user.DateLastLogged,
 				&user.DateCreated,
 				&user.DateLastModified)
+
 			if err != nil {
 				switch err {
 				default:
@@ -121,10 +125,8 @@ func GetAll(db *db.DB) ([]model.User, error) {
 
 // Insert - inserts new user
 func Insert(db *db.DB, user *model.User) (*model.User, error) {
-	var err error
-
-	db.WithTransaction(func(tx *sql.Tx) error {
-		stmt, ierr := tx.Prepare(`INSERT INTO user (id_user,
+	err := db.WithTransaction(func(tx *sql.Tx) error {
+		stmt, err := tx.Prepare(`INSERT INTO user (id_user,
 								  email, 
 								  password_fail_attempts, 
 								  login, 
@@ -137,7 +139,6 @@ func Insert(db *db.DB, user *model.User) (*model.User, error) {
 								  date_of_birth, 
 								  date_last_logged, 
 								  date_last_modified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-		err = ierr
 		if err != nil {
 
 		}
@@ -171,10 +172,9 @@ func Update(db *db.DB, update *model.User) (*model.User, error) {
 
 // Delete - deletes user
 func Delete(db *db.DB, id string) (bool, error) {
-	var err error
-	db.WithTransaction(func(tx *sql.Tx) error {
-		stmt, perr := tx.Prepare("DELETE FROM user WHERE id_user = ?")
-		err = perr
+	err := db.WithTransaction(func(tx *sql.Tx) error {
+		stmt, err := tx.Prepare("DELETE FROM user WHERE id_user = ?")
+
 		if err != nil {
 			switch err {
 			default:
@@ -182,7 +182,9 @@ func Delete(db *db.DB, id string) (bool, error) {
 			}
 			return err
 		}
+
 		res, err := stmt.Exec(id)
+
 		if err != nil {
 			switch err {
 			default:
@@ -199,22 +201,3 @@ func Delete(db *db.DB, id string) (bool, error) {
 
 	return true, err
 }
-
-// CREATE TABLE User (
-//     id_user int NOT NULL AUTO_INCREMENT,
-//     login varchar(20) NULL,
-//     password varchar(20) NOT NULL,
-//     password_fail_attempts int NOT NULL DEFAULT 0,
-//     email varchar(75) NOT NULL,
-//     name varchar(20) NULL,
-//     surname varchar(20) NULL,
-//     phone varchar(14) NULL,
-//     website_url varchar(300) NULL,
-//     image_url varchar(200) NULL,
-//     description varchar(300) NULL,
-//     date_of_birth date NULL,
-//     date_last_logged date NULL,
-//     date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//     date_last_modified timestamp NULL ON UPDATE CURRENT_TIMESTAMP,
-//     CONSTRAINT User_pk PRIMARY KEY (id_user)
-// );

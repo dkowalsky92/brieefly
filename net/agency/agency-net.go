@@ -23,6 +23,7 @@ func NewRouter(db *db.DB) *Router {
 
 	mux.Get("/", r.GetAll)
 	mux.Mount("/details", newDetailsRouter(db).mux)
+
 	r.Mux = mux
 
 	return r

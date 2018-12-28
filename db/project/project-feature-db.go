@@ -12,9 +12,8 @@ import (
 // GetFeaturesForID - get project features for project id
 func GetFeaturesForID(db *db.DB, id string) ([]model.Feature, error) {
 	var features []model.Feature
-	var err error
 
-	db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) error {
 		rows, err := tx.Query(`SELECT f.id_feature,
 									  f.name,
 									  f.description 

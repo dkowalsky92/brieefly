@@ -20,17 +20,37 @@ func newDetailsRouter(db *db.DB) *detailsRouter {
 
 	mux := chi.NewRouter()
 
-	mux.Get("/{name}", r.getDetailsForName)
+	mux.Get("/{slug}", r.getDetailsForURL)
+	mux.Get("/projects/{slug}", r.getFinishedProjectsForURL)
 
 	r.mux = mux
 
 	return r
 }
 
-// GetAll - get all users
-func (r *detailsRouter) getDetailsForName(w http.ResponseWriter, req *http.Request) {
-	name := chi.URLParam(req, "name")
-	details, err := agency.GetDetailsForName(r.db, name)
+func (r *detailsRouter) getFinishedProjectsForURL(w http.ResponseWriter, req *http.Request) {
+	slug := chi.URLParam(req, "slug")
+	finishedProjects, err := agency.GetFinishedProjectsForURL(r.db, slug)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	bytes, err := json.Marshal(&finishedProjects)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	_, err = w.Write(bytes)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+}
+
+func (r *detailsRouter) getDetailsForURL(w http.ResponseWriter, req *http.Request) {
+	slug := chi.URLParam(req, "slug")
+	details, err := agency.GetAgencyAndOpinionsForURL(r.db, slug)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return

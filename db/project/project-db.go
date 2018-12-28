@@ -11,11 +11,10 @@ import (
 // GetNameForID - gets the project's name for project id
 func GetNameForID(_db *db.DB, id string) (*db.NullString, error) {
 	var name db.NullString
-	var err error
 
-	_db.WithTransaction(func(tx *sql.Tx) error {
+	err := _db.WithTransaction(func(tx *sql.Tx) error {
 		row := tx.QueryRow(`SELECT name FROM Project WHERE id_project = ?;`, id)
-		err = row.Scan(&name)
+		err := row.Scan(&name)
 
 		if err != nil {
 			switch err {
@@ -25,7 +24,7 @@ func GetNameForID(_db *db.DB, id string) (*db.NullString, error) {
 			return err
 		}
 
-		return nil
+		return err
 	})
 
 	return &name, err

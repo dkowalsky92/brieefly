@@ -22,10 +22,9 @@ import (
 // GetTargetGroupsForID - get project's target groups for project id
 func GetTargetGroupsForID(db *db.DB, id string) ([]model.TargetGroup, error) {
 	var targetGroups []model.TargetGroup
-	var err error
 
-	db.WithTransaction(func(tx *sql.Tx) error {
-		rows, qerr := tx.Query(`SELECT tg.id_target_group,
+	err := db.WithTransaction(func(tx *sql.Tx) error {
+		rows, err := tx.Query(`SELECT tg.id_target_group,
 									   tg.name,
 									   tg.description, 
 									   tg.age_min,
@@ -33,9 +32,9 @@ func GetTargetGroupsForID(db *db.DB, id string) ([]model.TargetGroup, error) {
 									   FROM Target_group tg 
 									   INNER JOIN Project p ON p.id_project = tg.id_project
 									   WHERE p.id_project = ?;`, id)
-		err = qerr
 		for rows.Next() {
 			var tg model.TargetGroup
+
 			err = rows.Scan(&tg.ID,
 				&tg.Name,
 				&tg.Description,
@@ -53,7 +52,7 @@ func GetTargetGroupsForID(db *db.DB, id string) ([]model.TargetGroup, error) {
 			targetGroups = append(targetGroups, tg)
 		}
 
-		return nil
+		return err
 	})
 
 	return targetGroups, err

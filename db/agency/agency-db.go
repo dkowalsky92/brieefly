@@ -9,29 +9,31 @@ import (
 	"github.com/brieefly/model"
 )
 
-// GetForID - get agency for id
-func GetForID(db *db.DB, id string) (*model.Agency, error) {
-	var agency model.Agency
+// GetForURL - get agency for url
+func GetForURL(db *db.DB, url string) (*model.Agency, error) {
+	var agency *model.Agency
 
 	err := db.WithTransaction(func(tx *sql.Tx) error {
 		row := tx.QueryRow(`SELECT a.agency_code,
-										a.nip_number, 
-										c.id_company, 
-										c.email,
-										c.name, 
-										c.phone, 
-										c.address, 
-										c.website_url, 
-										c.image_url, 
-										c.description, 
-										c.date_last_modified, 
-										c.date_created FROM Agency a
-										INNER JOIN Company c ON a.id_company = c.id_company
-										WHERE c.id_company = ?`, id)
+									a.nip_number, 
+									c.id_company, 
+									c.email,
+									c.name, 
+									c.phone, 
+									c.address, 
+									c.website_url, 
+									c.image_url, 
+									c.description, 
+									c.date_last_modified, 
+									c.date_created FROM Agency a
+									INNER JOIN Company c ON a.id_company = c.id_company
+									WHERE c.url_name = ?`, url)
 
 		var c model.Company
-		err := row.Scan(&agency.AgencyCode,
-			&agency.NipNumber,
+		var a model.Agency
+
+		err := row.Scan(&a.AgencyCode,
+			&a.NipNumber,
 			&c.ID,
 			&c.Email,
 			&c.Name,
@@ -50,12 +52,67 @@ func GetForID(db *db.DB, id string) (*model.Agency, error) {
 			return err
 		}
 
-		agency.Company = c
+		a.Company = c
+
+		agency = &a
 
 		return err
 	})
 
-	return &agency, err
+	return agency, err
+}
+
+// GetForID - get agency for id
+func GetForID(db *db.DB, id string) (*model.Agency, error) {
+	var agency *model.Agency
+
+	err := db.WithTransaction(func(tx *sql.Tx) error {
+		row := tx.QueryRow(`SELECT a.agency_code,
+									a.nip_number, 
+									c.id_company, 
+									c.email,
+									c.name, 
+									c.phone, 
+									c.address, 
+									c.website_url, 
+									c.image_url, 
+									c.description, 
+									c.date_last_modified, 
+									c.date_created FROM Agency a
+									INNER JOIN Company c ON a.id_company = c.id_company
+									WHERE c.id_company = ?`, id)
+
+		var c model.Company
+		var a model.Agency
+
+		err := row.Scan(&a.AgencyCode,
+			&a.NipNumber,
+			&c.ID,
+			&c.Email,
+			&c.Name,
+			&c.Phone,
+			&c.Address,
+			&c.WebsiteURL,
+			&c.ImageURL,
+			&c.Description,
+			&c.DateLastModified,
+			&c.DateCreated)
+		if err != nil {
+			switch err {
+			default:
+				log.Error(fmt.Sprintf("Error occurred: %+v", err))
+			}
+			return err
+		}
+
+		a.Company = c
+
+		agency = &a
+
+		return err
+	})
+
+	return agency, err
 }
 
 // GetAll - Get all agencies

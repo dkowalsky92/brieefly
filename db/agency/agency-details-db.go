@@ -6,60 +6,38 @@ import (
 
 	"github.com/brieefly/db"
 	"github.com/brieefly/log"
-	"github.com/brieefly/model"
 	"github.com/brieefly/model/agency"
 )
 
-// GetDetailsForName - get agency details for agency name
-func GetDetailsForName(db *db.DB, name string) (agency.Details, error) {
-	var details agency.Details
+// GetFinishedProjectsForURL - get finished projects for company id
+func GetFinishedProjectsForURL(db *db.DB, url string) ([]agency.BasicProject, error) {
+	projects := []agency.BasicProject{}
 
 	err := db.WithTransaction(func(tx *sql.Tx) error {
 		rows, err := tx.Query(`SELECT p.id_project,
 									  p.name,
 									  p.type,
 									  p.description,
-									  p.image_url,
-									  p.language,
-									  p.budget_min,
-									  p.budget_max, 
-									  p.subpage_count, 
-									  p.overall_progress, 
-									  p.date_created,
-									  p.date_deadline,
-									  p.date_last_modified,
-									  a.id_company 
+									  p.image_url
 									  FROM Project p
 									  INNER JOIN Offer o ON o.id_project = p.id_project
 									  INNER JOIN Agency a ON a.id_company = o.id_company
 									  INNER JOIN Company c ON c.id_company = a.id_company
 									  INNER JOIN Status s ON s.id_status = p.id_status
-									  WHERE o.is_chosen = true AND s.name = ? AND c.name LIKE ?`, `Finished`, name)
+									  WHERE o.is_chosen = true AND s.name = ? AND c.url_name = ?`, `Finished`, url)
 		if err != nil {
 			log.Error(fmt.Sprintf("Error occurred: %+v", err))
 			return err
 		}
 
-		p := []model.Project{}
-		var agnID string
-
 		for rows.Next() {
-			var p model.Project
+			var bp agency.BasicProject
 
-			err = rows.Scan(&p.ID,
-				&p.Name,
-				&p.Type,
-				&p.Description,
-				&p.ImageURL,
-				&p.Language,
-				&p.BudgetMin,
-				&p.BudgetMax,
-				&p.SubpageCount,
-				&p.OverallProgress,
-				&p.DateCreated,
-				&p.DateDeadline,
-				&p.DateLastModified,
-				&agnID)
+			err = rows.Scan(&bp.ID,
+				&bp.Name,
+				&bp.Type,
+				&bp.Description,
+				&bp.ImageURL)
 
 			if err != nil {
 				switch err {
@@ -68,9 +46,22 @@ func GetDetailsForName(db *db.DB, name string) (agency.Details, error) {
 				}
 				return err
 			}
+
+			projects = append(projects, bp)
 		}
 
-		a, err := GetForID(db, agnID)
+		return err
+	})
+
+	return projects, err
+}
+
+// GetAgencyAndOpinionsForURL - get agency details for company url
+func GetAgencyAndOpinionsForURL(db *db.DB, url string) (*agency.Details, error) {
+	var details *agency.Details
+
+	err := db.WithTransaction(func(tx *sql.Tx) error {
+		a, err := GetForURL(db, url)
 
 		if err != nil {
 			switch err {
@@ -80,8 +71,26 @@ func GetDetailsForName(db *db.DB, name string) (agency.Details, error) {
 			return err
 		}
 
-		details.Agency = a
-		details.FinishedProjects = p
+		var d agency.Details
+
+		d.Agency = a
+
+		row := tx.QueryRow(`SELECT AVG(op.grade) 
+						           FROM Opinion op
+						           INNER JOIN Offer o ON o.id_project = op.id_project
+								   WHERE o.id_company = ?`, a.Company.ID)
+
+		err = row.Scan(&d.AverageOpinion)
+
+		if err != nil {
+			switch err {
+			default:
+				log.Error(fmt.Sprintf("Error occurred: %+v", err))
+			}
+			return err
+		}
+
+		details = &d
 
 		return err
 	})

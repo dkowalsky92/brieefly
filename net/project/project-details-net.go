@@ -18,16 +18,16 @@ func newDetailsRouter(db *db.DB) *detailsRouter {
 	r := &detailsRouter{db: db}
 
 	mux := chi.NewRouter()
-	mux.Get("/{id}", r.getDetailsForID)
+	mux.Get("/{slug}", r.getDetailsForURL)
 
 	r.mux = mux
 
 	return r
 }
 
-func (r *detailsRouter) getDetailsForID(w http.ResponseWriter, req *http.Request) {
-	id := chi.URLParam(req, "id")
-	details, err := project.GetDetailsForID(r.db, id)
+func (r *detailsRouter) getDetailsForURL(w http.ResponseWriter, req *http.Request) {
+	slug := chi.URLParam(req, "slug")
+	details, err := project.GetDetailsForURL(r.db, slug)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return

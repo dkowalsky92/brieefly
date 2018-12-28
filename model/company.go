@@ -9,6 +9,7 @@ type Company struct {
 	Name             db.NullString `json:"name"`
 	Phone            db.NullString `json:"phone"`
 	Address          db.NullString `json:"address"`
+	NameURL          db.NullString `json:"nameUrl"`
 	WebsiteURL       db.NullString `json:"websiteUrl"`
 	ImageURL         db.NullString `json:"imageUrl"`
 	Description      db.NullString `json:"description"`

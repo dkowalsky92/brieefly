@@ -11,7 +11,7 @@ import (
 
 // GetCMSForID - gets the project's name for project id
 func GetCMSForID(_db *db.DB, id string) (*model.CMS, error) {
-	var cms model.CMS
+	var cms *model.CMS
 
 	err := _db.WithTransaction(func(tx *sql.Tx) error {
 		row := tx.QueryRow(`SELECT c.id_cms,
@@ -20,9 +20,11 @@ func GetCMSForID(_db *db.DB, id string) (*model.CMS, error) {
 								   FROM Project p
 							       INNER JOIN Cms c ON p.id_cms = c.id_cms
 								   WHERE p.id_project = ?;`, id)
-		err := row.Scan(&cms.ID,
-			&cms.Name,
-			&cms.Description)
+		var c model.CMS
+
+		err := row.Scan(&c.ID,
+			&c.Name,
+			&c.Description)
 
 		if err != nil {
 			switch err {
@@ -32,8 +34,10 @@ func GetCMSForID(_db *db.DB, id string) (*model.CMS, error) {
 			return err
 		}
 
+		cms = &c
+
 		return err
 	})
 
-	return &cms, err
+	return cms, err
 }

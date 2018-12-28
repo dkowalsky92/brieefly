@@ -12,9 +12,8 @@ import (
 // GetColorsForID - Get all visual identities for project id
 func GetColorsForID(db *db.DB, id string) ([]model.Color, error) {
 	var colors []model.Color
-	var err error
 
-	err = db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) error {
 		rows, err := tx.Query(`SELECT c.id_color,
 									  c.hex_value
 									  FROM Color c 

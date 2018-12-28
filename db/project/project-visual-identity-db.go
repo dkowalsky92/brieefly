@@ -12,14 +12,12 @@ import (
 // GetVisualIdentitiesForID - Get all visual identities for project id
 func GetVisualIdentitiesForID(db *db.DB, id string) ([]model.VisualIdentity, error) {
 	var identities []model.VisualIdentity
-	var err error
 
-	db.WithTransaction(func(tx *sql.Tx) error {
-		rows, qerr := tx.Query(`SELECT vi.id_visual_identity,
+	err := db.WithTransaction(func(tx *sql.Tx) error {
+		rows, err := tx.Query(`SELECT vi.id_visual_identity,
 									   vi.type 
 									   FROM Visual_identity vi 
 									   WHERE vi.id_project = ?`, id)
-		err = qerr
 		if err != nil {
 			switch err {
 			default:
@@ -44,7 +42,7 @@ func GetVisualIdentitiesForID(db *db.DB, id string) ([]model.VisualIdentity, err
 			identities = append(identities, vi)
 		}
 
-		return nil
+		return err
 	})
 
 	return identities, err
