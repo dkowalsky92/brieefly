@@ -21,7 +21,9 @@ func NewRouter(db *db.DB) *Router {
 
 	mux := chi.NewRouter()
 
-	mux.Get("/{id}", r.GetAllForUserID)
+	mux.Route("/user", func(sr chi.Router) {
+		sr.Get("/{id}", r.GetAllForUserID)
+	})
 
 	mux.Route("/name", func(sr chi.Router) {
 		sr.Get("/{id}", r.GetNameForID)

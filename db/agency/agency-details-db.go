@@ -18,7 +18,8 @@ func GetFinishedProjectsForURL(db *db.DB, url string) ([]agency.BasicProject, er
 									  p.name,
 									  p.type,
 									  p.description,
-									  p.image_url
+									  p.image_url,
+									  (SELECT AVG(oo.grade) FROM Opinion oo WHERE oo.id_project = p.id_project) as "avgOpn"
 									  FROM Project p
 									  INNER JOIN Offer o ON o.id_project = p.id_project
 									  INNER JOIN Agency a ON a.id_company = o.id_company
@@ -37,7 +38,8 @@ func GetFinishedProjectsForURL(db *db.DB, url string) ([]agency.BasicProject, er
 				&bp.Name,
 				&bp.Type,
 				&bp.Description,
-				&bp.ImageURL)
+				&bp.ImageURL,
+				&bp.AverageOpinion)
 
 			if err != nil {
 				switch err {
@@ -75,10 +77,18 @@ func GetAgencyAndOpinionsForURL(db *db.DB, url string) (*agency.Details, error) 
 
 		d.Agency = a
 
-		row := tx.QueryRow(`SELECT AVG(op.grade) 
-						           FROM Opinion op
-						           INNER JOIN Offer o ON o.id_project = op.id_project
-								   WHERE o.id_company = ?`, a.Company.ID)
+		row := tx.QueryRow(`SELECT AVG(op.grade)
+						 	FROM Opinion op
+							INNER JOIN Offer o ON o.id_project = op.id_project
+							WHERE o.id_company = ?`, a.Company.ID)
+
+		if err != nil {
+			switch err {
+			default:
+				log.Error(fmt.Sprintf("Error occurred: %+v", err))
+			}
+			return err
+		}
 
 		err = row.Scan(&d.AverageOpinion)
 
