@@ -10,11 +10,11 @@ import (
 )
 
 // GetForID - get agency for id
-func GetForID(db *db.DB, id string) ([]model.Agency, error) {
-	agencies := []model.Agency{}
+func GetForID(db *db.DB, id string) (*model.Agency, error) {
+	var agency model.Agency
 
 	err := db.WithTransaction(func(tx *sql.Tx) error {
-		rows, err := tx.Query(`SELECT a.agency_code,
+		row := tx.QueryRow(`SELECT a.agency_code,
 										a.nip_number, 
 										c.id_company, 
 										c.email,
@@ -26,43 +26,36 @@ func GetForID(db *db.DB, id string) ([]model.Agency, error) {
 										c.description, 
 										c.date_last_modified, 
 										c.date_created FROM Agency a
-										INNER JOIN Company c ON a.id_company = c.id_company`)
+										INNER JOIN Company c ON a.id_company = c.id_company
+										WHERE c.id_company = ?`, id)
+
+		var c model.Company
+		err := row.Scan(&agency.AgencyCode,
+			&agency.NipNumber,
+			&c.ID,
+			&c.Email,
+			&c.Name,
+			&c.Phone,
+			&c.Address,
+			&c.WebsiteURL,
+			&c.ImageURL,
+			&c.Description,
+			&c.DateLastModified,
+			&c.DateCreated)
 		if err != nil {
-			log.Error(fmt.Sprintf("Error occurred: %+v", err))
+			switch err {
+			default:
+				log.Error(fmt.Sprintf("Error occurred: %+v", err))
+			}
 			return err
 		}
-		for rows.Next() {
-			var a model.Agency
-			var c model.Company
-			err = rows.Scan(&a.AgencyCode,
-				&a.NipNumber,
-				&c.ID,
-				&c.Email,
-				&c.Name,
-				&c.Phone,
-				&c.Address,
-				&c.WebsiteURL,
-				&c.ImageURL,
-				&c.Description,
-				&c.DateLastModified,
-				&c.DateCreated)
-			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
-			}
 
-			a.Company = c
-
-			agencies = append(agencies, a)
-		}
+		agency.Company = c
 
 		return err
 	})
 
-	return agencies, err
+	return &agency, err
 }
 
 // GetAll - Get all agencies

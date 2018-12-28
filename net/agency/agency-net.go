@@ -22,7 +22,7 @@ func NewRouter(db *db.DB) *Router {
 	mux := chi.NewRouter()
 
 	mux.Get("/", r.GetAll)
-
+	mux.Mount("/details", newDetailsRouter(db).mux)
 	r.Mux = mux
 
 	return r
