@@ -4,15 +4,16 @@ import (
 	"database/sql"
 
 	"github.com/brieefly/db"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model"
 	"github.com/brieefly/model/project"
 )
 
 // GetDetailsForURL - get project details for project url
-func GetDetailsForURL(db *db.DB, url string) (*project.Details, error) {
+func GetDetailsForURL(db *db.DB, url string) (*project.Details, *err.Error) {
 	var details *project.Details
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		projectRow := tx.QueryRow(`SELECT p.id_project,
 										  p.name, 
 										  p.type, 
@@ -56,15 +57,33 @@ func GetDetailsForURL(db *db.DB, url string) (*project.Details, error) {
 			&avgOp)
 
 		if err != nil {
-			return err
+			return db.HandleError(err)
 		}
 
-		f, err := GetFeaturesForID(db, d.ProjectID)
-		vi, err := GetVisualIdentitiesForID(db, d.ProjectID)
-		cl, err := GetColorsForID(db, d.ProjectID)
-		cf, err := GetCustomFeaturesForID(db, d.ProjectID)
-		sp, err := GetSimilarProjectsForID(db, d.ProjectID)
-		tg, err := GetTargetGroupsForID(db, d.ProjectID)
+		f, fErr := GetFeaturesForID(db, d.ProjectID)
+		if fErr != nil {
+			return fErr
+		}
+		vi, viErr := GetVisualIdentitiesForID(db, d.ProjectID)
+		if viErr != nil {
+			return viErr
+		}
+		cl, cErr := GetColorsForID(db, d.ProjectID)
+		if cErr != nil {
+			return cErr
+		}
+		cf, cfErr := GetCustomFeaturesForID(db, d.ProjectID)
+		if cfErr != nil {
+			return cfErr
+		}
+		sp, spErr := GetSimilarProjectsForID(db, d.ProjectID)
+		if spErr != nil {
+			return spErr
+		}
+		tg, tgErr := GetTargetGroupsForID(db, d.ProjectID)
+		if tgErr != nil {
+			return tgErr
+		}
 
 		d.Cms = &c
 		d.Status = &s
@@ -78,7 +97,7 @@ func GetDetailsForURL(db *db.DB, url string) (*project.Details, error) {
 
 		details = &d
 
-		return err
+		return nil
 	})
 
 	return details, err

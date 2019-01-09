@@ -2,18 +2,17 @@ package project
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model"
 )
 
 // GetFeaturesForID - get project features for project id
-func GetFeaturesForID(db *db.DB, id string) ([]model.Feature, error) {
+func GetFeaturesForID(db *db.DB, id string) ([]model.Feature, *err.Error) {
 	var features []model.Feature
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT f.id_feature,
 									  f.name,
 									  f.description 
@@ -29,11 +28,7 @@ func GetFeaturesForID(db *db.DB, id string) ([]model.Feature, error) {
 				&f.Description)
 
 			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+				return db.HandleError(err)
 			}
 
 			features = append(features, f)

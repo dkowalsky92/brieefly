@@ -1,11 +1,11 @@
 package project
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/brieefly/db"
 	"github.com/brieefly/db/project"
+	"github.com/brieefly/net/io"
 	"github.com/go-chi/chi"
 )
 
@@ -28,20 +28,5 @@ func newDetailsRouter(db *db.DB) *detailsRouter {
 func (r *detailsRouter) getDetailsForURL(w http.ResponseWriter, req *http.Request) {
 	slug := chi.URLParam(req, "slug")
 	details, err := project.GetDetailsForURL(r.db, slug)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	bytes, err := json.Marshal(&details)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	_, err = w.Write(bytes)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
+	io.ParseAndWrite(w, details, err)
 }

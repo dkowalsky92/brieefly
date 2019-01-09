@@ -2,18 +2,17 @@ package market
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model"
 )
 
 // GetOffersForID - get offers for project id
-func GetOffersForID(db *db.DB, id string) ([]model.Offer, error) {
+func GetOffersForID(db *db.DB, id string) ([]model.Offer, *err.Error) {
 	var offers []model.Offer
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT o.id_offer,
 									  o.salary, 
 									  o.is_chosen,
@@ -35,27 +34,23 @@ func GetOffersForID(db *db.DB, id string) ([]model.Offer, error) {
 				&o.CompanyID)
 
 			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+				return db.HandleError(err)
 			}
 
 			offers = append(offers, o)
 		}
 
-		return err
+		return nil
 	})
 
 	return offers, err
 }
 
 // GetAllOffers - get all offers
-func GetAllOffers(db *db.DB) ([]model.Offer, error) {
+func GetAllOffers(db *db.DB) ([]model.Offer, *err.Error) {
 	var offers []model.Offer
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT o.id_offer,
 									  o.salary, 
 									  o.is_chosen,
@@ -76,17 +71,13 @@ func GetAllOffers(db *db.DB) ([]model.Offer, error) {
 				&o.CompanyID)
 
 			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+				return db.HandleError(err)
 			}
 
 			offers = append(offers, o)
 		}
 
-		return err
+		return nil
 	})
 
 	return offers, err

@@ -2,18 +2,17 @@ package project
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model"
 )
 
 // GetCustomFeaturesForID - get project's custom features for project id
-func GetCustomFeaturesForID(db *db.DB, id string) ([]model.CustomFeature, error) {
+func GetCustomFeaturesForID(db *db.DB, id string) ([]model.CustomFeature, *err.Error) {
 	var customFeatures []model.CustomFeature
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT cf.id_custom_feature,
 									  cf.name,
 									  cf.description
@@ -28,17 +27,13 @@ func GetCustomFeaturesForID(db *db.DB, id string) ([]model.CustomFeature, error)
 				&cf.Description)
 
 			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+				return db.HandleError(err)
 			}
 
 			customFeatures = append(customFeatures, cf)
 		}
 
-		return err
+		return nil
 	})
 
 	return customFeatures, err

@@ -2,10 +2,9 @@ package project
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model"
 )
 
@@ -20,10 +19,10 @@ import (
 // }
 
 // GetTargetGroupsForID - get project's target groups for project id
-func GetTargetGroupsForID(db *db.DB, id string) ([]model.TargetGroup, error) {
+func GetTargetGroupsForID(db *db.DB, id string) ([]model.TargetGroup, *err.Error) {
 	var targetGroups []model.TargetGroup
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT tg.id_target_group,
 									   tg.name,
 									   tg.description, 
@@ -42,17 +41,13 @@ func GetTargetGroupsForID(db *db.DB, id string) ([]model.TargetGroup, error) {
 				&tg.AgeMax)
 
 			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+				return db.HandleError(err)
 			}
 
 			targetGroups = append(targetGroups, tg)
 		}
 
-		return err
+		return nil
 	})
 
 	return targetGroups, err

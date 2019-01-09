@@ -1,11 +1,11 @@
 package project
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/brieefly/db"
 	"github.com/brieefly/db/project"
+	"github.com/brieefly/net/io"
 	"github.com/go-chi/chi"
 )
 
@@ -57,41 +57,12 @@ func NewRouter(db *db.DB) *Router {
 func (r *Router) GetAllForUserID(w http.ResponseWriter, req *http.Request) {
 	id := chi.URLParam(req, "id")
 	projects, err := project.GetAllForUserID(r.DB, id)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-	bytes, err := json.Marshal(projects)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	_, err = w.Write(bytes)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
+	io.ParseAndWrite(w, projects, err)
 }
 
 // GetNameForID - get project name for project id
 func (r *Router) GetNameForID(w http.ResponseWriter, req *http.Request) {
 	id := chi.URLParam(req, "id")
 	name, err := project.GetNameForID(r.DB, id)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	bytes, err := json.Marshal(&name)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	_, err = w.Write(bytes)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
+	io.ParseAndWrite(w, name, err)
 }

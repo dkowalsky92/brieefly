@@ -30,6 +30,7 @@ func BrieeflyRouter(db *db.DB, config *config.Config) *Router {
 			next.ServeHTTP(w, r)
 		})
 	})
+	//mux.Use(ComposeError)
 	mux.Use(middleware.Timeout(60 * time.Second))
 	mux.Use(middleware.RequestID)
 	mux.Use(middleware.RealIP)

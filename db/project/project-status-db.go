@@ -2,18 +2,17 @@ package project
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model"
 )
 
 // GetStatusForID - get status for project id
-func GetStatusForID(db *db.DB, id string) (*model.ProjectStatus, error) {
+func GetStatusForID(db *db.DB, id string) (*model.ProjectStatus, *err.Error) {
 	var status *model.ProjectStatus
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		row := tx.QueryRow(`SELECT s.id_status,
 							       s.name
 							       FROM Project p
@@ -25,16 +24,12 @@ func GetStatusForID(db *db.DB, id string) (*model.ProjectStatus, error) {
 			&s.Name)
 
 		if err != nil {
-			switch err {
-			default:
-				log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			}
-			return err
+			return db.HandleError(err)
 		}
 
 		status = &s
 
-		return err
+		return nil
 	})
 
 	return status, err

@@ -2,29 +2,24 @@ package project
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 )
 
 // GetNameForID - gets the project's name for project id
-func GetNameForID(_db *db.DB, id string) (*db.NullString, error) {
+func GetNameForID(_db *db.DB, id string) (*db.NullString, *err.Error) {
 	var name db.NullString
 
-	err := _db.WithTransaction(func(tx *sql.Tx) error {
+	err := _db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		row := tx.QueryRow(`SELECT name FROM Project WHERE id_project = ?;`, id)
 		err := row.Scan(&name)
 
 		if err != nil {
-			switch err {
-			default:
-				log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			}
-			return err
+			return _db.HandleError(err)
 		}
 
-		return err
+		return nil
 	})
 
 	return &name, err

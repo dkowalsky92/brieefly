@@ -2,18 +2,17 @@ package market
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model/market"
 )
 
 // GetPendingProjects - get all offers
-func GetPendingProjects(db *db.DB) ([]market.PendingProject, error) {
+func GetPendingProjects(db *db.DB) ([]market.PendingProject, *err.Error) {
 	var projects []market.PendingProject
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT p.id_project,
 									  p.name, 
 									  p.type, 
@@ -48,17 +47,13 @@ func GetPendingProjects(db *db.DB) ([]market.PendingProject, error) {
 				&pp.VisualIdentityType)
 
 			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+				return db.HandleError(err)
 			}
 
 			projects = append(projects, pp)
 		}
 
-		return err
+		return nil
 	})
 
 	return projects, err

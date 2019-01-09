@@ -2,18 +2,17 @@ package project
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model"
 )
 
 // GetCMSForID - gets the project's name for project id
-func GetCMSForID(_db *db.DB, id string) (*model.CMS, error) {
+func GetCMSForID(_db *db.DB, id string) (*model.CMS, *err.Error) {
 	var cms *model.CMS
 
-	err := _db.WithTransaction(func(tx *sql.Tx) error {
+	err := _db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		row := tx.QueryRow(`SELECT c.id_cms,
 								   c.name,
 								   c.description
@@ -27,16 +26,12 @@ func GetCMSForID(_db *db.DB, id string) (*model.CMS, error) {
 			&c.Description)
 
 		if err != nil {
-			switch err {
-			default:
-				log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			}
-			return err
+			return _db.HandleError(err)
 		}
 
 		cms = &c
 
-		return err
+		return nil
 	})
 
 	return cms, err

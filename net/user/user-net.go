@@ -1,11 +1,11 @@
 package user
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/brieefly/db"
 	"github.com/brieefly/db/user"
+	"github.com/brieefly/net/io"
 	"github.com/go-chi/chi"
 )
 
@@ -20,13 +20,10 @@ func NewRouter(db *db.DB) *Router {
 	r := &Router{DB: db}
 
 	mux := chi.NewRouter()
-
 	mux.Get("/", r.GetAll)
-
 	mux.Route("/{id}", func(sr chi.Router) {
 		sr.Get("/", r.Get)
 	})
-
 	r.Mux = mux
 
 	return r
@@ -36,33 +33,11 @@ func NewRouter(db *db.DB) *Router {
 func (r *Router) Get(w http.ResponseWriter, req *http.Request) {
 	id := chi.URLParam(req, "id")
 	user, err := user.Get(r.DB, id)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-	err = json.NewEncoder(w).Encode(user)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
+	io.ParseAndWrite(w, user, err)
 }
 
 // GetAll - get all users
 func (r *Router) GetAll(w http.ResponseWriter, req *http.Request) {
 	users, err := user.GetAll(r.DB)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-	bytes, err := json.Marshal(users)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	_, err = w.Write(bytes)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
+	io.ParseAndWrite(w, users, err)
 }

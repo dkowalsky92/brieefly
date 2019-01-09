@@ -1,11 +1,11 @@
 package agency
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/brieefly/db"
 	"github.com/brieefly/db/agency"
+	"github.com/brieefly/net/io"
 	"github.com/go-chi/chi"
 )
 
@@ -47,19 +47,5 @@ func NewRouter(db *db.DB) *Router {
 // GetAll - get all users
 func (r *Router) GetAll(w http.ResponseWriter, req *http.Request) {
 	agencies, err := agency.GetAll(r.DB)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-	bytes, err := json.Marshal(&agencies)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	_, err = w.Write(bytes)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
+	io.ParseAndWrite(w, agencies, err)
 }

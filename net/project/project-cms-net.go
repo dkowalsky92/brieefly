@@ -1,11 +1,11 @@
 package project
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/brieefly/db"
 	"github.com/brieefly/db/project"
+	"github.com/brieefly/net/io"
 	"github.com/go-chi/chi"
 )
 
@@ -31,20 +31,5 @@ func newCMSRouter(db *db.DB) *cmsRouter {
 func (r *cmsRouter) getCMSForID(w http.ResponseWriter, req *http.Request) {
 	id := chi.URLParam(req, "id")
 	cms, err := project.GetCMSForID(r.db, id)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	bytes, err := json.Marshal(&cms)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	_, err = w.Write(bytes)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
+	io.ParseAndWrite(w, cms, err)
 }

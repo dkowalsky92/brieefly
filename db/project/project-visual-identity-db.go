@@ -2,28 +2,23 @@ package project
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model"
 )
 
 // GetVisualIdentitiesForID - Get all visual identities for project id
-func GetVisualIdentitiesForID(db *db.DB, id string) ([]model.VisualIdentity, error) {
+func GetVisualIdentitiesForID(db *db.DB, id string) ([]model.VisualIdentity, *err.Error) {
 	var identities []model.VisualIdentity
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT vi.id_visual_identity,
 									   vi.type 
 									   FROM Visual_identity vi 
 									   WHERE vi.id_project = ?`, id)
 		if err != nil {
-			switch err {
-			default:
-				log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			}
-			return err
+			return db.HandleError(err)
 		}
 
 		for rows.Next() {
@@ -32,17 +27,13 @@ func GetVisualIdentitiesForID(db *db.DB, id string) ([]model.VisualIdentity, err
 				&vi.Type)
 
 			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+				return db.HandleError(err)
 			}
 
 			identities = append(identities, vi)
 		}
 
-		return err
+		return nil
 	})
 
 	return identities, err

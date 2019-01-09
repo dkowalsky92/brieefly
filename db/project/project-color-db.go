@@ -2,28 +2,23 @@ package project
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model"
 )
 
 // GetColorsForID - Get all visual identities for project id
-func GetColorsForID(db *db.DB, id string) ([]model.Color, error) {
+func GetColorsForID(db *db.DB, id string) ([]model.Color, *err.Error) {
 	var colors []model.Color
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT c.id_color,
 									  c.hex_value
 									  FROM Color c 
 								      WHERE c.id_project = ?`, id)
 		if err != nil {
-			switch err {
-			default:
-				log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			}
-			return err
+			return db.HandleError(err)
 		}
 
 		for rows.Next() {
@@ -31,17 +26,13 @@ func GetColorsForID(db *db.DB, id string) ([]model.Color, error) {
 			err := rows.Scan(&c.ID,
 				&c.HexValue)
 			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+				return db.HandleError(err)
 			}
 
 			colors = append(colors, c)
 		}
 
-		return err
+		return nil
 	})
 
 	return colors, err

@@ -1,14 +1,9 @@
 package net
 
-import (
-	"net/http"
-)
-
-type Middleware func(http.HandlerFunc) http.HandlerFunc
-
-func WithStack(f http.HandlerFunc, middlewares ...Middleware) http.HandlerFunc {
-	for _, m := range middlewares {
-		f = m(f)
-	}
-	return f
-}
+// // ComposeError - creates an err.CompositeError object inside the request's context for collecting all the errors
+// func ComposeError(next http.Handler) http.Handler {
+// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		r = r.WithContext(ctx)
+// 		next.ServeHTTP(w, r)
+// 	})
+// }

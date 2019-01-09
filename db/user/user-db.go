@@ -5,15 +5,16 @@ import (
 	"fmt"
 
 	"github.com/brieefly/db"
+	"github.com/brieefly/err"
 	"github.com/brieefly/log"
 	"github.com/brieefly/model"
 )
 
 // Get - Get user for id
-func Get(db *db.DB, id string) (*model.User, error) {
+func Get(db *db.DB, id string) (*model.User, *err.Error) {
 	var user *model.User
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		row := tx.QueryRow(`SELECT u.id_user,
 							u.login,
 							u.email, 
@@ -46,28 +47,23 @@ func Get(db *db.DB, id string) (*model.User, error) {
 			&u.DateLastModified)
 
 		if err != nil {
-			switch err {
-			case sql.ErrNoRows:
-				log.Error(fmt.Sprintf("No rows found for id: %s", id))
-			default:
-				log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			}
-			return err
+			fmt.Println("HOHOHOOH")
+			return db.HandleError(err)
 		}
 
 		user = &u
 
-		return err
+		return db.HandleError(err)
 	})
-
+	fmt.Println(err)
 	return user, err
 }
 
 // GetAll - Get all users
-func GetAll(db *db.DB) ([]model.User, error) {
+func GetAll(db *db.DB) ([]model.User, *err.Error) {
 	var users []model.User
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT u.id_user,
 								u.login,
 								u.email, 
@@ -82,11 +78,7 @@ func GetAll(db *db.DB) ([]model.User, error) {
 								u.date_created, 
 								u.date_last_modified FROM User u;`)
 		if err != nil {
-			switch err {
-			default:
-				log.Error(fmt.Sprintf("Error occurred: %v", err))
-			}
-			return err
+			return db.HandleError(err)
 		}
 
 		for rows.Next() {
@@ -107,25 +99,22 @@ func GetAll(db *db.DB) ([]model.User, error) {
 				&user.DateLastModified)
 
 			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+				return db.HandleError(err)
 			}
 
 			users = append(users, user)
 		}
 
-		return nil
+		return db.HandleError(err)
 	})
 
 	return users, err
 }
 
 // Insert - inserts new user
-func Insert(db *db.DB, user *model.User) (*model.User, error) {
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+func Insert(db *db.DB, user *model.User) (*model.User, *err.Error) {
+
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		stmt, err := tx.Prepare(`INSERT INTO user (id_user,
 								  email, 
 								  password_fail_attempts, 
@@ -140,7 +129,7 @@ func Insert(db *db.DB, user *model.User) (*model.User, error) {
 								  date_last_logged, 
 								  date_last_modified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
 		if err != nil {
-
+			return db.HandleError(err)
 		}
 
 		_, err = stmt.Exec(user.ID,
@@ -165,32 +154,24 @@ func Insert(db *db.DB, user *model.User) (*model.User, error) {
 }
 
 // Update - updates user's details
-func Update(db *db.DB, update *model.User) (*model.User, error) {
+func Update(db *db.DB, update *model.User) (*model.User, *err.Error) {
 	// TODO: implement
 	return nil, nil
 }
 
 // Delete - deletes user
-func Delete(db *db.DB, id string) (bool, error) {
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+func Delete(db *db.DB, id string) (bool, *err.Error) {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		stmt, err := tx.Prepare("DELETE FROM user WHERE id_user = ?")
 
 		if err != nil {
-			switch err {
-			default:
-				log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			}
-			return err
+			return db.HandleError(err)
 		}
 
 		res, err := stmt.Exec(id)
 
 		if err != nil {
-			switch err {
-			default:
-				log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			}
-			return err
+			return db.HandleError(err)
 		}
 
 		affected, _ := res.RowsAffected()

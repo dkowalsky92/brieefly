@@ -2,18 +2,17 @@ package agency
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model"
 )
 
 // GetForURL - get agency for url
-func GetForURL(db *db.DB, url string) (*model.Agency, error) {
+func GetForURL(db *db.DB, url string) (*model.Agency, *err.Error) {
 	var agency *model.Agency
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		row := tx.QueryRow(`SELECT a.agency_code,
 									a.nip_number, 
 									c.id_company, 
@@ -44,29 +43,26 @@ func GetForURL(db *db.DB, url string) (*model.Agency, error) {
 			&c.Description,
 			&c.DateLastModified,
 			&c.DateCreated)
+
 		if err != nil {
-			switch err {
-			default:
-				log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			}
-			return err
+			return db.HandleError(err)
 		}
 
 		a.Company = c
 
 		agency = &a
 
-		return err
+		return nil
 	})
 
 	return agency, err
 }
 
 // GetForID - get agency for id
-func GetForID(db *db.DB, id string) (*model.Agency, error) {
+func GetForID(db *db.DB, id string) (*model.Agency, *err.Error) {
 	var agency *model.Agency
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		row := tx.QueryRow(`SELECT a.agency_code,
 									a.nip_number, 
 									c.id_company, 
@@ -97,29 +93,26 @@ func GetForID(db *db.DB, id string) (*model.Agency, error) {
 			&c.Description,
 			&c.DateLastModified,
 			&c.DateCreated)
+
 		if err != nil {
-			switch err {
-			default:
-				log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			}
-			return err
+			return db.HandleError(err)
 		}
 
 		a.Company = c
 
 		agency = &a
 
-		return err
+		return nil
 	})
 
 	return agency, err
 }
 
 // GetAll - Get all agencies
-func GetAll(db *db.DB) ([]model.Agency, error) {
+func GetAll(db *db.DB) ([]model.Agency, *err.Error) {
 	agencies := []model.Agency{}
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT a.agency_code,
 								a.nip_number, 
 								c.id_company, 
@@ -134,10 +127,11 @@ func GetAll(db *db.DB) ([]model.Agency, error) {
 								c.date_created 
 								FROM Agency a 
 								INNER JOIN Company c ON a.id_company = c.id_company`)
+
 		if err != nil {
-			log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			return err
+			return db.HandleError(err)
 		}
+
 		for rows.Next() {
 			var a model.Agency
 			var c model.Company
@@ -154,13 +148,7 @@ func GetAll(db *db.DB) ([]model.Agency, error) {
 				&c.DateLastModified,
 				&c.DateCreated)
 			if err != nil {
-				switch err {
-				case sql.ErrNoRows:
-					log.Error(fmt.Sprintf("No rows found"))
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+				return db.HandleError(err)
 			}
 
 			a.Company = c
@@ -168,7 +156,7 @@ func GetAll(db *db.DB) ([]model.Agency, error) {
 			agencies = append(agencies, a)
 		}
 
-		return err
+		return nil
 	})
 
 	return agencies, err

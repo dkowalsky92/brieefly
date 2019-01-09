@@ -2,19 +2,18 @@ package project
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/brieefly/db"
-	"github.com/brieefly/log"
+	"github.com/brieefly/err"
 	"github.com/brieefly/model"
 	"github.com/brieefly/model/project"
 )
 
 // GetAllForUserID - Get all projects for user id
-func GetAllForUserID(db *db.DB, id string) ([]project.UserProject, error) {
+func GetAllForUserID(db *db.DB, id string) ([]project.UserProject, *err.Error) {
 	projects := []project.UserProject{}
 
-	err := db.WithTransaction(func(tx *sql.Tx) error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT p.id_project,
 									   p.name,
 									   p.type,
@@ -37,9 +36,9 @@ func GetAllForUserID(db *db.DB, id string) ([]project.UserProject, error) {
 									   WHERE cp.id_user = ? AND o.is_chosen = true`, id)
 
 		if err != nil {
-			log.Error(fmt.Sprintf("Error occurred: %+v", err))
-			return err
+			return db.HandleError(err)
 		}
+
 		for rows.Next() {
 			var up project.UserProject
 			var p model.Project
@@ -60,22 +59,16 @@ func GetAllForUserID(db *db.DB, id string) ([]project.UserProject, error) {
 				&up.AgencyName)
 
 			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+				return db.HandleError(err)
 			}
 
-			c, err := GetCMSForID(db, p.ID)
-			s, err := GetStatusForID(db, p.ID)
-
-			if err != nil {
-				switch err {
-				default:
-					log.Error(fmt.Sprintf("Error occurred: %+v", err))
-				}
-				return err
+			c, cErr := GetCMSForID(db, p.ID)
+			if cErr != nil {
+				return cErr
+			}
+			s, sErr := GetStatusForID(db, p.ID)
+			if sErr != nil {
+				return sErr
 			}
 
 			p.Cms = c
@@ -85,7 +78,7 @@ func GetAllForUserID(db *db.DB, id string) ([]project.UserProject, error) {
 			projects = append(projects, up)
 		}
 
-		return err
+		return nil
 	})
 
 	return projects, err
