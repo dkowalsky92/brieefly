@@ -7,6 +7,8 @@ import (
 	"github.com/brieefly/config"
 	"github.com/brieefly/db"
 	"github.com/brieefly/net/agency"
+	"github.com/brieefly/net/auth"
+	"github.com/brieefly/net/login"
 	"github.com/brieefly/net/market"
 	"github.com/brieefly/net/project"
 	"github.com/brieefly/net/user"
@@ -24,25 +26,69 @@ type Router struct {
 // BrieeflyRouter - creates a new router
 func BrieeflyRouter(db *db.DB, config *config.Config) *Router {
 	mux := chi.NewRouter()
-	mux.Use(func(next http.Handler) http.Handler {
+
+	/** public **/
+	public(mux, db, config)
+
+	/** protected **/
+	protected(mux, db, config)
+
+	/** private **/
+	private(mux, db, config)
+
+	return &Router{database: db, config: config, mux: mux}
+}
+
+func public(mux *chi.Mux, db *db.DB, config *config.Config) {
+	mux.Group(func(r chi.Router) {
+		injectMiddlewareStack(r, config)
+
+		r.Mount("/api/login", login.NewRouter(db).Mux)
+	})
+}
+
+func protected(mux *chi.Mux, db *db.DB, config *config.Config) {
+	mux.Group(func(r chi.Router) {
+		injectMiddlewareStack(r, config)
+
+		r.Use(auth.ValidateTokenMiddleware)
+
+		r.Mount("/api/projects", project.NewRouter(db).Mux)
+		r.Mount("/api/users", user.NewRouter(db).Mux)
+		r.Mount("/api/agencies", agency.NewRouter(db).Mux)
+		r.Mount("/api/market", market.NewRouter(db).Mux)
+	})
+}
+
+func private(mux *chi.Mux, db *db.DB, config *config.Config) {
+	mux.Group(func(r chi.Router) {
+		injectMiddlewareStack(r, config)
+
+		r.Use(auth.ValidateTokenMiddleware)
+	})
+}
+
+func injectMiddlewareStack(r chi.Router, cnf *config.Config) {
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx := config.IntoContext(r.Context(), cnf)
+
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	})
+
+	r.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 			next.ServeHTTP(w, r)
 		})
 	})
-	//mux.Use(ComposeError)
-	mux.Use(middleware.Timeout(60 * time.Second))
-	mux.Use(middleware.RequestID)
-	mux.Use(middleware.RealIP)
-	mux.Use(middleware.Logger)
-	mux.Use(middleware.Recoverer)
 
-	mux.Mount("/api/projects", project.NewRouter(db).Mux)
-	mux.Mount("/api/users", user.NewRouter(db).Mux)
-	mux.Mount("/api/agencies", agency.NewRouter(db).Mux)
-	mux.Mount("/api/market", market.NewRouter(db).Mux)
-
-	return &Router{database: db, config: config, mux: mux}
+	r.Use(middleware.Timeout(60 * time.Second))
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
 }
 
 // Run - starts the server

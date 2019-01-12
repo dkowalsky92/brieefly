@@ -47,7 +47,6 @@ func Get(db *db.DB, id string) (*model.User, *err.Error) {
 			&u.DateLastModified)
 
 		if err != nil {
-			fmt.Println("HOHOHOOH")
 			return db.HandleError(err)
 		}
 

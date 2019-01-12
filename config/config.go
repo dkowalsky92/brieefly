@@ -1,11 +1,18 @@
 package config
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 
 	"github.com/brieefly/log"
+)
+
+type contextKey string
+
+var (
+	configKey contextKey
 )
 
 // Environment - defines environment
@@ -26,8 +33,9 @@ const (
 
 // Config - stores all necessary information regarding server & database setup
 type Config struct {
-	Database *DatabaseParams `json:"database"`
-	Server   *ServerParams   `json:"server"`
+	Database *DatabaseParams      `json:"database"`
+	Server   *ServerParams        `json:"server"`
+	Auth     *AuthorizationParams `json:"auth"`
 }
 
 // DatabaseParams - database info
@@ -45,6 +53,12 @@ type ServerParams struct {
 	FileProtocol string `json:"file_protocol"`
 	IP           string `json:"ip"`
 	Port         string `json:"port"`
+}
+
+// AuthorizationParams - jwt authorization info
+type AuthorizationParams struct {
+	Public  string `json:"public"`
+	Private string `json:"private"`
 }
 
 // NewConfig - creates a new Config object with specified environment
@@ -75,6 +89,16 @@ func NewConfig(environment Environment) (*Config, error) {
 	}
 
 	return &config, nil
+}
+
+// IntoContext - inserts the associated config into given context
+func IntoContext(ctx context.Context, config *Config) context.Context {
+	return context.WithValue(ctx, configKey, config)
+}
+
+// FromContext - returns the associated config from given context
+func FromContext(ctx context.Context) *Config {
+	return ctx.Value(configKey).(*Config)
 }
 
 // MyPath - generates a path with parameters from given config

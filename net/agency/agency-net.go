@@ -44,7 +44,6 @@ func NewRouter(db *db.DB) *Router {
 // 	}
 // }
 
-// GetAll - get all users
 func (r *Router) GetAll(w http.ResponseWriter, req *http.Request) {
 	agencies, err := agency.GetAll(r.DB)
 	io.ParseAndWrite(w, agencies, err)

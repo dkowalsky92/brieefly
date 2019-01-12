@@ -5,13 +5,8 @@ import (
 	"net/http"
 )
 
-type contextKey string
-
-// errorCtxKey - a key under which all errors are stored in a given *context.Context
-const errorCtxKey contextKey = `ErrorCtxKey`
-
-// underlyingErrorCtxKey - a key inside the Error.Info map pointing to the underlying error
-const underlyingErrorCtxKey contextKey = `UnderlyingErrorCtxKey`
+// ErrorType - error
+type ErrorType uint64
 
 const (
 
@@ -61,6 +56,11 @@ const (
 // ErrorHandler - an error handling interface with one method
 type ErrorHandler interface {
 	HandleError(error) *Error
+}
+
+// TypedErrorHandler - an error handling interface with specific type
+type TypedErrorHandler interface {
+	HandleTypedError(error, ErrorType) *Error
 }
 
 // Error - extended error model for better error management

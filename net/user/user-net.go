@@ -24,6 +24,7 @@ func NewRouter(db *db.DB) *Router {
 	mux.Route("/{id}", func(sr chi.Router) {
 		sr.Get("/", r.Get)
 	})
+
 	r.Mux = mux
 
 	return r
