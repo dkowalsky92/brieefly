@@ -26,6 +26,7 @@ func DbLogin(db *_db.DB, cnf *config.Config, email, password string) (*body.Toke
 		claims := &body.JWTClaims{
 			id.String,
 			jwt.StandardClaims{
+				IssuedAt:  time.Now().Unix(),
 				ExpiresAt: time.Now().Add(time.Hour * 15).Unix(),
 				Issuer:    "Brieefly",
 			},

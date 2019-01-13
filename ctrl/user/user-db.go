@@ -64,7 +64,9 @@ func DbExists(_db *db.DB, email, password string) db.NullString {
 	_ = _db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		row := tx.QueryRow(`SELECT u.id_user FROM User u
 							WHERE u.email = ? AND u.password = ?;`, email, password)
-		_ = row.Scan(&id)
+		err := row.Scan(&id)
+		fmt.Println(err)
+		fmt.Println(id)
 		return nil
 	})
 

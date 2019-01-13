@@ -30,7 +30,7 @@ func NewLoginRouter(db *db.DB) *LoginRouter {
 
 // Login - logins a user and returns an auth token
 func (r *LoginRouter) Login(w http.ResponseWriter, req *http.Request) {
-	li := body.LoginInfo{}
+	li := &body.LoginInfo{}
 	io.ParseBody(w, req, li)
 	config := config.FromContext(req.Context())
 	auth, err := DbLogin(r.DB, config, li.Email, li.Password)
