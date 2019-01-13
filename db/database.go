@@ -11,8 +11,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// error constants
 const (
-	ErrUserNotFound err.ErrorType = iota
+	ErrNotFound err.ErrorType = iota
+	ErrAlreadyExists
 )
 
 // DB - sql.DB wrapper
@@ -53,14 +55,12 @@ func (db *DB) HandleError(_err error) *err.Error {
 
 // HandleTypedError - returns an appropriate error for
 func (db *DB) HandleTypedError(_err error, t err.ErrorType) *err.Error {
-	if _err != nil {
-		switch t {
-		case ErrUserNotFound:
-			return err.New(errors.New("User could not be found :("), err.ErrEmptyResult, map[string]interface{}{})
-		default:
-			return err.New(_err, err.ErrEmptyResult, map[string]interface{}{})
-		}
+	switch t {
+	case ErrNotFound:
+		return err.New(errors.New("specified resource does not exist"), err.ErrEmptyResult, map[string]interface{}{})
+	case ErrAlreadyExists:
+		return err.New(errors.New("specified resource already exists and cannot be replaced"), err.ErrConflict, map[string]interface{}{})
+	default:
+		return err.New(_err, err.ErrEmptyResult, map[string]interface{}{})
 	}
-
-	return nil
 }

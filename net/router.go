@@ -5,13 +5,13 @@ import (
 	"time"
 
 	"github.com/brieefly/config"
+	"github.com/brieefly/ctrl/access"
+	"github.com/brieefly/ctrl/agency"
+	"github.com/brieefly/ctrl/market"
+	"github.com/brieefly/ctrl/project"
+	"github.com/brieefly/ctrl/user"
 	"github.com/brieefly/db"
-	"github.com/brieefly/net/agency"
 	"github.com/brieefly/net/auth"
-	"github.com/brieefly/net/login"
-	"github.com/brieefly/net/market"
-	"github.com/brieefly/net/project"
-	"github.com/brieefly/net/user"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )
@@ -23,8 +23,8 @@ type Router struct {
 	database *db.DB
 }
 
-// BrieeflyRouter - creates a new router
-func BrieeflyRouter(db *db.DB, config *config.Config) *Router {
+// NewRouter - creates a new router
+func NewRouter(db *db.DB, config *config.Config) *Router {
 	mux := chi.NewRouter()
 
 	/** public **/
@@ -43,7 +43,8 @@ func public(mux *chi.Mux, db *db.DB, config *config.Config) {
 	mux.Group(func(r chi.Router) {
 		injectMiddlewareStack(r, config)
 
-		r.Mount("/api/login", login.NewRouter(db).Mux)
+		r.Mount("/api/register", access.NewRegisterRouter(db).Mux)
+		r.Mount("/api/login", access.NewLoginRouter(db).Mux)
 	})
 }
 

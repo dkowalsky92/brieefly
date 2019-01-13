@@ -38,6 +38,9 @@ const (
 	// ErrNotFound - the destination does not exist
 	ErrNotFound int = 404
 
+	// ErrConflict - the resource posted encountered a conflict
+	ErrConflict int = 409
+
 	/*** Server errors ***/
 
 	// ErrInternal - the server cannot process the request for an unknown reason

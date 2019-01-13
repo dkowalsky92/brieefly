@@ -26,7 +26,7 @@ func main() {
 	}
 	fmt.Println("Connected.")
 
-	router := net.BrieeflyRouter(db, c)
+	router := net.NewRouter(db, c)
 
 	fmt.Println("Server is running.")
 	router.Run()
