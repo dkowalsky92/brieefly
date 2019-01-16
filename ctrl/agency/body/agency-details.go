@@ -15,8 +15,9 @@ type BasicProject struct {
 	AverageOpinion db.NullFloat64 `json:"averageOpinion"`
 }
 
-// Details - a model for agency's details and finished projects
-type Details struct {
+// AgencyDetails - a model for agency's details and finished projects
+type AgencyDetails struct {
 	Agency         *model.Agency  `json:"agency"`
 	AverageOpinion db.NullFloat64 `json:"averageOpinion"`
+	Projects       []BasicProject `json:"projects"`
 }

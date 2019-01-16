@@ -52,17 +52,21 @@ func DbGetFinishedProjectsForURL(db *db.DB, url string) ([]body.BasicProject, *e
 }
 
 // DbGetAgencyAndOpinionsForURL - get agency details for company url
-func DbGetAgencyAndOpinionsForURL(db *db.DB, url string) (*body.Details, *err.Error) {
-	var details *body.Details
+func DbGetAgencyAndOpinionsForURL(db *db.DB, url string) (*body.AgencyDetails, *err.Error) {
+	var details *body.AgencyDetails
 
 	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		a, err := DbGetForURL(db, url)
 		if err != nil {
 			return err
 		}
-
-		var d body.Details
+		p, err := DbGetFinishedProjectsForURL(db, url)
+		if err != nil {
+			return err
+		}
+		var d body.AgencyDetails
 		d.Agency = a
+		d.Projects = p
 
 		row := tx.QueryRow(`SELECT AVG(op.grade)
 						 	FROM Opinion op

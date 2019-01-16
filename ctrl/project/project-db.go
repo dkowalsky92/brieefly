@@ -13,7 +13,6 @@ import (
 // DbGetProjectForID -
 func DbGetProjectForID(_db *db.DB, id string) (*model.Project, *err.Error) {
 	var project *model.Project
-	fmt.Println(id)
 	err := _db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		row := tx.QueryRow(`SELECT u.id_project,
 									u.name,

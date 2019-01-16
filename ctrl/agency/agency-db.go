@@ -22,7 +22,8 @@ func DbGetForURL(db *db.DB, url string) (*model.Agency, *err.Error) {
 									c.phone, 
 									c.address, 
 									c.website_url, 
-									c.image_url, 
+									c.image_url,
+									c.url_name,  
 									c.description, 
 									c.date_last_modified, 
 									c.date_created FROM Agency a
@@ -41,6 +42,7 @@ func DbGetForURL(db *db.DB, url string) (*model.Agency, *err.Error) {
 			&c.Address,
 			&c.WebsiteURL,
 			&c.ImageURL,
+			&c.NameURL,
 			&c.Description,
 			&c.DateLastModified,
 			&c.DateCreated)
@@ -110,8 +112,8 @@ func DbGetForID(db *db.DB, id string) (*model.Agency, *err.Error) {
 }
 
 // DbGetAll - Get all agencies
-func DbGetAll(_db *db.DB) ([]body.Details, *err.Error) {
-	agencies := []body.Details{}
+func DbGetAll(_db *db.DB) ([]body.AgencyDetails, *err.Error) {
+	agencies := []body.AgencyDetails{}
 
 	err := _db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT a.agency_code,
@@ -134,7 +136,7 @@ func DbGetAll(_db *db.DB) ([]body.Details, *err.Error) {
 		}
 
 		for rows.Next() {
-			var d body.Details
+			var d body.AgencyDetails
 			var a model.Agency
 			var c model.Company
 
