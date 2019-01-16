@@ -2,8 +2,8 @@ package model
 
 // VisualIdentity - visual identity model
 type VisualIdentity struct {
-	ID   string `json:"idVisualIdentity"`
-	Type string `json:"type"`
+	ID   string `json:"idVisualIdentity" orm:"id_visual_identity"`
+	Type string `json:"type" orm:"type"`
 }
 
 // -- Table: Visual_identity

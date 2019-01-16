@@ -4,11 +4,11 @@ import "github.com/brieefly/db"
 
 // TargetGroup - a target group model
 type TargetGroup struct {
-	ID          string        `json:"idTarget"`
-	Name        string        `json:"name"`
-	Description db.NullString `json:"description"`
-	AgeMin      db.NullInt64  `json:"ageMin"`
-	AgeMax      db.NullInt64  `json:"ageMax"`
+	ID          string        `json:"idTarget" orm:"id_target_group"`
+	Name        string        `json:"name" orm:"name"`
+	Description db.NullString `json:"description" orm:"description"`
+	AgeMin      db.NullInt64  `json:"ageMin" orm:"age_min"`
+	AgeMax      db.NullInt64  `json:"ageMax" orm:"age_max"`
 }
 
 // -- Table: Target_group

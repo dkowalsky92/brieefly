@@ -2,8 +2,8 @@ package model
 
 // ProjectStatus - project status model
 type ProjectStatus struct {
-	ID   string `json:"idStatus"`
-	Name string `json:"name"`
+	ID   string `json:"idStatus" orm:"id_status"`
+	Name string `json:"name" orm:"name"`
 }
 
 // -- Table: Status

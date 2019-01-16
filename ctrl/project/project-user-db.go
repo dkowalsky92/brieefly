@@ -71,8 +71,8 @@ func DbGetAllForUserID(db *db.DB, id string) ([]body.UserProject, *err.Error) {
 				return sErr
 			}
 
-			p.Cms = c
-			p.Status = s
+			up.CMS = c
+			up.Status = s
 			up.Project = p
 
 			projects = append(projects, up)

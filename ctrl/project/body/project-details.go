@@ -5,8 +5,8 @@ import (
 	"github.com/brieefly/model"
 )
 
-// Details - project details model
-type Details struct {
+// ProjectDetails - project details model
+type ProjectDetails struct {
 	ProjectID        string                 `json:"idProject"`
 	Name             string                 `json:"name"`
 	Type             string                 `json:"type"`

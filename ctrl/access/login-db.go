@@ -23,7 +23,7 @@ func DbLogin(db *_db.DB, cnf *config.Config, email, password string) (*body.Toke
 			return db.HandleTypedError(nil, _db.ErrNotFound)
 		}
 
-		claims := &body.JWTClaims{
+		claims := &auth.JWTClaims{
 			id.String,
 			jwt.StandardClaims{
 				IssuedAt:  time.Now().Unix(),
@@ -44,7 +44,7 @@ func DbLogin(db *_db.DB, cnf *config.Config, email, password string) (*body.Toke
 			return db.HandleError(err)
 		}
 
-		authToken = &body.Token{Token: ss}
+		authToken = &body.Token{Token: ss, UserID: id.String}
 
 		return db.HandleError(err)
 	})

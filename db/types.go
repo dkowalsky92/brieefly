@@ -115,12 +115,24 @@ func (ni *NullInt64) MarshalJSON() ([]byte, error) {
 	return json.Marshal(ni.Int64)
 }
 
+// UnmarshalJSON -
+func (ni *NullInt64) UnmarshalJSON(bytes []byte) error {
+	ni.Valid = string(bytes) != "null"
+	return json.Unmarshal(bytes, &ni.Int64)
+}
+
 // MarshalJSON - NullFloat64 json marshalling with javascript null handling
 func (nf *NullFloat64) MarshalJSON() ([]byte, error) {
 	if !nf.Valid {
 		return []byte("null"), nil
 	}
 	return json.Marshal(nf.Float64)
+}
+
+// UnmarshalJSON -
+func (nf *NullFloat64) UnmarshalJSON(bytes []byte) error {
+	nf.Valid = string(bytes) != "null"
+	return json.Unmarshal(bytes, &nf.Float64)
 }
 
 // MarshalJSON - NullString json marshalling with javascript null handling
@@ -131,10 +143,22 @@ func (ns *NullString) MarshalJSON() ([]byte, error) {
 	return json.Marshal(ns.String)
 }
 
+// UnmarshalJSON -
+func (ns *NullString) UnmarshalJSON(bytes []byte) error {
+	ns.Valid = string(bytes) != "null"
+	return json.Unmarshal(bytes, &ns.String)
+}
+
 // MarshalJSON - NullTime json marshalling with javascript null handling
 func (nt *NullTime) MarshalJSON() ([]byte, error) {
 	if !nt.Valid {
 		return []byte("null"), nil
 	}
 	return json.Marshal(nt.Time)
+}
+
+// UnmarshalJSON -
+func (nt *NullTime) UnmarshalJSON(bytes []byte) error {
+	nt.Valid = string(bytes) != "null"
+	return json.Unmarshal(bytes, &nt.Time)
 }

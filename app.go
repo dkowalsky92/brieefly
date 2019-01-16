@@ -1,4 +1,4 @@
-package main // import "github.com/dkowalsky/brieefly"
+package main
 
 import (
 	"fmt"

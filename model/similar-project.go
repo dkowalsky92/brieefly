@@ -1,12 +1,9 @@
 package model
 
-import "github.com/brieefly/db"
-
 // SimilarProject - a similiar project model
 type SimilarProject struct {
-	ID         string        `json:"idSimilarProject"`
-	ProjectURL string        `json:"projectUrl"`
-	ProjectID  db.NullString `json:"idProject"`
+	ID         string `json:"idSimilarProject" orm:"id_similar_project"`
+	ProjectURL string `json:"projectUrl" orm:"project_url"`
 }
 
 // -- Table: Similar_project

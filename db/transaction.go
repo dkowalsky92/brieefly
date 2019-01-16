@@ -14,6 +14,7 @@ type TxFn func(*sql.Tx) *err.Error
 // error object returned by the `TxFn`
 func (db *DB) WithTransaction(fn TxFn) *err.Error {
 	tx, errTx := db.Begin()
+
 	if errTx != nil {
 		return err.New(errTx, err.ErrTxBegin, map[string]interface{}{})
 	}

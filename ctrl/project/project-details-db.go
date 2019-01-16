@@ -10,8 +10,8 @@ import (
 )
 
 // DbGetDetailsForURL - get project details for project url
-func DbGetDetailsForURL(db *db.DB, url string) (*body.Details, *err.Error) {
-	var details *body.Details
+func DbGetDetailsForURL(db *db.DB, url string) (*body.ProjectDetails, *err.Error) {
+	var details *body.ProjectDetails
 
 	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		projectRow := tx.QueryRow(`SELECT p.id_project,
@@ -38,7 +38,7 @@ func DbGetDetailsForURL(db *db.DB, url string) (*body.Details, *err.Error) {
 
 		var s model.ProjectStatus
 		var c model.CMS
-		var d body.Details
+		var d body.ProjectDetails
 		var avgOp float64
 
 		err := projectRow.Scan(&d.ProjectID,

@@ -1,14 +1,27 @@
 package auth
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strings"
 
 	"github.com/brieefly/config"
 	_err "github.com/brieefly/err"
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go"
 )
+
+type contextKey string
+
+const (
+	userIDKey contextKey = "userIDKey"
+)
+
+// JWTClaims - claims to be used inside JWT token
+type JWTClaims struct {
+	UserID string `json:"idUser"`
+	jwt.StandardClaims
+}
 
 // ValidateTokenMiddleware - validate if token is present
 func ValidateTokenMiddleware(next http.Handler) http.Handler {
@@ -26,7 +39,9 @@ func ValidateTokenMiddleware(next http.Handler) http.Handler {
 		})
 		if pErr == nil {
 			if token.Valid {
-				next.ServeHTTP(w, r)
+				claims := token.Claims.(jwt.MapClaims)
+				ctx := context.WithValue(r.Context(), userIDKey, claims["idUser"])
+				next.ServeHTTP(w, r.WithContext(ctx))
 			} else {
 				err := _err.New(pErr, http.StatusUnauthorized, map[string]interface{}{})
 				_err.WriteError(err, w)
@@ -36,4 +51,13 @@ func ValidateTokenMiddleware(next http.Handler) http.Handler {
 			_err.WriteError(err, w)
 		}
 	})
+}
+
+// UserIDFromContext -
+func UserIDFromContext(ctx context.Context) *string {
+	val := ctx.Value(userIDKey).(string)
+	if val == "" {
+		return nil
+	}
+	return &val
 }

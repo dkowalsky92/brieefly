@@ -2,9 +2,9 @@ package model
 
 // CustomFeature - a custom feature model
 type CustomFeature struct {
-	ID          string `json:"idCustomFeature"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	ID          string `json:"idCustomFeature" orm:"id_custom_feature"`
+	Name        string `json:"name" orm:"name"`
+	Description string `json:"description" orm:"description"`
 }
 
 // -- Table: Custom_feature

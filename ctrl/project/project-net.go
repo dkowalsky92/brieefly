@@ -1,9 +1,12 @@
 package project
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/brieefly/ctrl/project/body"
 	"github.com/brieefly/db"
+	"github.com/brieefly/net/auth"
 	"github.com/brieefly/net/io"
 	"github.com/go-chi/chi"
 )
@@ -19,6 +22,8 @@ func NewRouter(db *db.DB) *Router {
 	r := &Router{DB: db}
 
 	mux := chi.NewRouter()
+
+	mux.Post("/", r.Create)
 
 	mux.Route("/user", func(sr chi.Router) {
 		sr.Get("/{id}", r.GetAllForUserID)
@@ -64,4 +69,17 @@ func (r *Router) GetNameForID(w http.ResponseWriter, req *http.Request) {
 	id := chi.URLParam(req, "id")
 	name, err := DbGetNameForID(r.DB, id)
 	io.ParseAndWrite(w, name, err)
+}
+
+// Create - create project name for project id
+func (r *Router) Create(w http.ResponseWriter, req *http.Request) {
+	pb := &body.Body{}
+	io.ParseBody(w, req, pb)
+	fmt.Println(pb)
+	id := auth.UserIDFromContext(req.Context())
+	if id == nil {
+		fmt.Println("ID IS NIL SHIEEET")
+	}
+	newProject, err := DbInsert(r.DB, *id, pb)
+	io.ParseAndWrite(w, newProject, err)
 }
