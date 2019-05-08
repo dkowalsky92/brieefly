@@ -15,7 +15,6 @@ type Question struct {
 	DateCreated      time.Time   `json:"dateCreated"`
 	DateLastModified db.NullTime `json:"dateLastModified"`
 	UserID           string      `json:"idUser"`
-	ProjectPhaseID   string      `json:"idProjectPhase"`
 }
 
 // -- Table: Question

@@ -6,15 +6,18 @@ import (
 	"github.com/brieefly/db"
 )
 
-// ProjectPhase - a model for project phase
-type ProjectPhase struct {
+// Phase - a model for project phase
+type Phase struct {
 	ID            string        `json:"idProjectPhase"`
+	Name          string        `json:"name"`
+	Description   db.NullString `json:"description"`
 	Value         int64         `json:"value"`
 	Progress      int64         `json:"progress"`
 	OrderPosition db.NullInt64  `json:"orderPosition"`
 	Status        db.NullString `json:"status"`
 	DateCreated   time.Time     `json:"dateCreated"`
-	PhaseID       string        `json:"idPhase"`
+	//PhaseID       string        `json:"idPhase"`
+	//ProjectID     string        `json:"idProject"`
 }
 
 // -- Table: Project_phase

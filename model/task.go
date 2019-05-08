@@ -2,11 +2,10 @@ package model
 
 // Task - a model for task
 type Task struct {
-	ID             string `json:"idTask"`
-	Name           string `json:"name"`
-	Value          int64  `json:"value"`
-	IsDone         bool   `json:"isDone"`
-	ProjectPhaseID string `json:"idProjectPhase"`
+	ID     string `json:"idTask"`
+	Name   string `json:"name"`
+	Value  int64  `json:"value"`
+	IsDone bool   `json:"isDone"`
 }
 
 // -- Table: Task

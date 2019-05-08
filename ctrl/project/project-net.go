@@ -37,6 +37,7 @@ func NewRouter(db *db.DB) *Router {
 	mux.Mount("/features", newFeatureRouter(db).mux)
 	mux.Mount("/details", newDetailsRouter(db).mux)
 	mux.Mount("/offers", newOfferRouter(db).mux)
+	mux.Mount("/process", newProcessDataRouter(db).mux)
 
 	r.Mux = mux
 
