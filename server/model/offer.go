@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/brieefly/server/db"
+	"github.com/dkowalsky/brieefly/db"
 )
 
 // Offer - an offer model

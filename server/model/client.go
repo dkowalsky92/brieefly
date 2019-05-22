@@ -1,6 +1,6 @@
 package model
 
-import "github.com/brieefly/server/db"
+import "github.com/dkowalsky/brieefly/db"
 
 // Client - a client model
 type Client struct {

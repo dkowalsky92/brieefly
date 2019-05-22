@@ -3,7 +3,7 @@ package db
 import (
 	"database/sql"
 
-	"github.com/brieefly/server/err"
+	"github.com/dkowalsky/brieefly/err"
 )
 
 // TxFn - is a function that will be called with an initialized `sql.Tx` object

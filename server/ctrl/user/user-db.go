@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/brieefly/server/db"
-	"github.com/brieefly/server/err"
-	"github.com/brieefly/server/log"
-	"github.com/brieefly/server/model"
+	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/err"
+	"github.com/dkowalsky/brieefly/log"
+	"github.com/dkowalsky/brieefly/model"
 )
 
 // DbGet - Get user for id

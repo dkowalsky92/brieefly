@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/brieefly/server/config"
+	"github.com/dkowalsky/brieefly/config"
 )
 
 // PrivateKey - private rsa key for jwt

@@ -1,6 +1,6 @@
 package model
 
-import "github.com/brieefly/server/db"
+import "github.com/dkowalsky/brieefly/db"
 
 // CMS - a cms model
 type CMS struct {

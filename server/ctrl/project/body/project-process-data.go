@@ -1,6 +1,6 @@
 package body
 
-import "github.com/brieefly/server/model"
+import "github.com/dkowalsky/brieefly/model"
 
 // ProjectProcessData -
 type ProjectProcessData struct {

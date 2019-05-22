@@ -3,9 +3,9 @@ package market
 import (
 	"database/sql"
 
-	"github.com/brieefly/server/db"
-	"github.com/brieefly/server/err"
-	"github.com/brieefly/server/model"
+	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/err"
+	"github.com/dkowalsky/brieefly/model"
 )
 
 // DbGetOffersForID - get offers for project id

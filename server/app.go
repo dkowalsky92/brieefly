@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/brieefly/server/config"
-	"github.com/brieefly/server/db"
-	"github.com/brieefly/server/log"
-	"github.com/brieefly/server/net"
+	"github.com/dkowalsky/brieefly/config"
+	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/log"
+	"github.com/dkowalsky/brieefly/net"
 )
 
 func main() {

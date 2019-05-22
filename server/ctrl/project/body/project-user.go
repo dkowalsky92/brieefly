@@ -1,8 +1,8 @@
 package body
 
 import (
-	"github.com/brieefly/server/db"
-	"github.com/brieefly/server/model"
+	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/model"
 )
 
 // UserProject - a model for user's project

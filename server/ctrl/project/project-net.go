@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/brieefly/server/ctrl/project/body"
-	"github.com/brieefly/server/db"
-	"github.com/brieefly/server/net/auth"
-	"github.com/brieefly/server/net/io"
+	"github.com/dkowalsky/brieefly/ctrl/project/body"
+	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/net/auth"
+	"github.com/dkowalsky/brieefly/net/io"
 	"github.com/go-chi/chi"
 )
 

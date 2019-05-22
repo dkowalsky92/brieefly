@@ -3,11 +3,11 @@ package access
 import (
 	"database/sql"
 
-	"github.com/brieefly/server/ctrl/access/body"
-	"github.com/brieefly/server/ctrl/user"
-	_db "github.com/brieefly/server/db"
-	"github.com/brieefly/server/err"
-	"github.com/brieefly/server/util"
+	"github.com/dkowalsky/brieefly/ctrl/access/body"
+	"github.com/dkowalsky/brieefly/ctrl/user"
+	_db "github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/err"
+	"github.com/dkowalsky/brieefly/util"
 )
 
 // DbRegister - registers a user

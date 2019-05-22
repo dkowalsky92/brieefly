@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/brieefly/server/config"
-	_err "github.com/brieefly/server/err"
+	"github.com/dkowalsky/brieefly/config"
+	_err "github.com/dkowalsky/brieefly/err"
 	"github.com/dgrijalva/jwt-go"
 )
 

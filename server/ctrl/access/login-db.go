@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/brieefly/server/config"
-	"github.com/brieefly/server/ctrl/access/body"
-	"github.com/brieefly/server/ctrl/user"
-	_db "github.com/brieefly/server/db"
-	"github.com/brieefly/server/err"
-	"github.com/brieefly/server/net/auth"
+	"github.com/dkowalsky/brieefly/config"
+	"github.com/dkowalsky/brieefly/ctrl/access/body"
+	"github.com/dkowalsky/brieefly/ctrl/user"
+	_db "github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/err"
+	"github.com/dkowalsky/brieefly/net/auth"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 

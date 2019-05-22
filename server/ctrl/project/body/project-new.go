@@ -1,9 +1,9 @@
 package body
 
 import (
-	"github.com/brieefly/server/db"
-	"github.com/brieefly/server/model"
-	"github.com/brieefly/server/util"
+	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/model"
+	"github.com/dkowalsky/brieefly/util"
 )
 
 // Body -

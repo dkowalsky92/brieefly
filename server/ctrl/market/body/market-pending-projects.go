@@ -1,7 +1,7 @@
 package body
 
 import (
-	"github.com/brieefly/server/db"
+	"github.com/dkowalsky/brieefly/db"
 )
 
 // PendingProject - a model for pending projects

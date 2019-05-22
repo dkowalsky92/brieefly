@@ -3,9 +3,9 @@ package project
 import (
 	"database/sql"
 
-	"github.com/brieefly/server/ctrl/project/body"
-	"github.com/brieefly/server/db"
-	"github.com/brieefly/server/err"
+	"github.com/dkowalsky/brieefly/ctrl/project/body"
+	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/err"
 )
 
 // -- Table: Offer

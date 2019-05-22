@@ -7,12 +7,28 @@ services:
       - ./server:/server
     ports:
       - 5001:443
+    secrets:
+      - config_dev
+      - config_local
+      - config_prod
     depends_on:
       - db
-
   db:
     build: ./db
     volumes:
       - ./db:/db
     ports:
-      - 3306:3306
+      - 3306
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    secrets:
+      - config_dev
+      - config_local
+      - config_prod
+secrets:
+  config_dev:
+    file: ./secrets/config-dev.json
+  config_local:
+    file: ./secrets/config-local.json
+  config_prod:
+    file: ./secrets/config-prod.json

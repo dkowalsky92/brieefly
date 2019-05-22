@@ -3,9 +3,9 @@ package access
 import (
 	"net/http"
 
-	"github.com/brieefly/server/ctrl/access/body"
-	"github.com/brieefly/server/db"
-	"github.com/brieefly/server/net/io"
+	"github.com/dkowalsky/brieefly/ctrl/access/body"
+	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/net/io"
 	"github.com/go-chi/chi"
 )
 

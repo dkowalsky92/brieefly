@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/brieefly/server/log"
+	"github.com/dkowalsky/brieefly/log"
 )
 
 type contextKey string

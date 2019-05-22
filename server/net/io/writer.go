@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	_err "github.com/brieefly/server/err"
+	_err "github.com/dkowalsky/brieefly/err"
 )
 
 // ParseAndWrite - parses an object and writes it to the ResponseWriter

@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/brieefly/server/config"
-	"github.com/brieefly/server/err"
+	"github.com/dkowalsky/brieefly/config"
+	"github.com/dkowalsky/brieefly/err"
 	// mysql driver
 	_ "github.com/go-sql-driver/mysql"
 )

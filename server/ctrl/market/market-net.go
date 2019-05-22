@@ -1,7 +1,7 @@
 package market
 
 import (
-	"github.com/brieefly/server/db"
+	"github.com/dkowalsky/brieefly/db"
 	"github.com/go-chi/chi"
 )
 

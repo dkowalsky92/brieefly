@@ -3,10 +3,10 @@ package agency
 import (
 	"database/sql"
 
-	"github.com/brieefly/server/ctrl/agency/body"
-	"github.com/brieefly/server/db"
-	"github.com/brieefly/server/err"
-	"github.com/brieefly/server/model"
+	"github.com/dkowalsky/brieefly/ctrl/agency/body"
+	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/err"
+	"github.com/dkowalsky/brieefly/model"
 )
 
 // DbGetForURL - get agency for url
