@@ -1,34 +1,35 @@
 version: "3.7"
 
+networks:
+  network:
+    driver: overlay
+
+secrets:
+  config_local:
+    file: ./secrets/config-local.json
+
 services:
   server:
-    build: ./server
+    image: 127.0.0.1:5000/server
     volumes:
       - ./server:/server
     ports:
       - 5001:443
-    secrets:
-      - config_dev
-      - config_local
-      - config_prod
     depends_on:
       - db
+    networks:
+      - network
+    secrets:
+      - config_local
   db:
-    build: ./db
+    image: 127.0.0.1:5000/db
     volumes:
       - ./db:/db
     ports:
-      - 3306
+      - 5002:3306
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    networks:
+      - network
     secrets:
-      - config_dev
       - config_local
-      - config_prod
-secrets:
-  config_dev:
-    file: ./secrets/config-dev.json
-  config_local:
-    file: ./secrets/config-local.json
-  config_prod:
-    file: ./secrets/config-prod.json

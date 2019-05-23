@@ -1,0 +1,13 @@
+version: "3.7"
+
+secrets:
+  config_prod:
+    file: ./secrets/config-prod.json
+
+services:
+  server:
+    secrets:
+      - config_prod
+  db:
+    secrets:
+      - config_prod

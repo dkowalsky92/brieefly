@@ -1,0 +1,13 @@
+version: "3.7"
+
+secrets:
+  config_dev:
+    file: ./secrets/config-dev.json
+
+services:
+  server:
+    secrets:
+      - config_dev
+  db:
+    secrets:
+      - config_dev
