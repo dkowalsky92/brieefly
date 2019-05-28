@@ -9,6 +9,7 @@ import (
 
 	"github.com/dkowalsky/brieefly/config"
 	"github.com/dkowalsky/brieefly/err"
+
 	// mysql driver
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -25,11 +26,16 @@ type DB struct {
 }
 
 // Connect - connect to a database and return it
-func Connect(config *config.Config) (*DB, error) {
-	connectionString := fmt.Sprintf("%s:%s@/%s?parseTime=true", config.Database.User, config.Database.Password, config.Database.Name)
-	db, err := sql.Open("mysql", connectionString)
-	if err != nil {
-		return nil, err
+func Connect(config *config.Config) (*DB, *err.Error) {
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
+		config.Database.User,
+		config.Database.Password,
+		config.Database.Address,
+		config.Database.Port,
+		config.Database.Name)
+	db, sqlErr := sql.Open("mysql", connectionString)
+	if sqlErr != nil {
+		return nil, err.New(sqlErr, err.ErrConnectionFailure, nil)
 	}
 
 	return &DB{db}, nil

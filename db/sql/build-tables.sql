@@ -1,5 +1,5 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2018-10-21 23:42:26.656
+-- Last modification date: 2019-01-18 00:01:34.435
 
 -- tables
 -- Table: Agency
@@ -15,16 +15,16 @@ CREATE TABLE Agency_employee (
     id_user varchar(100) NOT NULL,
     position varchar(70) NULL,
     id_company varchar(100) NOT NULL,
+    role varchar(20) NOT NULL,
     CONSTRAINT Agency_employee_pk PRIMARY KEY (id_user)
 );
 
--- Table: Agency_employee_project_phase
-CREATE TABLE Agency_employee_project_phase (
-    id_agency_employee_project_phase varchar(100) NOT NULL,
+-- Table: Agency_employee_phase
+CREATE TABLE Agency_employee_phase (
     id_user varchar(100) NOT NULL,
     id_phase varchar(100) NOT NULL,
     date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT Agency_employee_project_phase_pk PRIMARY KEY (id_agency_employee_project_phase)
+    CONSTRAINT Agency_employee_phase_pk PRIMARY KEY (id_user,id_phase)
 );
 
 -- Table: Answer_option
@@ -32,7 +32,7 @@ CREATE TABLE Answer_option (
     id_answer_option varchar(100) NOT NULL,
     content varchar(150) NOT NULL,
     is_chosen bool NOT NULL DEFAULT false,
-    id_question varchar(100) NOT NULL,
+    id_question varchar(100) NULL,
     CONSTRAINT Answer_option_pk PRIMARY KEY (id_answer_option)
 );
 
@@ -46,20 +46,18 @@ CREATE TABLE Client (
 
 -- Table: Client_agency
 CREATE TABLE Client_agency (
-    id_client_agency varchar(100) NOT NULL,
     id_user varchar(100) NOT NULL,
     id_company varchar(100) NOT NULL,
     date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT Client_agency_pk PRIMARY KEY (id_client_agency)
+    CONSTRAINT Client_agency_pk PRIMARY KEY (id_user,id_company)
 );
 
 -- Table: Client_project
 CREATE TABLE Client_project (
-    id_client_project varchar(100) NOT NULL,
     id_user varchar(100) NOT NULL,
     id_project varchar(100) NOT NULL,
     date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT Client_project_pk PRIMARY KEY (id_client_project)
+    CONSTRAINT Client_project_pk PRIMARY KEY (id_user,id_project)
 );
 
 -- Table: Cms
@@ -82,7 +80,7 @@ CREATE TABLE Color (
 CREATE TABLE Company (
     id_company varchar(100) NOT NULL,
     name varchar(100) NOT NULL,
-    url_name varchar(100) NOT NULL UNIQUE,
+    name_slug varchar(100) NOT NULL,
     website_url varchar(300) NULL,
     phone varchar(20) NULL,
     email varchar(75) NOT NULL,
@@ -118,7 +116,7 @@ CREATE TABLE Offer (
     is_chosen bool NOT NULL DEFAULT false,
     date_deadline date NOT NULL,
     date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    id_project varchar(100) NULL,
+    id_project varchar(100) NOT NULL,
     id_company varchar(100) NOT NULL,
     CONSTRAINT Offer_pk PRIMARY KEY (id_offer)
 );
@@ -133,11 +131,26 @@ CREATE TABLE Opinion (
     CONSTRAINT Opinion_pk PRIMARY KEY (id_opinion)
 );
 
+-- Table: Phase
+CREATE TABLE Phase (
+    id_phase varchar(100) NOT NULL,
+    is_active bool NOT NULL,
+    value int NOT NULL DEFAULT 1,
+    progress int NOT NULL DEFAULT 0,
+    order_position int NULL,
+    status varchar(20) NOT NULL,
+    date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    name varchar(40) NOT NULL,
+    description varchar(300) NULL,
+    id_project varchar(100) NOT NULL,
+    CONSTRAINT Phase_pk PRIMARY KEY (id_phase)
+);
+
 -- Table: Project
 CREATE TABLE Project (
     id_project varchar(100) NOT NULL,
     name varchar(70) NOT NULL,
-    url_name varchar(70) NOT NULL UNIQUE,
+    name_slug varchar(100) NOT NULL,
     type varchar(40) NOT NULL,
     description varchar(500) NOT NULL,
     language varchar(50) NULL,
@@ -151,6 +164,7 @@ CREATE TABLE Project (
     date_last_modified timestamp NULL ON UPDATE CURRENT_TIMESTAMP,
     id_status varchar(100) NOT NULL,
     id_cms varchar(100) NULL,
+    id_visual_identity varchar(100) NULL,
     CONSTRAINT Project_pk PRIMARY KEY (id_project)
 );
 
@@ -159,21 +173,6 @@ CREATE TABLE Project_feature (
     id_project varchar(100) NOT NULL,
     id_feature varchar(100) NOT NULL,
     CONSTRAINT Project_feature_pk PRIMARY KEY (id_project,id_feature)
-);
-
--- Table: Phase
-CREATE TABLE Phase (
-    id_phase varchar(100) NOT NULL,
-    name varchar(40) NOT NULL,
-    description varchar(300) NULL,
-    value int NOT NULL DEFAULT 1,
-    progress int NOT NULL DEFAULT 0,
-    order_position int NULL,
-    status varchar(20) NOT NULL,
-    date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    id_phase varchar(100) NOT NULL,
-    id_project varchar(100) NOT NULL,
-    CONSTRAINT Phase_pk PRIMARY KEY (id_phase)
 );
 
 -- Table: Question
@@ -229,9 +228,9 @@ CREATE TABLE Task (
 CREATE TABLE User (
     id_user varchar(100) NOT NULL,
     login varchar(20) NULL,
-    password varchar(20) NULL,
+    password varchar(20) NOT NULL,
     password_fail_attempts int NOT NULL DEFAULT 0,
-    email varchar(75) NOT NULL UNIQUE,
+    email varchar(75) NOT NULL,
     name varchar(20) NULL,
     surname varchar(20) NULL,
     phone varchar(14) NULL,
@@ -249,7 +248,6 @@ CREATE TABLE User (
 CREATE TABLE Visual_identity (
     id_visual_identity varchar(100) NOT NULL,
     type varchar(30) NOT NULL,
-    id_project varchar(100) NULL,
     CONSTRAINT Visual_identity_pk PRIMARY KEY (id_visual_identity)
 );
 
@@ -272,15 +270,15 @@ ALTER TABLE Agency_employee ADD CONSTRAINT Agency_employee_User FOREIGN KEY Agen
     ON DELETE CASCADE
     ON UPDATE CASCADE;
 
--- Reference: Agency_employee_project_phase_Agency_employee (table: Agency_employee_project_phase)
-ALTER TABLE Agency_employee_project_phase ADD CONSTRAINT Agency_employee_project_phase_Agency_employee FOREIGN KEY Agency_employee_project_phase_Agency_employee (id_user)
+-- Reference: Agency_employee_project_phase_Agency_employee (table: Agency_employee_phase)
+ALTER TABLE Agency_employee_phase ADD CONSTRAINT Agency_employee_project_phase_Agency_employee FOREIGN KEY Agency_employee_project_phase_Agency_employee (id_user)
     REFERENCES Agency_employee (id_user)
     ON DELETE CASCADE
     ON UPDATE CASCADE;
 
--- Reference: Agency_employee_project_phase_Project_phase (table: Agency_employee_project_phase)
-ALTER TABLE Agency_employee_project_phase ADD CONSTRAINT Agency_employee_project_phase_Phase FOREIGN KEY Agency_employee_project_phase_Project_phase (id_phase)
-    REFERENCES Project_phase (id_phase)
+-- Reference: Agency_employee_project_phase_Project_phase (table: Agency_employee_phase)
+ALTER TABLE Agency_employee_phase ADD CONSTRAINT Agency_employee_project_phase_Project_phase FOREIGN KEY Agency_employee_project_phase_Project_phase (id_phase)
+    REFERENCES Phase (id_phase)
     ON DELETE CASCADE
     ON UPDATE CASCADE;
 
@@ -378,8 +376,8 @@ ALTER TABLE Project_feature ADD CONSTRAINT Project_feature_Project FOREIGN KEY P
     ON DELETE CASCADE
     ON UPDATE CASCADE;
 
--- Reference: Project_phase_Project (table: Project_phase)
-ALTER TABLE Phase ADD CONSTRAINT Phase_Project FOREIGN KEY Phase_Project (id_project)
+-- Reference: Project_phase_Project (table: Phase)
+ALTER TABLE Phase ADD CONSTRAINT Project_phase_Project FOREIGN KEY Project_phase_Project (id_project)
     REFERENCES Project (id_project)
     ON DELETE CASCADE
     ON UPDATE CASCADE;
@@ -397,7 +395,7 @@ ALTER TABLE Question ADD CONSTRAINT Question_Client FOREIGN KEY Question_Client 
     ON UPDATE CASCADE;
 
 -- Reference: Question_Project_phase (table: Question)
-ALTER TABLE Question ADD CONSTRAINT Question_Phase FOREIGN KEY Question_Phase (id_phase)
+ALTER TABLE Question ADD CONSTRAINT Question_Project_phase FOREIGN KEY Question_Project_phase (id_phase)
     REFERENCES Phase (id_phase)
     ON DELETE CASCADE
     ON UPDATE CASCADE;
@@ -415,22 +413,16 @@ ALTER TABLE Target_group ADD CONSTRAINT Target_group_Project FOREIGN KEY Target_
     ON UPDATE CASCADE;
 
 -- Reference: Task_Project_phase (table: Task)
-ALTER TABLE Task ADD CONSTRAINT Task_Phase FOREIGN KEY Task_Phase (id_phase)
+ALTER TABLE Task ADD CONSTRAINT Task_Project_phase FOREIGN KEY Task_Project_phase (id_phase)
     REFERENCES Phase (id_phase)
     ON DELETE CASCADE
     ON UPDATE CASCADE;
 
--- Reference: Visual_identity_Project (table: Visual_identity)
-ALTER TABLE Visual_identity ADD CONSTRAINT Visual_identity_Project FOREIGN KEY Visual_identity_Project (id_project)
-    REFERENCES Project (id_project)
+-- Reference: Visual_identity_Project (table: Project)
+ALTER TABLE Project ADD CONSTRAINT Visual_identity_Project FOREIGN KEY Visual_identity_Project (id_visual_identity)
+    REFERENCES Visual_identity (id_visual_identity)
     ON DELETE CASCADE
     ON UPDATE CASCADE;
-
--- -- Reference: Agency_employee_Agency_employee (table: Agency_employee)
--- ALTER TABLE Agency_employee ADD CONSTRAINT Agency_employee_Agency_employee FOREIGN KEY Agency_employee_Agency_employee (id_user)
---     REFERENCES Agency_employee (id_user)
---     ON DELETE CASCADE
---     ON UPDATE CASCADE;
 
 -- End of file.
 

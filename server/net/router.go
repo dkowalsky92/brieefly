@@ -11,6 +11,7 @@ import (
 	"github.com/dkowalsky/brieefly/ctrl/project"
 	"github.com/dkowalsky/brieefly/ctrl/user"
 	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/err"
 	"github.com/dkowalsky/brieefly/net/auth"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -93,8 +94,8 @@ func injectMiddlewareStack(r chi.Router, cnf *config.Config) {
 }
 
 // Run - starts the server
-func (r *Router) Run() {
+func (r *Router) Run() *err.Error {
 	path := config.MyPath(r.config)
-	err := http.ListenAndServeTLS(path, r.config.TLSCert(), r.config.TLSKey(), r.mux)
-	panic(err)
+	httpErr := http.ListenAndServeTLS(path, r.config.TLSCert(), r.config.TLSKey(), r.mux)
+	return err.New(httpErr, err.ErrInternal, nil)
 }

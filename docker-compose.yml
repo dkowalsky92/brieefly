@@ -1,35 +1,23 @@
 version: "3.7"
 
-networks:
-  network:
-    driver: overlay
-
-secrets:
-  config_local:
-    file: ./secrets/config-local.json
-
 services:
-  server:
-    image: 127.0.0.1:5000/server
-    volumes:
-      - ./server:/server
-    ports:
-      - 5001:443
-    depends_on:
-      - db
-    networks:
-      - network
-    secrets:
-      - config_local
   db:
-    image: 127.0.0.1:5000/db
+    build: ./db
     volumes:
       - ./db:/db
     ports:
-      - 5002:3306
+      - 3306:3306
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=1
-    networks:
-      - network
-    secrets:
-      - config_local
+      - MYSQL_ENV=local
+    hostname: db
+  server:
+    build: ./server
+    volumes:
+      - ./server:/server
+    ports:
+      - 443:5001
+      - 80:5002
+    hostname: server
+    stdin_open: true
+    depends_on:
+      - db

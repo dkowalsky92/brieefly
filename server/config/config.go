@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/dkowalsky/brieefly/err"
 	"github.com/dkowalsky/brieefly/log"
 )
 
@@ -29,8 +30,8 @@ const (
 	configProductionFile  string = "config-prod.json"
 	configDevelopmentFile string = "config-dev.json"
 	configLocalFile       string = "config-local.json"
-
-	ConfigFilePath string = "../secret/"
+	// ConfigFilePath - path to config files
+	ConfigFilePath string = "./secrets/"
 )
 
 // Config - stores all necessary information regarding server & database setup
@@ -42,6 +43,8 @@ type Config struct {
 
 // DatabaseParams - database info
 type DatabaseParams struct {
+	Address  string `json:"address"`
+	Port     string `json:"port"`
 	Name     string `json:"name"`
 	User     string `json:"user"`
 	Password string `json:"password"`
@@ -64,43 +67,41 @@ type AuthorizationParams struct {
 }
 
 // NewConfig - creates a new Config object with specified environment
-func NewConfig(environment Environment) (*Config, error) {
+func NewConfig(environment Environment) (*Config, *err.Error) {
 	var file *os.File
-	var err error
+	var cnfErr error
 
 	switch environment {
 	case Production:
-		file, err = os.Open(fmt.Sprintf("%s%s", ConfigFilePath, configProductionFile))
+		file, cnfErr = os.Open(fmt.Sprintf("%s%s", ConfigFilePath, configProductionFile))
 	case Development:
-		file, err = os.Open(fmt.Sprintf("%s%s", ConfigFilePath, configDevelopmentFile))
+		file, cnfErr = os.Open(fmt.Sprintf("%s%s", ConfigFilePath, configDevelopmentFile))
 	case Local:
-		file, err = os.Open(fmt.Sprintf("%s%s", ConfigFilePath, configLocalFile))
+		file, cnfErr = os.Open(fmt.Sprintf("%s%s", ConfigFilePath, configLocalFile))
 	}
 
-	if err != nil {
-		log.Error(err)
-		return nil, err
+	if cnfErr != nil {
+		log.Error(cnfErr)
+		return nil, err.New(cnfErr, err.ErrConfigMalformed, nil)
 	}
 
 	var config Config
 	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&config)
-	if err != nil {
-		log.Error(err)
-		return nil, err
+	cnfErr = decoder.Decode(&config)
+	if cnfErr != nil {
+		log.Error(cnfErr)
+		return nil, err.New(cnfErr, err.ErrConfigMalformed, nil)
 	}
-
-	fmt.Printf("%+v", config.Server)
 
 	return &config, nil
 }
 
-// TLSPublic - get public TLS key
+// TLSCert - get public TLS key
 func (c *Config) TLSCert() string {
 	return fmt.Sprintf("%s%s", ConfigFilePath, c.Server.Certificate)
 }
 
-// TLSPrivate - get private TLS key
+// TLSKey - get private TLS key
 func (c *Config) TLSKey() string {
 	return fmt.Sprintf("%s%s", ConfigFilePath, c.Server.Key)
 }
@@ -118,6 +119,5 @@ func FromContext(ctx context.Context) *Config {
 // MyPath - generates a path with parameters from given config
 func MyPath(config *Config) string {
 	address := fmt.Sprintf("%s:%s", config.Server.IP, config.Server.Port)
-	fmt.Printf("%s", address)
 	return address
 }

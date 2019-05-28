@@ -1,33 +1,52 @@
 package main
 
 import (
-	"fmt"
+	// "os"
+	// "bufio"
+	// "errors"
 
 	"github.com/dkowalsky/brieefly/config"
 	"github.com/dkowalsky/brieefly/db"
 	"github.com/dkowalsky/brieefly/log"
 	"github.com/dkowalsky/brieefly/net"
+	"github.com/dkowalsky/brieefly/retry"
+	"github.com/dkowalsky/brieefly/err"
 )
 
 func main() {
-	fmt.Println("Configuring...")
-	c, err := config.NewConfig(config.Local)
-	if err != nil {
-		log.Error(err)
-		return
-	}
-	fmt.Println("Configuration successful.")
+	go func() {
+		retry.PerformInfinite(retry.DefaultOptions(), func() *err.Error {
+			log.Info("Configuring...")
+			c, cErr := config.NewConfig(config.Local)
+			if cErr != nil {
+				return cErr
+			}
+			log.Info("Configuration successful.")
+			
+			log.Info("Connecting to database...")
+			db, dbErr := db.Connect(c)
+			if dbErr != nil {
+				return dbErr
+			}
+			log.Info("Connected.")
 
-	fmt.Println("Connecting to database...")
-	db, err := db.Connect(c)
-	if err != nil {
-		log.Error(err)
-		return
-	}
-	fmt.Println("Connected.")
+			router := net.NewRouter(db, c)
 
-	router := net.NewRouter(db, c)
+			
+			log.Info("Server is running.")
+			log.Info("Accepting standard input -> ")
+			rtErr := router.Run()
+			if rtErr != nil {
+				return rtErr
+			}
 
-	fmt.Println("Server is running.")
-	router.Run()
+			return nil
+		})
+	}()
+
+	select {}
+	// scanner := bufio.NewScanner(os.Stdin)
+	// for scanner.Scan() {
+	// 	log.Info("->")
+	// }
 }

@@ -10,6 +10,11 @@ type ErrorType uint64
 
 const (
 
+	/*** Internal errors ***/
+
+	// ErrConfigMalformed - config couldn't be loaded
+	ErrConfigMalformed int = 3000
+
 	/*** SQL errors ***/
 
 	// ErrEmptyResult - no rows returned from query
@@ -23,6 +28,9 @@ const (
 
 	// ErrTxCommit - transaction commit error
 	ErrTxCommit int = 4003
+
+	// ErrConnectionFailure - transaction commit error
+	ErrConnectionFailure int = 4004
 
 	/*** Client errors ***/
 

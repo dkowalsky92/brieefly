@@ -1,4 +1,4 @@
-INSERT INTO Company (id_company, name, url_name, website_url, phone, email, address, description, image_url) VALUES ('b04e0a2f-cec8-4aa5-96d5-1622c7fa680b', '180heartbeats', '180heartbeats', 'http://180hb.com/','+48214748367','collier.colton@example.org','2875 Durgan Run Apt. 887\nSouth Dino, AL 38644','180heartbeats is an independent creative agency located in Warsaw, Poland. They work on behalf of local and international brands.','src/images/180heartbeats.png'),
+INSERT INTO Company (id_company, name, name_slug, website_url, phone, email, address, description, image_url) VALUES ('b04e0a2f-cec8-4aa5-96d5-1622c7fa680b', '180heartbeats', '180heartbeats', 'http://180hb.com/','+48214748367','collier.colton@example.org','2875 Durgan Run Apt. 887\nSouth Dino, AL 38644','180heartbeats is an independent creative agency located in Warsaw, Poland. They work on behalf of local and international brands.','src/images/180heartbeats.png'),
 ('3b78549d-6d1a-42c6-8467-5d4d6c3ed54d', 'Adequate', 'adequate', 'http://www.predovic.net/','+48847355111','hgreen@example.com','86149 Jamison Crest\nEast Horacio, FL 70093','Adequate boutique interactive agency is a team of highly experienced digital marketing specialists located in Poland.','src/images/adequate.png'),
 ('9636bb2e-98da-4644-8856-dee994efc7f2', 'Arsthanea', 'arsthanea', 'http://romaguera.com/','+48675950974','janae83@example.net','1550 Satterfield Ville Suite 762\nLake Owenville, ME 77679-2587','Ars Thanea is an Advertising and Production Agency founded in 2007, home to 60 talented people who make work that matters and breathe excellence.','src/images/arsthanea.png'),
 ('51e7f494-0a3c-48ad-91af-950bee41f94a', 'El Passion', 'el-passion', 'https://www.elpassion.com/','+48451222321','daija05@example.org','8012 Dare Circle\nEast Mittiestad, IA 08358-1087','EL Passion is an app development & design house which turns great ideas into web apps, mobile apps and stunning designs.','src/images/elpassion.png'),
@@ -14,7 +14,7 @@ INSERT INTO Company (id_company, name, url_name, website_url, phone, email, addr
 ('e48dcc2f-e0c7-4056-982c-97f50b0c553f', 'Cassin, Labadie and Okuneva', 'cassin-labadie-and-okuneva', 'http://www.feeneyking.com/','1-714-228-2023','bjacobi@stanton.com','718 Okuneva Mount\nNorth Yasminestad, SD 75890','Quas quos nihil qui et. Doloribus iure at sint in. Dolor corrupti quae recusandae soluta magnam omnis. Totam aut pariatur dolores hic et.','http://via.placeholder.com/200x200'),
 ('dbb79e3b-6e7d-4b44-bbb7-1e2376c37fee', 'rogahn-mante', 'Rogahn-Mante', 'http://hirthe.com/','02135417508','kirlin.nico@mosciski.com','34587 Dortha Rue Suite 557\nLynchville, ND 63888-0498','Quas quos nihil qui et. Doloribus iure at sint in. Dolor corrupti quae recusandae soluta magnam omnis. Totam aut pariatur dolores hic et.','http://via.placeholder.com/200x200');
 
-INSERT INTO AGENCY (agency_code, nip_number, id_company) VALUES ('39j8g7d8ve','1234512345', 'e48dcc2f-e0c7-4056-982c-97f50b0c553f'),
+INSERT INTO Agency (agency_code, nip_number, id_company) VALUES ('39j8g7d8ve','1234512345', 'e48dcc2f-e0c7-4056-982c-97f50b0c553f'),
 ('26a8m5i4eg','2147483647', '9636bb2e-98da-4644-8856-dee994efc7f2'),
 ('65e6t8o7bx','2147483647', '51e7f494-0a3c-48ad-91af-950bee41f94a'),
 ('89o3v8o8nn','2147483647', 'b8f1391f-ebeb-44ee-95a7-a74827248446'),
@@ -56,8 +56,11 @@ INSERT INTO Cms (id_cms, name, description) VALUES ('1ad0e477-5072-457b-9457-3cd
 ('79af9b6e-8606-4dd3-b20e-5059e0c82f13', 'Squarespace','Voluptatum dicta impedit quam eveniet. Suscipit accusantium soluta quos velit cum. Architecto voluptas omnis temporibus optio rerum. Commodi sunt assumenda magni blanditiis nostrum aut. Mollitia suscipit nihil quia et. Id natus qui et quia quo. Dolorem minus quia et autem culpa totam.'),
 ('35366487-ff02-4bff-8bd7-7bec92231b85', 'Magnolia','Est rerum ut sint quia aspernatur. In iste voluptates tempora voluptatibus sit architecto qui. Blanditiis cum perspiciatis pariatur temporibus dicta. A quae voluptatem maiores in. Aliquid non natus et.');
 
-INSERT INTO Project (id_project, name, url_name, type, description, language, budget_min, budget_max, date_created, date_deadline, subpage_count, overall_progress, image_url, id_status, id_cms) VALUES ('78d951b0-532d-4b13-bf70-96df4cf2e488', 'Crazy Tom Fishing Shop', 'crazy-tom-fishing-shop', 'eCommerce','We want to create internet shop related to fishing accesories.','English','3000','7500','2018-08-25','2018-12-28','10','10','http://via.placeholder.com/300x300','f4bdc1ef-4f34-4334-b3e7-559390a69838','1ad0e477-5072-457b-9457-3cdfe0e471bb'),
-('af0893af-85d9-4d4a-a096-a33065060c53', 'NextLevel App', 'nextlevel-app', 'App','We want to create next level application based on block-chain and newest technologies.','Multilingual','10000','42655','2017-11-05','2018-11-13','50','66','http://via.placeholder.com/300x300','a4ecbea4-be4f-4429-a3fc-53e47ecfdea9','24a846b0-81e8-4ffb-83d7-9011ff63086b');
+INSERT INTO Visual_identity (id_visual_identity, type) VALUES ('54346b39-86f3-4d52-a0b9-313c67867e70', 'All'),
+('f42576f6-d7ea-4a98-bcb3-56d7a6bf6dcd', 'Logotype, layout');
+
+INSERT INTO Project (id_project, name, name_slug, type, description, language, budget_min, budget_max, date_created, date_deadline, subpage_count, overall_progress, image_url, id_status, id_cms, id_visual_identity) VALUES ('78d951b0-532d-4b13-bf70-96df4cf2e488', 'Crazy Tom Fishing Shop', 'crazy-tom-fishing-shop', 'eCommerce','We want to create internet shop related to fishing accesories.','English','3000','7500','2018-08-25','2018-12-28','10','10','http://via.placeholder.com/300x300','f4bdc1ef-4f34-4334-b3e7-559390a69838','1ad0e477-5072-457b-9457-3cdfe0e471bb', '54346b39-86f3-4d52-a0b9-313c67867e70'),
+('af0893af-85d9-4d4a-a096-a33065060c53', 'NextLevel App', 'nextlevel-app', 'App','We want to create next level application based on block-chain and newest technologies.','Multilingual','10000','42655','2017-11-05','2018-11-13','50','66','http://via.placeholder.com/300x300','a4ecbea4-be4f-4429-a3fc-53e47ecfdea9','24a846b0-81e8-4ffb-83d7-9011ff63086b', 'f42576f6-d7ea-4a98-bcb3-56d7a6bf6dcd');
 
 INSERT INTO Similar_project (id_similar_project, project_url, id_project) VALUES ('3d24d078-c565-47c1-bac6-448f65d2c7b8', 'http://google.com/', 'af0893af-85d9-4d4a-a096-a33065060c53'),
 ('ccb8e33b-6338-41f3-b82f-566e0b999135', 'http://amazon.com/', '78d951b0-532d-4b13-bf70-96df4cf2e488'),
@@ -98,9 +101,6 @@ INSERT INTO Project_feature (id_project, id_feature) VALUES ('af0893af-85d9-4d4a
 ('78d951b0-532d-4b13-bf70-96df4cf2e488','8bc45432-d4fe-4305-9e5e-b53404b531be'),
 ('78d951b0-532d-4b13-bf70-96df4cf2e488','12265f88-9ad6-4ed9-bc13-caccadf5c658');
 
-INSERT INTO Visual_identity (id_visual_identity, type, id_project) VALUES ('54346b39-86f3-4d52-a0b9-313c67867e70', 'All','af0893af-85d9-4d4a-a096-a33065060c53'),
-('f42576f6-d7ea-4a98-bcb3-56d7a6bf6dcd', 'Logotype, layout','78d951b0-532d-4b13-bf70-96df4cf2e488');
-
 INSERT INTO Color (id_color, hex_value, id_project) VALUES ('ae1a43a9-c234-4fc1-87e0-2d8f35531c80', '#050122','78d951b0-532d-4b13-bf70-96df4cf2e488'),
 ('a3b5cf7a-ee44-441c-b76a-b9b40ef44538', '#144007','af0893af-85d9-4d4a-a096-a33065060c53'),
 ('7a70e091-bad3-4047-8622-d88b0057975e', '#476237','af0893af-85d9-4d4a-a096-a33065060c53'),
@@ -113,17 +113,17 @@ INSERT INTO Target_group (id_target_group, name, description, age_min, age_max, 
 ('4cd19e93-b74c-45e5-9967-5f4d77898f8d', 'Teenagers / Young adults','Our company would like to target young creative people which are into new technologies, internet, mobile applications and social media.','15','28','78d951b0-532d-4b13-bf70-96df4cf2e488');
 
 
-INSERT INTO Phase (id_project_phase, name, description, id_project, id_phase, order_position, value, progress, status) VALUES ('7a3808b1-2cf7-4a58-905b-10a77c6d976d', 'Initiation','This is where the project’s value and feasibility are measured.', '78d951b0-532d-4b13-bf70-96df4cf2e488','60118177-0de1-4eb6-819b-4e38c92b3481','1','10','100','Finished'),
-('8addd01a-2e63-49ce-8b7b-ffc9c82fe541','Planning','All about writing a solid action plan to guide the development team, as well as keep them on time and on budget.', '78d951b0-532d-4b13-bf70-96df4cf2e488','9e5c0106-5d1b-4f81-bd50-1309bb7dfb08','2','20','30', 'In progress'),
-('d1ae281e-9974-4d55-babd-70e792d944eb', 'Development','Creation of your desired project according to Initiation and Planning phases arrangements.', '78d951b0-532d-4b13-bf70-96df4cf2e488','e6c560a3-6d84-459d-931a-abfe1791babe','3','40','0', 'Pending'),
-('a9f429db-44e6-40a4-aca3-d8e50fe87cd6', 'Testing','Making sure that your project solutions are bullet-proof.', '78d951b0-532d-4b13-bf70-96df4cf2e488','19c9788e-d008-4787-85ab-cf5d055338cb','4','20','0', 'Pending'),
-('46c7c1ad-5f8f-4013-832a-9be9be6c2ac3', 'Delivery','After final acceptance and testing phase passing completed project to you.', '78d951b0-532d-4b13-bf70-96df4cf2e488','b0e9a6be-cea5-42c8-a153-c1ad1eb9a499','5','10','0', 'Pending'),
-('87343fc0-7a9c-4c46-afba-8647920f39a9', 'af0893af-85d9-4d4a-a096-a33065060c53','9e5c0106-5d1b-4f81-bd50-1309bb7dfb08','1','10','50', 'In progress'),
-('5c934346-3ae5-4069-8015-59bfd90e3487', 'af0893af-85d9-4d4a-a096-a33065060c53','e6c560a3-6d84-459d-931a-abfe1791babe','2','50','0', 'Pending'),
-('5bb3ef5a-575c-46a2-bf6b-f956a8fb5cf2', 'af0893af-85d9-4d4a-a096-a33065060c53','19c9788e-d008-4787-85ab-cf5d055338cb','3','30','0', 'Pending'),
-('8edaad28-13fc-4db0-bdc0-7bb2200b626f', 'af0893af-85d9-4d4a-a096-a33065060c53','b0e9a6be-cea5-42c8-a153-c1ad1eb9a499','4','10','0', 'Pending');
+INSERT INTO Phase (id_phase, name, description, id_project, order_position, value, progress, status, is_active) VALUES ('7a3808b1-2cf7-4a58-905b-10a77c6d976d', 'Initiation','This is where the project’s value and feasibility are measured.', '78d951b0-532d-4b13-bf70-96df4cf2e488','1','10','100','Finished', '0'),
+('8addd01a-2e63-49ce-8b7b-ffc9c82fe541','Planning','All about writing a solid action plan to guide the development team, as well as keep them on time and on budget.', '78d951b0-532d-4b13-bf70-96df4cf2e488','2','20','30', 'In progress', '0'),
+('d1ae281e-9974-4d55-babd-70e792d944eb', 'Development','Creation of your desired project according to Initiation and Planning phases arrangements.', '78d951b0-532d-4b13-bf70-96df4cf2e488','3','40','0', 'Pending', '0'),
+('a9f429db-44e6-40a4-aca3-d8e50fe87cd6', 'Testing','Making sure that your project solutions are bullet-proof.', '78d951b0-532d-4b13-bf70-96df4cf2e488','4','20','0', 'Pending', '0'),
+('46c7c1ad-5f8f-4013-832a-9be9be6c2ac3', 'Alfa','A cool application.', '78d951b0-532d-4b13-bf70-96df4cf2e488','5','10','0', 'Pending', '0'),
+('87343fc0-7a9c-4c46-afba-8647920f39a9', 'Omega','A very cool application.', 'af0893af-85d9-4d4a-a096-a33065060c53','1','10','50', 'In progress', '0'),
+('5c934346-3ae5-4069-8015-59bfd90e3487', 'Gamma','An ultra cool application.', 'af0893af-85d9-4d4a-a096-a33065060c53','2','50','0', 'Pending', '0'),
+('5bb3ef5a-575c-46a2-bf6b-f956a8fb5cf2', 'Beta','Another ultra fun application.', 'af0893af-85d9-4d4a-a096-a33065060c53','3','30','0', 'Pending', '0'),
+('8edaad28-13fc-4db0-bdc0-7bb2200b626f', 'Zeta','The ultimate application.', 'af0893af-85d9-4d4a-a096-a33065060c53','4','10','0', 'Pending', '0');
 
-INSERT INTO Task (id_task, name, id_project_phase, value, is_done) VALUES ('22e94d92-cf19-42b3-8fd1-b6deec6c5283', 'Qui deleniti.','7a3808b1-2cf7-4a58-905b-10a77c6d976d','1','0'),
+INSERT INTO Task (id_task, name, id_phase, value, is_done) VALUES ('22e94d92-cf19-42b3-8fd1-b6deec6c5283', 'Qui deleniti.','7a3808b1-2cf7-4a58-905b-10a77c6d976d','1','0'),
 ('970243a0-0e40-4b82-bad1-e2ac72eb7a77', 'Quae sed ducimus suscipit.','7a3808b1-2cf7-4a58-905b-10a77c6d976d','1','0'),
 ('a84a5b69-9451-4b49-8cdc-83eebf3ee245', 'Sit quae iure.','8addd01a-2e63-49ce-8b7b-ffc9c82fe541','1','0'),
 ('053c51eb-69ef-4253-a762-efaea4c2536c', 'Minima nihil totam.','8addd01a-2e63-49ce-8b7b-ffc9c82fe541','1','0'),
@@ -171,29 +171,19 @@ INSERT INTO Opinion (id_opinion, grade, description, date_created, id_project) V
 ('6721361e-3005-4de8-a691-c53631cf2d75', '5','A cool description.','2018-08-25','78d951b0-532d-4b13-bf70-96df4cf2e488'),
 ('6159c4e6-8122-4497-b571-32225bc69ca7', '5','Nisi ratione et placeat sint voluptatum dolorem. At quia voluptatibus laborum reprehenderit illo. Autem ut aliquid non eos id accusantium molestias ratione. Saepe sapiente nobis et quia molestias magnam.','2018-08-25','af0893af-85d9-4d4a-a096-a33065060c53');
 
-INSERT INTO Agency_employee (position, id_user, id_company) VALUES ('Developer','063eb1f4-a1e3-4043-bdcf-6daf814f7e8c','2fac289c-5258-4b6c-b99a-0398c668dd41'),
-('Graphic Designer','3e049f97-6823-40c2-9f07-9e7578b398a8','35a25e33-a3ca-4b91-8bf2-553c86caa109'),
-('Developer','f71bed07-5339-41ad-b4d6-e7518514ecef','defee47a-e277-4a65-a68d-fe5c18c98b64');
+INSERT INTO Agency_employee (position, id_user, id_company, role) VALUES ('Developer','063eb1f4-a1e3-4043-bdcf-6daf814f7e8c','2fac289c-5258-4b6c-b99a-0398c668dd41', 'Agency owner'),
+('Graphic Designer','3e049f97-6823-40c2-9f07-9e7578b398a8','35a25e33-a3ca-4b91-8bf2-553c86caa109', 'Employee'),
+('Developer','f71bed07-5339-41ad-b4d6-e7518514ecef','defee47a-e277-4a65-a68d-fe5c18c98b64', 'Employee');
 
-INSERT INTO Agency_employee_project_phase (id_agency_employee_project_phase, id_project_phase, id_user) VALUES ('acaafa66-a8d6-42a5-a6f8-0995ecd09e83', '8addd01a-2e63-49ce-8b7b-ffc9c82fe541','f71bed07-5339-41ad-b4d6-e7518514ecef'),
-('9f75508e-8985-4541-8a5a-ed236c314019', 'd1ae281e-9974-4d55-babd-70e792d944eb','f71bed07-5339-41ad-b4d6-e7518514ecef'),
-('8faf04ee-5a67-4b59-aaf6-aee86a0af963', 'a9f429db-44e6-40a4-aca3-d8e50fe87cd6','f71bed07-5339-41ad-b4d6-e7518514ecef'),
-('0bd47fa4-ce34-4cd1-957b-2edd0bfb0a98', '46c7c1ad-5f8f-4013-832a-9be9be6c2ac3','063eb1f4-a1e3-4043-bdcf-6daf814f7e8c'),
-('79fc150e-6226-4608-8ce9-15e11e48eaa6', '46c7c1ad-5f8f-4013-832a-9be9be6c2ac3','f71bed07-5339-41ad-b4d6-e7518514ecef');
+INSERT INTO Agency_employee_phase (id_phase, id_user) VALUES ('8addd01a-2e63-49ce-8b7b-ffc9c82fe541','f71bed07-5339-41ad-b4d6-e7518514ecef'),
+('d1ae281e-9974-4d55-babd-70e792d944eb','f71bed07-5339-41ad-b4d6-e7518514ecef'),
+('a9f429db-44e6-40a4-aca3-d8e50fe87cd6','f71bed07-5339-41ad-b4d6-e7518514ecef'),
+('46c7c1ad-5f8f-4013-832a-9be9be6c2ac3','063eb1f4-a1e3-4043-bdcf-6daf814f7e8c'),
+('46c7c1ad-5f8f-4013-832a-9be9be6c2ac3','f71bed07-5339-41ad-b4d6-e7518514ecef');
 
-INSERT INTO Client_agency (id_client_agency, id_user, id_company) VALUES ('84c3d92f-959e-4473-b54b-8e4eca4c38a0', '8f1f45fa-2beb-44ba-9854-e9d351dfefb8','defee47a-e277-4a65-a68d-fe5c18c98b64'),
-('5935f14a-7341-46e4-8f15-aca1c0305faa', '2a62ad9a-9290-4afd-886d-26e2fe91701c','f94d9934-55da-4bdf-8eba-43aeedcbade5'),
-('8122e976-ab8e-45b1-82f6-b6c1c3df10e9', 'f71bed07-5339-41ad-b4d6-e7518514ecef','35a25e33-a3ca-4b91-8bf2-553c86caa109'),
-('a10a8866-b6bf-410a-893b-433da1dad267', '87e95508-9ba4-4669-b858-dbe5d273b4e0','cb595266-3a16-4c7d-9ecb-7a258e85c7c6');
+INSERT INTO Client_agency (id_user, id_company) VALUES ('8f1f45fa-2beb-44ba-9854-e9d351dfefb8','defee47a-e277-4a65-a68d-fe5c18c98b64'),
+('2a62ad9a-9290-4afd-886d-26e2fe91701c','f94d9934-55da-4bdf-8eba-43aeedcbade5'),
+('f71bed07-5339-41ad-b4d6-e7518514ecef','35a25e33-a3ca-4b91-8bf2-553c86caa109'),
+('87e95508-9ba4-4669-b858-dbe5d273b4e0','cb595266-3a16-4c7d-9ecb-7a258e85c7c6');
 
-INSERT INTO Client_project (id_client_project, id_user, id_project, date_created) VALUES ('0671b28c-4182-41ba-8738-21d46c2b129d','3e049f97-6823-40c2-9f07-9e7578b398a8','78d951b0-532d-4b13-bf70-96df4cf2e488','1983-05-18');
-
-INSERT INTO Question (id_question, type, content, status, id_user, id_phase)
-VALUES ('f14a05e2-5aad-4cdf-817e-7e7c346be958', 'QuestionType', 'What should be the navbar color?', 'Unanswered', '063eb1f4-a1e3-4043-bdcf-6daf814f7e8c', '46c7c1ad-5f8f-4013-832a-9be9be6c2ac3');
-
-INSERT INTO Answer_option (id_answer_option, content, is_chosen, id_question)
-VALUES ('9dad01af-8090-423a-9771-d786c612db74', 'Red', false, 'f14a05e2-5aad-4cdf-817e-7e7c346be958');
-INSERT INTO Answer_option (id_answer_option, content, is_chosen, id_question)
-VALUES ('a960eb78-21f6-45e2-8c05-aa915d462d8b', 'Blue', false, 'f14a05e2-5aad-4cdf-817e-7e7c346be958');
-INSERT INTO Answer_option (id_answer_option, content, is_chosen, id_question)
-VALUES ('0564c7d0-024f-431c-a44b-b5a284e21520', 'Yellow', true, 'f14a05e2-5aad-4cdf-817e-7e7c346be958');
+INSERT INTO Client_project (id_user, id_project, date_created) VALUES ('3e049f97-6823-40c2-9f07-9e7578b398a8','78d951b0-532d-4b13-bf70-96df4cf2e488','1983-05-18');

@@ -1,24 +1,16 @@
 FROM mysql:latest
 
-ADD ./sql-scripts /docker-entrypoint-initdb.d
-RUN mkdir /secrets
-COPY ../secrets/ /secrets
+EXPOSE 3306
+
+ENV MYSQL_ALLOW_EMPTY_PASSWORD=yes
+
 RUN apt-get update && \
-    apt-get install jq bash -y wget && \
+    apt-get install jq -y wget && \
     rm -rf /var/lib/apt/lists/*
 
-RUN cd /run ; ls -a
-
-RUN mkdir /db
-WORKDIR /db
+COPY ./init /docker-entrypoint-initdb.d/
+WORKDIR /brieefly
 ADD . .
 
-RUN chmod +x ./mysql-create.sh ; \
-    chmod +x ./get-json-value.sh
 
-SHELL ["/bin/bash", "-c"]
-
-RUN . "./mysql-create.sh <(get-json-value.sh ../run/secrets/config_local.json .database.name) \
-    <(get-json-value.sh ../run/secrets/config_local.json" ".database.user) \
-    <(get-json-value.sh ../run/secrets/config_local.json" ".database.password)"
 
