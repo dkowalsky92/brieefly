@@ -1,23 +1,26 @@
 version: "3.7"
 
+networks:
+  net:
+    attachable: true
+
 services:
   db:
     build: ./db
-    volumes:
-      - ./db:/db
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
       - MYSQL_ENV=local
+    networks:
+      - net
     hostname: db
   server:
     build: ./server
-    volumes:
-      - ./server:/server
     ports:
-      - 443:5001
-      - 80:5002
+      - "5001:443"
+    networks:
+      - net
     hostname: server
-    stdin_open: true
-    depends_on:
-      - db
+    tty: true
+    links:
+      - db:db

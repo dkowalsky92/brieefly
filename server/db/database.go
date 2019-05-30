@@ -9,6 +9,7 @@ import (
 
 	"github.com/dkowalsky/brieefly/config"
 	"github.com/dkowalsky/brieefly/err"
+	"github.com/dkowalsky/brieefly/log"
 
 	// mysql driver
 	_ "github.com/go-sql-driver/mysql"
@@ -33,11 +34,15 @@ func Connect(config *config.Config) (*DB, *err.Error) {
 		config.Database.Address,
 		config.Database.Port,
 		config.Database.Name)
+	log.Debug(connectionString)
 	db, sqlErr := sql.Open("mysql", connectionString)
 	if sqlErr != nil {
 		return nil, err.New(sqlErr, err.ErrConnectionFailure, nil)
 	}
-
+	sqlErr = db.Ping()
+	if sqlErr != nil {
+		return nil, err.New(sqlErr, err.ErrConnectionFailure, nil)
+	}
 	return &DB{db}, nil
 }
 

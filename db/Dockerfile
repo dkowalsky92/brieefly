@@ -11,6 +11,3 @@ RUN apt-get update && \
 COPY ./init /docker-entrypoint-initdb.d/
 WORKDIR /brieefly
 ADD . .
-
-
-
