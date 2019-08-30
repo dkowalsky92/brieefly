@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/dkowalsky/brieefly/config"
 	"github.com/dkowalsky/brieefly/err"
@@ -28,13 +29,12 @@ type DB struct {
 
 // Connect - connect to a database and return it
 func Connect(config *config.Config) (*DB, *err.Error) {
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
+	connectionString := fmt.Sprintf("%s:%s@(%s:%s)/%s?parseTime=true",
 		config.Database.User,
 		config.Database.Password,
 		config.Database.Address,
 		config.Database.Port,
 		config.Database.Name)
-	log.Debug(connectionString)
 	db, sqlErr := sql.Open("mysql", connectionString)
 	if sqlErr != nil {
 		return nil, err.New(sqlErr, err.ErrConnectionFailure, nil)
@@ -90,7 +90,6 @@ func InsertStmt(tx *sql.Tx, args interface{}, table string) FinishedInsert {
 	insert := "INSERT INTO"
 	values := "VALUES"
 	stmt := fmt.Sprintf("%s %s %s %s %s", insert, table, preparedInsert.cols, values, preparedInsert.args)
-	fmt.Println(stmt)
 	sqlStmt, err := tx.Prepare(stmt)
 	if err != nil {
 		panic(err)
@@ -99,6 +98,58 @@ func InsertStmt(tx *sql.Tx, args interface{}, table string) FinishedInsert {
 	fi := FinishedInsert{sqlStmt, preparedInsert.vals}
 
 	return fi
+}
+
+// UpdateStmt -
+func UpdateStmt(tx *sql.Tx, args interface{}, table string, condition *string) FinishedUpdate {
+	updateMap := parseStruct(args)
+	preparedUpdate := parseUpdateMap(updateMap)
+	update := "UPDATE"
+	set := "SET"
+	where := "WHERE"
+	stmt := "" 
+	if condition != nil {
+		stmt = fmt.Sprintf("%s %s %s %s %s %s", update, table, set, preparedUpdate.sets, where, *condition)
+	} else {
+		stmt = fmt.Sprintf("%s %s %s %s", update, table, set, preparedUpdate.sets)
+	}
+	log.Debug(stmt)
+	sqlStmt, err := tx.Prepare(stmt)
+	if err != nil {
+		panic(err)
+	}
+
+	fi := FinishedUpdate{sqlStmt, preparedUpdate.vals}
+
+	return fi
+}
+
+// FinishedUpdate -
+type FinishedUpdate struct {
+	*sql.Stmt
+	Args []interface{}
+}
+
+type preparedUpdate struct {
+	sets string
+	vals []interface{}
+}
+
+func parseUpdateMap(arg map[string]interface{}) preparedUpdate {
+	upVals := preparedUpdate{sets: "", vals: []interface{}{}}
+	size := len(arg)
+	count := 0
+	for k, v := range arg {
+		upVals.sets += fmt.Sprintf("%v = ", k)
+		if count == size-1 {
+			upVals.sets += "?"
+		} else {
+			upVals.sets += "?, "
+		}
+		upVals.vals = append(upVals.vals, v)
+		count++
+	}
+	return upVals
 }
 
 // FinishedInsert -
@@ -155,7 +206,6 @@ func parseStruct(arg interface{}) map[string]interface{} {
 		}
 		switch val.Kind() {
 		case reflect.Struct:
-			fmt.Printf("struct: %s\n", val.String())
 			value := val.Interface()
 			switch value.(type) {
 			case NullString:
@@ -183,6 +233,9 @@ func parseStruct(arg interface{}) map[string]interface{} {
 				if nb.Valid {
 					res[tag] = nb.Bool
 				}
+			case time.Time:
+				t := value.(time.Time)
+				res[tag] = t
 			default:
 				nested := parseStruct(val.Interface())
 				for k, v := range nested {

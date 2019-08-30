@@ -1,13 +1,12 @@
 version: "3.7"
 
-secrets:
-  config_prod:
-    file: ./secrets/config-prod.json
-
 services:
   server:
-    secrets:
-      - config_prod
+    environment:
+      - "MYSQL_ENV=prod"
+      - "BRIEEFLY_ENVIRONMENT=prod"
+    ports:
+      - "443:5001"
   db:
-    secrets:
-      - config_prod
+    environment:
+      - "MYSQL_ENV=prod"

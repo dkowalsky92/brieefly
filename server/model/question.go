@@ -6,26 +6,24 @@ import (
 	"github.com/dkowalsky/brieefly/db"
 )
 
+// QuestionType -
+type QuestionType int
+
+const (
+	// Text - 
+	Text QuestionType = 0
+	// Options - 
+	Options QuestionType = 1
+	// MultiOptions - 
+	MultiOptions QuestionType = 2
+)
+
 // Question - a model for question
 type Question struct {
-	ID               string      `json:"idQuestion"`
-	Type             string      `json:"type"`
-	Content          string      `json:"content"`
-	Status           string      `json:"status"`
-	DateCreated      time.Time   `json:"dateCreated"`
-	DateLastModified db.NullTime `json:"dateLastModified"`
-	UserID           string      `json:"idUser"`
+	ID               string      `json:"idQuestion" orm:"id_question"`
+	Type             int      	 `json:"type" orm:"type"`
+	Content          string      `json:"content" orm:"content"`
+	Status           string      `json:"status" orm:"status"`
+	DateCreated      time.Time   `json:"dateCreated" orm:"date_created"`
+	DateLastModified db.NullTime `json:"dateLastModified" orm:"date_last_modified"`
 }
-
-// -- Table: Question
-// CREATE TABLE Question (
-//     id_question int NOT NULL AUTO_INCREMENT,
-//     type varchar(100) NOT NULL,
-//     content varchar(500) NOT NULL,
-//     status varchar(30) NOT NULL DEFAULT 'pending',
-//     date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//     date_last_modified timestamp NULL ON UPDATE CURRENT_TIMESTAMP,
-//     id_user int NOT NULL,
-//     id_project_phase int NOT NULL,
-//     CONSTRAINT Question_pk PRIMARY KEY (id_question)
-// );

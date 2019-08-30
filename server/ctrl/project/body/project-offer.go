@@ -1,6 +1,8 @@
 package body
 
-import "github.com/dkowalsky/brieefly/model"
+import (
+	"github.com/dkowalsky/brieefly/model"
+)
 
 // AgencyOffer -
 type AgencyOffer struct {

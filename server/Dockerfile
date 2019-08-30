@@ -1,8 +1,5 @@
 FROM golang:1.12.5-alpine3.9
 
-EXPOSE 5001
-EXPOSE 5002
-
 RUN apk update && \
     apk upgrade && \
     apk add git bash

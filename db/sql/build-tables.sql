@@ -1,11 +1,10 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2019-01-18 00:01:34.435
+-- Last modification date: 2019-08-17 10:55:14.77
 
 -- tables
 -- Table: Agency
 CREATE TABLE Agency (
     id_company varchar(100) NOT NULL,
-    agency_code varchar(13) NOT NULL,
     nip_number int NULL,
     CONSTRAINT Agency_pk PRIMARY KEY (id_company)
 );
@@ -13,10 +12,9 @@ CREATE TABLE Agency (
 -- Table: Agency_employee
 CREATE TABLE Agency_employee (
     id_user varchar(100) NOT NULL,
-    position varchar(70) NULL,
     id_company varchar(100) NOT NULL,
-    role varchar(20) NOT NULL,
-    CONSTRAINT Agency_employee_pk PRIMARY KEY (id_user)
+    id_agency_role varchar(100) NULL,
+    CONSTRAINT Agency_employee_pk PRIMARY KEY (id_user,id_company)
 );
 
 -- Table: Agency_employee_phase
@@ -27,11 +25,19 @@ CREATE TABLE Agency_employee_phase (
     CONSTRAINT Agency_employee_phase_pk PRIMARY KEY (id_user,id_phase)
 );
 
+-- Table: Agency_role
+CREATE TABLE Agency_role (
+    id_agency_role varchar(100) NOT NULL,
+    role varchar(100) NOT NULL,
+    CONSTRAINT id_agency_role PRIMARY KEY (id_agency_role)
+);
+
 -- Table: Answer_option
 CREATE TABLE Answer_option (
     id_answer_option varchar(100) NOT NULL,
     content varchar(150) NOT NULL,
     is_chosen bool NOT NULL DEFAULT false,
+    image_url varchar(100) NULL,
     id_question varchar(100) NULL,
     CONSTRAINT Answer_option_pk PRIMARY KEY (id_answer_option)
 );
@@ -80,7 +86,7 @@ CREATE TABLE Color (
 CREATE TABLE Company (
     id_company varchar(100) NOT NULL,
     name varchar(100) NOT NULL,
-    name_slug varchar(100) NOT NULL,
+    url_name varchar(100) NOT NULL,
     website_url varchar(300) NULL,
     phone varchar(20) NULL,
     email varchar(75) NOT NULL,
@@ -112,8 +118,10 @@ CREATE TABLE Feature (
 -- Table: Offer
 CREATE TABLE Offer (
     id_offer varchar(100) NOT NULL,
-    salary int NOT NULL,
+    salary_min int NOT NULL,
+    salary_max int NOT NULL,
     is_chosen bool NOT NULL DEFAULT false,
+    date_start date NOT NULL,
     date_deadline date NOT NULL,
     date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     id_project varchar(100) NOT NULL,
@@ -150,7 +158,7 @@ CREATE TABLE Phase (
 CREATE TABLE Project (
     id_project varchar(100) NOT NULL,
     name varchar(70) NOT NULL,
-    name_slug varchar(100) NOT NULL,
+    url_name varchar(100) NOT NULL,
     type varchar(40) NOT NULL,
     description varchar(500) NOT NULL,
     language varchar(50) NULL,
@@ -164,7 +172,6 @@ CREATE TABLE Project (
     date_last_modified timestamp NULL ON UPDATE CURRENT_TIMESTAMP,
     id_status varchar(100) NOT NULL,
     id_cms varchar(100) NULL,
-    id_visual_identity varchar(100) NULL,
     CONSTRAINT Project_pk PRIMARY KEY (id_project)
 );
 
@@ -178,7 +185,7 @@ CREATE TABLE Project_feature (
 -- Table: Question
 CREATE TABLE Question (
     id_question varchar(100) NOT NULL,
-    type varchar(100) NOT NULL,
+    type int NOT NULL,
     content varchar(500) NOT NULL,
     status varchar(30) NOT NULL DEFAULT 'pending',
     date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -228,7 +235,7 @@ CREATE TABLE Task (
 CREATE TABLE User (
     id_user varchar(100) NOT NULL,
     login varchar(20) NULL,
-    password varchar(20) NOT NULL,
+    password varchar(1500) NOT NULL,
     password_fail_attempts int NOT NULL DEFAULT 0,
     email varchar(75) NOT NULL,
     name varchar(20) NULL,
@@ -248,6 +255,7 @@ CREATE TABLE User (
 CREATE TABLE Visual_identity (
     id_visual_identity varchar(100) NOT NULL,
     type varchar(30) NOT NULL,
+    id_project varchar(100) NOT NULL,
     CONSTRAINT Visual_identity_pk PRIMARY KEY (id_visual_identity)
 );
 
@@ -418,11 +426,73 @@ ALTER TABLE Task ADD CONSTRAINT Task_Project_phase FOREIGN KEY Task_Project_phas
     ON DELETE CASCADE
     ON UPDATE CASCADE;
 
--- Reference: Visual_identity_Project (table: Project)
-ALTER TABLE Project ADD CONSTRAINT Visual_identity_Project FOREIGN KEY Visual_identity_Project (id_visual_identity)
-    REFERENCES Visual_identity (id_visual_identity)
+-- Reference: Visual_identity_Project (table: Visual_identity)
+ALTER TABLE Visual_identity ADD CONSTRAINT Visual_identity_Project FOREIGN KEY Visual_identity_Project (id_project)
+    REFERENCES Project (id_project)
     ON DELETE CASCADE
     ON UPDATE CASCADE;
+
+-- Reference: id_agency_role (table: Agency_employee)
+ALTER TABLE Agency_employee ADD CONSTRAINT id_agency_role FOREIGN KEY id_agency_role (id_agency_role)
+    REFERENCES Agency_role (id_agency_role);
+
+
+DELIMITER //
+CREATE TRIGGER task_done_update_trigger AFTER UPDATE ON Task
+FOR EACH ROW
+BEGIN
+DECLARE v_count int;
+DECLARE v_done int;
+DECLARE v_progress int;
+
+    SELECT COUNT(value) INTO @v_count FROM Task WHERE id_phase = OLD.id_phase;
+    SELECT COUNT(is_done) INTO @v_done FROM Task WHERE id_phase = OLD.id_phase AND is_done = true;
+    
+    SET @v_progress = (@v_done * 100) / @v_count;
+
+    UPDATE Phase
+    SET progress = @v_progress
+    WHERE id_phase = OLD.id_phase;
+
+END;//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER task_done_insert_trigger AFTER INSERT ON Task
+FOR EACH ROW
+BEGIN
+DECLARE v_count int;
+DECLARE v_done int;
+DECLARE v_progress int;
+
+    SELECT COUNT(value) INTO @v_count FROM Task WHERE id_phase = NEW.id_phase;
+    SELECT COUNT(is_done) INTO @v_done FROM Task WHERE id_phase = NEW.id_phase AND is_done = true;
+    
+    SET @v_progress = (@v_done * 100) / @v_count;
+    
+    UPDATE Phase
+    SET progress = @v_progress
+    WHERE id_phase = NEW.id_phase;
+     
+END;//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER phase_update_trigger BEFORE UPDATE ON Phase
+FOR EACH ROW
+BEGIN
+DECLARE v_progress int;
+DECLARE v_status varchar(20);
+    SET @v_progress = NEW.progress;
+
+    IF @v_progress = 100 THEN
+        SET @v_status = 'Finished';
+        SET NEW.status = @v_status, NEW.is_active = false;
+    END IF;
+END;//
+DELIMITER ;
+
+
 
 -- End of file.
 

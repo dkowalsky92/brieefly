@@ -6,12 +6,11 @@ import (
 	"github.com/dkowalsky/brieefly/ctrl/project/body"
 	"github.com/dkowalsky/brieefly/db"
 	"github.com/dkowalsky/brieefly/err"
-	"github.com/dkowalsky/brieefly/model"
 )
 
 // DbGetDetailsForURL - get project details for project url
-func DbGetDetailsForURL(db *db.DB, url string) (*body.ProjectDetails, *err.Error) {
-	var details *body.ProjectDetails
+func DbGetDetailsForURL(db *db.DB, url string) (*body.ProjectDetailsBundle, *err.Error) {
+	var bundle *body.ProjectDetailsBundle
 
 	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		projectRow := tx.QueryRow(`SELECT p.id_project,
@@ -19,46 +18,26 @@ func DbGetDetailsForURL(db *db.DB, url string) (*body.ProjectDetails, *err.Error
 										  p.type, 
 										  p.description, 
 										  p.date_created, 
-										  p.date_deadline,
-										  cp.name,
-										  cp.image_url,
-										  s.id_status,
-										  s.name,
-										  c.id_cms,
-										  c.name,
-										  c.description,
-										  (SELECT AVG(op.grade) FROM Opinion op WHERE op.id_project = p.id_project GROUP BY op.id_opinion) as "avgOpn"
+										  p.date_deadline
 										  FROM Project p
-										  INNER JOIN Offer o ON o.id_project = p.id_project
-										  INNER JOIN Agency a ON a.id_company = o.id_company
-										  INNER JOIN Company cp ON a.id_company = cp.id_company
-										  INNER JOIN Status s ON s.id_status = p.id_status
-										  INNER JOIN Cms c ON c.id_cms = p.id_cms
-										  WHERE p.url_name = ? AND o.is_chosen = true`, url)
-
-		var s model.ProjectStatus
-		var c model.CMS
+										  WHERE p.url_name = ?`, url)
 		var d body.ProjectDetails
-		var avgOp float64
 
 		err := projectRow.Scan(&d.ProjectID,
 			&d.Name,
 			&d.Type,
 			&d.Description,
 			&d.DateCreated,
-			&d.DateDeadline,
-			&d.AgencyName,
-			&d.AgencyLogoURL,
-			&s.ID,
-			&s.Name,
-			&c.ID,
-			&c.Name,
-			&c.Description,
-			&avgOp)
+			&d.DateDeadline)
 
 		if err != nil {
 			return db.HandleError(err)
 		}
+
+		pba, _ := DbGetBiddingAgencyForURL(db, url)
+		cms, _ := DbGetCMSForID(db, d.ProjectID)
+		s, _ := DbGetStatusForID(db, d.ProjectID)
+		avgOp, _ := DbGetAverageOpinionForID(db, d.ProjectID)
 
 		f, fErr := DbGetFeaturesForID(db, d.ProjectID)
 		if fErr != nil {
@@ -84,21 +63,28 @@ func DbGetDetailsForURL(db *db.DB, url string) (*body.ProjectDetails, *err.Error
 		if tgErr != nil {
 			return tgErr
 		}
+		op, opErr := DbGetOpinionsForID(db, d.ProjectID)
+		if opErr != nil {
+			return opErr
+		}
+		
+		if avgOp != nil {
+			d.AverageOpinion = *avgOp
+		} else {
+			d.AverageOpinion = 0
+		}
 
-		d.Cms = &c
-		d.Status = &s
-		d.Features = f
-		d.CustomFeatures = cf
-		d.VisualIdentities = vi
-		d.Colors = cl
-		d.TargetGroups = tg
-		d.SimilarProjects = sp
-		d.AverageOpinion = avgOp
-
-		details = &d
+		bundle = &body.ProjectDetailsBundle{ProjectDetails: d, Bidder: pba, Status: s, CMS: cms}
+		bundle.Features = f
+		bundle.CustomFeatures = cf
+		bundle.VisualIdentities = vi
+		bundle.Colors = cl
+		bundle.TargetGroups = tg
+		bundle.SimilarProjects = sp
+		bundle.Opinions = op
 
 		return nil
 	})
 
-	return details, err
+	return bundle, err
 }

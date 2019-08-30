@@ -36,9 +36,10 @@ const (
 
 // Config - stores all necessary information regarding server & database setup
 type Config struct {
-	Database *DatabaseParams      `json:"database"`
-	Server   *ServerParams        `json:"server"`
-	Auth     *AuthorizationParams `json:"auth"`
+	Environment Environment          `json:"-"`
+	Database    *DatabaseParams      `json:"database"`
+	Server      *ServerParams        `json:"server"`
+	Auth        *AuthorizationParams `json:"auth"`
 }
 
 // DatabaseParams - database info
@@ -92,6 +93,8 @@ func NewConfig(environment Environment) (*Config, *err.Error) {
 		log.Error(cnfErr)
 		return nil, err.New(cnfErr, err.ErrConfigMalformed, nil)
 	}
+
+	config.Environment = environment
 
 	return &config, nil
 }

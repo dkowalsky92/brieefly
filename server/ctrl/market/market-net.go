@@ -16,6 +16,7 @@ func NewRouter(db *db.DB) *Router {
 	r := &Router{DB: db}
 
 	mux := chi.NewRouter()
+	
 	mux.Mount("/", newPendingProjectsRouter(db).mux)
 	mux.Mount("/offers", newOfferRouter(db).mux)
 

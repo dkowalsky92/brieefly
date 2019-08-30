@@ -1,1 +1,75 @@
 // TODO
+
+1. Trzeba zrobić z salary w tabeli "Offer" przedział, potrzebne są tam wartości min i max, np. salaryMin i salaryMax..
+ 
+2. /api/market/{idOffer}/bid - post
+ 
+w body prześlę Ci
+ 
+{
+    idProject: string;
+    budgetMin: number;
+    budgetMax: number;
+    dateStart: date (string);
+    dateDeadline: date (string);
+}
+ 
+idCompany musisz wyciągnąć z tabeli "Company" po idUsera z tokenu JWT.
+ 
+wszystkie są obowiązkowe - nie mogą być nullable
+ 
+Trzeba utworzyć nowy rekord w tabeli "Offer" powiązany z tabelą "Agency" i "Project"
+ 
+Nic mi nie zwracasz, wystarczy jakieś 200 albo jakiś inny status jak się nie uda i ja wyświetlę jakiś komunikat.
+ 
+2. /api/projects/{idProject}/offers/{idOffer}/choose - post
+ 
+zmieniasz w danym rekordzie z tabeli "Offer" wartość "is_chosen" na true - 
+musisz wcześniej sprawdzić czy już nie ma jakiegoś rekordu w tabeli "Offer",
+który ma tą flagę z wartością true, ten wybór jest jednorazowy i nieodwracalny.
+
+3. dodawani Question i Question_answer
+3a. usuwanie Question
+
+4. oznaczania task na done
+4a. usuwanie taska
+
+5. zmiana hasla Uzytkownika
+6. update user properties
+
+7. wychodzenie usera z Company
+8. dolaczanie usera do Company
+
+10. ocena projektu
+
+11. tworzenie Company,
+11a.tworzenie Agency
+ 
+12. zwracanie ról uzytkownika przy logowaniu
+
+11a. zakonczenie phasea
+
+13. pobieranie features
+
+dodawanie agencji
+
+i zmienia role uzytkownika
+na agency ownera?
+
+tez dziala?
+Jestem na sZamoe
+
+mysle ze przy dobrych wiatrach
+jestem w stanie dzisiaj to opendzlowac
+Xd
+
+ale trzeba dokumentacje
+jeszcze napisac
+a tego na pewwno nie zdaze
+tzn ta druga czesc
+pisemna
+plus wszedzie w questionach zwracasz mi nulle
+dla tego processu
+przydalyby sie jakies dane tesowe
+testowe
+No xd

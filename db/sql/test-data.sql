@@ -1,4 +1,4 @@
-INSERT INTO Company (id_company, name, name_slug, website_url, phone, email, address, description, image_url) VALUES ('b04e0a2f-cec8-4aa5-96d5-1622c7fa680b', '180heartbeats', '180heartbeats', 'http://180hb.com/','+48214748367','collier.colton@example.org','2875 Durgan Run Apt. 887\nSouth Dino, AL 38644','180heartbeats is an independent creative agency located in Warsaw, Poland. They work on behalf of local and international brands.','src/images/180heartbeats.png'),
+INSERT INTO Company (id_company, name, url_name, website_url, phone, email, address, description, image_url) VALUES ('b04e0a2f-cec8-4aa5-96d5-1622c7fa680b', '180heartbeats', '180heartbeats', 'http://180hb.com/','+48214748367','collier.colton@example.org','2875 Durgan Run Apt. 887\nSouth Dino, AL 38644','180heartbeats is an independent creative agency located in Warsaw, Poland. They work on behalf of local and international brands.','src/images/180heartbeats.png'),
 ('3b78549d-6d1a-42c6-8467-5d4d6c3ed54d', 'Adequate', 'adequate', 'http://www.predovic.net/','+48847355111','hgreen@example.com','86149 Jamison Crest\nEast Horacio, FL 70093','Adequate boutique interactive agency is a team of highly experienced digital marketing specialists located in Poland.','src/images/adequate.png'),
 ('9636bb2e-98da-4644-8856-dee994efc7f2', 'Arsthanea', 'arsthanea', 'http://romaguera.com/','+48675950974','janae83@example.net','1550 Satterfield Ville Suite 762\nLake Owenville, ME 77679-2587','Ars Thanea is an Advertising and Production Agency founded in 2007, home to 60 talented people who make work that matters and breathe excellence.','src/images/arsthanea.png'),
 ('51e7f494-0a3c-48ad-91af-950bee41f94a', 'El Passion', 'el-passion', 'https://www.elpassion.com/','+48451222321','daija05@example.org','8012 Dare Circle\nEast Mittiestad, IA 08358-1087','EL Passion is an app development & design house which turns great ideas into web apps, mobile apps and stunning designs.','src/images/elpassion.png'),
@@ -14,23 +14,23 @@ INSERT INTO Company (id_company, name, name_slug, website_url, phone, email, add
 ('e48dcc2f-e0c7-4056-982c-97f50b0c553f', 'Cassin, Labadie and Okuneva', 'cassin-labadie-and-okuneva', 'http://www.feeneyking.com/','1-714-228-2023','bjacobi@stanton.com','718 Okuneva Mount\nNorth Yasminestad, SD 75890','Quas quos nihil qui et. Doloribus iure at sint in. Dolor corrupti quae recusandae soluta magnam omnis. Totam aut pariatur dolores hic et.','http://via.placeholder.com/200x200'),
 ('dbb79e3b-6e7d-4b44-bbb7-1e2376c37fee', 'rogahn-mante', 'Rogahn-Mante', 'http://hirthe.com/','02135417508','kirlin.nico@mosciski.com','34587 Dortha Rue Suite 557\nLynchville, ND 63888-0498','Quas quos nihil qui et. Doloribus iure at sint in. Dolor corrupti quae recusandae soluta magnam omnis. Totam aut pariatur dolores hic et.','http://via.placeholder.com/200x200');
 
-INSERT INTO Agency (agency_code, nip_number, id_company) VALUES ('39j8g7d8ve','1234512345', 'e48dcc2f-e0c7-4056-982c-97f50b0c553f'),
-('26a8m5i4eg','2147483647', '9636bb2e-98da-4644-8856-dee994efc7f2'),
-('65e6t8o7bx','2147483647', '51e7f494-0a3c-48ad-91af-950bee41f94a'),
-('89o3v8o8nn','2147483647', 'b8f1391f-ebeb-44ee-95a7-a74827248446'),
-('10h9x6a8jj','1142133788', 'f94d9934-55da-4bdf-8eba-43aeedcbade5'),
-('34n8u3y9qc','2147483647', '09946b82-d2f0-4aae-82aa-b4777401487d'),
-('43p1i2y1vq','2147483647', 'cb595266-3a16-4c7d-9ecb-7a258e85c7c6'),
-('24b2s2o3ku','2147483647', '2fac289c-5258-4b6c-b99a-0398c668dd41'),
-('83t0c2u4vh','2147483647', '35a25e33-a3ca-4b91-8bf2-553c86caa109'),
-('34z8k9w7el','2147483647', 'defee47a-e277-4a65-a68d-fe5c18c98b64');
+INSERT INTO Agency (nip_number, id_company) VALUES ('1234512345', 'e48dcc2f-e0c7-4056-982c-97f50b0c553f'),
+('2147483647', '9636bb2e-98da-4644-8856-dee994efc7f2'),
+('2147483647', '51e7f494-0a3c-48ad-91af-950bee41f94a'),
+('2147483647', 'b8f1391f-ebeb-44ee-95a7-a74827248446'),
+('1142133788', 'f94d9934-55da-4bdf-8eba-43aeedcbade5'),
+('2147483647', '09946b82-d2f0-4aae-82aa-b4777401487d'),
+('2147483647', 'cb595266-3a16-4c7d-9ecb-7a258e85c7c6'),
+('2147483647', '2fac289c-5258-4b6c-b99a-0398c668dd41'),
+('2147483647', '35a25e33-a3ca-4b91-8bf2-553c86caa109'),
+('2147483647', 'defee47a-e277-4a65-a68d-fe5c18c98b64');
 
 INSERT INTO Status (id_status, name) VALUES ('f4bdc1ef-4f34-4334-b3e7-559390a69838', 'Finished'),
 ('58af8417-c8da-49cb-947f-1537b477e010', 'Finished'),
 ('a4ecbea4-be4f-4429-a3fc-53e47ecfdea9', 'Pending'),
 ('9fb4ff47-b5ad-4c25-9054-190f2c775b23', 'Finished');
 
-INSERT INTO User (id_user, login, password, password_fail_attempts, email, name, surname, phone, website_url, image_url, description, date_of_birth, date_created, date_last_logged) VALUES ('3e049f97-6823-40c2-9f07-9e7578b398a8', 'konradkeska','admin','0','keska.konrad@gmail.com','Konrad','Keska','+48737447611','http://konradkeska.com/','https://avatars1.githubusercontent.com/u/29062983?s=460&v=4','Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.','1993-11-13','2018-08-23','2018-08-25'),
+INSERT INTO User (id_user, login, password, password_fail_attempts, email, name, surname, phone, website_url, image_url, description, date_of_birth, date_created, date_last_logged) VALUES ('3e049f97-6823-40c2-9f07-9e7578b398a8', 'konradkeska','$2a$04$V7llj6xdy7/ZTNdqOqNSZOZjUX8xaw41y8YL8EzCL9uwoOIFngm7u','0','keska.konrad@gmail.com','Konrad','Keska','+48737447611','http://konradkeska.com/','https://avatars1.githubusercontent.com/u/29062983?s=460&v=4','Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.','1993-11-13','2018-08-23','2018-08-25'),
 ('063eb1f4-a1e3-4043-bdcf-6daf814f7e8c', 'erika.armstrong','588e1f2528ac05df2845','0','jessika.pacocha@example.net','Garnett','Wiegand','04571193316','http://konradkeska.com/','http://via.placeholder.com/200x200','Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.','1988-08-09','1986-08-21','1991-08-28'),
 ('f71bed07-5339-41ad-b4d6-e7518514ecef', 'ulices60','af80b3102fd262ce33f9','2','kian.bogan@example.net','Norberto','Boehm','1-951-213-3547','http://konradkeska.com/','http://via.placeholder.com/200x200','Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.','2005-05-20','1992-05-31','2005-01-14'),
 ('8f1f45fa-2beb-44ba-9854-e9d351dfefb8', 'joan61','4b6c23ef706092e35f3b','1','rasheed.langosh@example.com','Vita','Dare','737.837.0891x4','http://konradkeska.com/','http://via.placeholder.com/200x200','Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.','1989-01-02','1971-03-06','2002-10-08'),
@@ -56,11 +56,11 @@ INSERT INTO Cms (id_cms, name, description) VALUES ('1ad0e477-5072-457b-9457-3cd
 ('79af9b6e-8606-4dd3-b20e-5059e0c82f13', 'Squarespace','Voluptatum dicta impedit quam eveniet. Suscipit accusantium soluta quos velit cum. Architecto voluptas omnis temporibus optio rerum. Commodi sunt assumenda magni blanditiis nostrum aut. Mollitia suscipit nihil quia et. Id natus qui et quia quo. Dolorem minus quia et autem culpa totam.'),
 ('35366487-ff02-4bff-8bd7-7bec92231b85', 'Magnolia','Est rerum ut sint quia aspernatur. In iste voluptates tempora voluptatibus sit architecto qui. Blanditiis cum perspiciatis pariatur temporibus dicta. A quae voluptatem maiores in. Aliquid non natus et.');
 
-INSERT INTO Visual_identity (id_visual_identity, type) VALUES ('54346b39-86f3-4d52-a0b9-313c67867e70', 'All'),
-('f42576f6-d7ea-4a98-bcb3-56d7a6bf6dcd', 'Logotype, layout');
+INSERT INTO Project (id_project, name, url_name, type, description, language, budget_min, budget_max, date_created, date_deadline, subpage_count, overall_progress, image_url, id_status, id_cms) VALUES ('78d951b0-532d-4b13-bf70-96df4cf2e488', 'Crazy Tom Fishing Shop', 'crazy-tom-fishing-shop', 'eCommerce','We want to create internet shop related to fishing accesories.','English','3000','7500','2018-08-25','2018-12-28','10','10','http://via.placeholder.com/300x300','f4bdc1ef-4f34-4334-b3e7-559390a69838','1ad0e477-5072-457b-9457-3cdfe0e471bb'),
+('af0893af-85d9-4d4a-a096-a33065060c53', 'NextLevel App', 'nextlevel-app', 'App','We want to create next level application based on block-chain and newest technologies.','Multilingual','10000','42655','2017-11-05','2018-11-13','50','66','http://via.placeholder.com/300x300','a4ecbea4-be4f-4429-a3fc-53e47ecfdea9','24a846b0-81e8-4ffb-83d7-9011ff63086b');
 
-INSERT INTO Project (id_project, name, name_slug, type, description, language, budget_min, budget_max, date_created, date_deadline, subpage_count, overall_progress, image_url, id_status, id_cms, id_visual_identity) VALUES ('78d951b0-532d-4b13-bf70-96df4cf2e488', 'Crazy Tom Fishing Shop', 'crazy-tom-fishing-shop', 'eCommerce','We want to create internet shop related to fishing accesories.','English','3000','7500','2018-08-25','2018-12-28','10','10','http://via.placeholder.com/300x300','f4bdc1ef-4f34-4334-b3e7-559390a69838','1ad0e477-5072-457b-9457-3cdfe0e471bb', '54346b39-86f3-4d52-a0b9-313c67867e70'),
-('af0893af-85d9-4d4a-a096-a33065060c53', 'NextLevel App', 'nextlevel-app', 'App','We want to create next level application based on block-chain and newest technologies.','Multilingual','10000','42655','2017-11-05','2018-11-13','50','66','http://via.placeholder.com/300x300','a4ecbea4-be4f-4429-a3fc-53e47ecfdea9','24a846b0-81e8-4ffb-83d7-9011ff63086b', 'f42576f6-d7ea-4a98-bcb3-56d7a6bf6dcd');
+INSERT INTO Visual_identity (id_visual_identity, type, id_project) VALUES ('54346b39-86f3-4d52-a0b9-313c67867e70', 'All', 'af0893af-85d9-4d4a-a096-a33065060c53'),
+('f42576f6-d7ea-4a98-bcb3-56d7a6bf6dcd', 'Logotype, layout', '78d951b0-532d-4b13-bf70-96df4cf2e488');
 
 INSERT INTO Similar_project (id_similar_project, project_url, id_project) VALUES ('3d24d078-c565-47c1-bac6-448f65d2c7b8', 'http://google.com/', 'af0893af-85d9-4d4a-a096-a33065060c53'),
 ('ccb8e33b-6338-41f3-b82f-566e0b999135', 'http://amazon.com/', '78d951b0-532d-4b13-bf70-96df4cf2e488'),
@@ -113,12 +113,12 @@ INSERT INTO Target_group (id_target_group, name, description, age_min, age_max, 
 ('4cd19e93-b74c-45e5-9967-5f4d77898f8d', 'Teenagers / Young adults','Our company would like to target young creative people which are into new technologies, internet, mobile applications and social media.','15','28','78d951b0-532d-4b13-bf70-96df4cf2e488');
 
 
-INSERT INTO Phase (id_phase, name, description, id_project, order_position, value, progress, status, is_active) VALUES ('7a3808b1-2cf7-4a58-905b-10a77c6d976d', 'Initiation','This is where the project’s value and feasibility are measured.', '78d951b0-532d-4b13-bf70-96df4cf2e488','1','10','100','Finished', '0'),
-('8addd01a-2e63-49ce-8b7b-ffc9c82fe541','Planning','All about writing a solid action plan to guide the development team, as well as keep them on time and on budget.', '78d951b0-532d-4b13-bf70-96df4cf2e488','2','20','30', 'In progress', '0'),
+INSERT INTO Phase (id_phase, name, description, id_project, order_position, value, progress, status, is_active) VALUES ('7a3808b1-2cf7-4a58-905b-10a77c6d976d', 'Initiation','This is where the project’s value and feasibility are measured.', '78d951b0-532d-4b13-bf70-96df4cf2e488','1','10','0','In Progress', '0'),
+('8addd01a-2e63-49ce-8b7b-ffc9c82fe541','Planning','All about writing a solid action plan to guide the development team, as well as keep them on time and on budget.', '78d951b0-532d-4b13-bf70-96df4cf2e488','2','20','0', 'Pending', '0'),
 ('d1ae281e-9974-4d55-babd-70e792d944eb', 'Development','Creation of your desired project according to Initiation and Planning phases arrangements.', '78d951b0-532d-4b13-bf70-96df4cf2e488','3','40','0', 'Pending', '0'),
 ('a9f429db-44e6-40a4-aca3-d8e50fe87cd6', 'Testing','Making sure that your project solutions are bullet-proof.', '78d951b0-532d-4b13-bf70-96df4cf2e488','4','20','0', 'Pending', '0'),
 ('46c7c1ad-5f8f-4013-832a-9be9be6c2ac3', 'Alfa','A cool application.', '78d951b0-532d-4b13-bf70-96df4cf2e488','5','10','0', 'Pending', '0'),
-('87343fc0-7a9c-4c46-afba-8647920f39a9', 'Omega','A very cool application.', 'af0893af-85d9-4d4a-a096-a33065060c53','1','10','50', 'In progress', '0'),
+('87343fc0-7a9c-4c46-afba-8647920f39a9', 'Omega','A very cool application.', 'af0893af-85d9-4d4a-a096-a33065060c53','1','10','0', 'Pending', '0'),
 ('5c934346-3ae5-4069-8015-59bfd90e3487', 'Gamma','An ultra cool application.', 'af0893af-85d9-4d4a-a096-a33065060c53','2','50','0', 'Pending', '0'),
 ('5bb3ef5a-575c-46a2-bf6b-f956a8fb5cf2', 'Beta','Another ultra fun application.', 'af0893af-85d9-4d4a-a096-a33065060c53','3','30','0', 'Pending', '0'),
 ('8edaad28-13fc-4db0-bdc0-7bb2200b626f', 'Zeta','The ultimate application.', 'af0893af-85d9-4d4a-a096-a33065060c53','4','10','0', 'Pending', '0');
@@ -135,20 +135,20 @@ INSERT INTO Task (id_task, name, id_phase, value, is_done) VALUES ('22e94d92-cf1
 ('048a97db-962a-443f-8725-2c30b699f836', 'Et dolor magni.','a9f429db-44e6-40a4-aca3-d8e50fe87cd6','1','0'),
 ('8897d248-96b9-4014-952d-44d3533b84d2', 'Numquam aliquam qui.','5c934346-3ae5-4069-8015-59bfd90e3487','1','0'),
 ('536f40f1-bc65-473b-b57f-63378917ee3f', 'Enim illum ipsum.','87343fc0-7a9c-4c46-afba-8647920f39a9','1','0'),
-('cbda5721-2e65-40b4-bfa6-d25566cd549a', 'Dolores expedita amet voluptat','d1ae281e-9974-4d55-babd-70e792d944eb','1','1'),
-('eebede0c-69e8-4d6a-a028-534f85c104ac', 'Aliquam doloribus nam vel.','87343fc0-7a9c-4c46-afba-8647920f39a9','1','1'),
-('afe347ed-52ba-4098-900e-2d3fc815c3cc', 'Repudiandae quasi et sed.','8addd01a-2e63-49ce-8b7b-ffc9c82fe541','1','1'),
-('95fbc4ea-f95c-40f9-b66f-6e5c6429fb06', 'Sapiente at hic.','5bb3ef5a-575c-46a2-bf6b-f956a8fb5cf2','1','1'),
-('4cffcee0-ecfd-41a5-b45b-c912480647c6', 'Consectetur aliquam commodi ve','8edaad28-13fc-4db0-bdc0-7bb2200b626f','1','1'),
-('55e45ee4-29e6-409d-a9a8-9706a1be300f', 'Voluptas veritatis ut.','46c7c1ad-5f8f-4013-832a-9be9be6c2ac3','1','1'),
-('a7819fe4-dabd-429e-9e7f-70694b26408d', 'Velit neque laborum.','7a3808b1-2cf7-4a58-905b-10a77c6d976d','1','1'),
-('70c36f57-9808-44e7-ac34-512a0498b8b9', 'Et quidem aut odio.','87343fc0-7a9c-4c46-afba-8647920f39a9','1','1'),
-('218fefbd-31ef-4ca2-867a-0c699033acd9', 'Repellat alias voluptas.','5bb3ef5a-575c-46a2-bf6b-f956a8fb5cf2','1','1'),
-('0b63618c-32fc-463b-9cb2-38fade559df6', 'Laborum et iusto.','87343fc0-7a9c-4c46-afba-8647920f39a9','2','1'),
-('3ee97b0a-da49-48bd-a926-bd36d46b807e', 'Porro assumenda quia.','5c934346-3ae5-4069-8015-59bfd90e3487','2','1'),
-('33f6cbe6-4b9f-452b-8ca3-fb43145df8ad', 'Dolorem nihil excepturi invent','5bb3ef5a-575c-46a2-bf6b-f956a8fb5cf2','2','1'),
-('60745235-b424-4bbb-b9bd-7b7d428a43cb', 'Et nulla sed.','7a3808b1-2cf7-4a58-905b-10a77c6d976d','2','1'),
-('14d60569-d188-4f75-ab16-370ad37f50a8', 'Voluptatem cupiditate.','5c934346-3ae5-4069-8015-59bfd90e3487','2','1'),
+('cbda5721-2e65-40b4-bfa6-d25566cd549a', 'Dolores expedita amet voluptat','d1ae281e-9974-4d55-babd-70e792d944eb','1','0'),
+('eebede0c-69e8-4d6a-a028-534f85c104ac', 'Aliquam doloribus nam vel.','87343fc0-7a9c-4c46-afba-8647920f39a9','1','0'),
+('afe347ed-52ba-4098-900e-2d3fc815c3cc', 'Repudiandae quasi et sed.','8addd01a-2e63-49ce-8b7b-ffc9c82fe541','1','0'),
+('95fbc4ea-f95c-40f9-b66f-6e5c6429fb06', 'Sapiente at hic.','5bb3ef5a-575c-46a2-bf6b-f956a8fb5cf2','1','0'),
+('4cffcee0-ecfd-41a5-b45b-c912480647c6', 'Consectetur aliquam commodi ve','8edaad28-13fc-4db0-bdc0-7bb2200b626f','1','0'),
+('55e45ee4-29e6-409d-a9a8-9706a1be300f', 'Voluptas veritatis ut.','46c7c1ad-5f8f-4013-832a-9be9be6c2ac3','1','0'),
+('a7819fe4-dabd-429e-9e7f-70694b26408d', 'Velit neque laborum.','7a3808b1-2cf7-4a58-905b-10a77c6d976d','1','0'),
+('70c36f57-9808-44e7-ac34-512a0498b8b9', 'Et quidem aut odio.','87343fc0-7a9c-4c46-afba-8647920f39a9','1','0'),
+('218fefbd-31ef-4ca2-867a-0c699033acd9', 'Repellat alias voluptas.','5bb3ef5a-575c-46a2-bf6b-f956a8fb5cf2','1','0'),
+('0b63618c-32fc-463b-9cb2-38fade559df6', 'Laborum et iusto.','87343fc0-7a9c-4c46-afba-8647920f39a9','2','0'),
+('3ee97b0a-da49-48bd-a926-bd36d46b807e', 'Porro assumenda quia.','5c934346-3ae5-4069-8015-59bfd90e3487','2','0'),
+('33f6cbe6-4b9f-452b-8ca3-fb43145df8ad', 'Dolorem nihil excepturi invent','5bb3ef5a-575c-46a2-bf6b-f956a8fb5cf2','2','0'),
+('60745235-b424-4bbb-b9bd-7b7d428a43cb', 'Et nulla sed.','7a3808b1-2cf7-4a58-905b-10a77c6d976d','2','0'),
+('14d60569-d188-4f75-ab16-370ad37f50a8', 'Voluptatem cupiditate.','5c934346-3ae5-4069-8015-59bfd90e3487','2','0'),
 ('bce56cf2-0446-405a-9dff-07d3bd012c63', 'Adipisci qui.','8addd01a-2e63-49ce-8b7b-ffc9c82fe541','2','0'),
 ('1adcd1d5-c994-4daf-8b4c-ac64af8b024d', 'Quia aut aperiam doloribus.','5bb3ef5a-575c-46a2-bf6b-f956a8fb5cf2','2','0'),
 ('ee25d992-f68c-44ce-8dde-19ff0b00d352', 'Quia odio ut.','d1ae281e-9974-4d55-babd-70e792d944eb','2','0'),
@@ -156,24 +156,28 @@ INSERT INTO Task (id_task, name, id_phase, value, is_done) VALUES ('22e94d92-cf1
 ('149eff21-ab1c-4db5-af1e-bf61b98aa0d7', 'Voluptas in beatae enim.','8addd01a-2e63-49ce-8b7b-ffc9c82fe541','2','0'),
 ('37192b96-2ec3-4987-89b3-21cbbd632b45', 'Ipsam voluptatem placeat assum','5bb3ef5a-575c-46a2-bf6b-f956a8fb5cf2','2','0');
 
-INSERT INTO Offer (id_offer, salary, date_deadline, is_chosen, id_company, id_project) VALUES ('94695438-a86a-4710-8964-f76825da05d2', '12059','2013-04-05','0','e48dcc2f-e0c7-4056-982c-97f50b0c553f','af0893af-85d9-4d4a-a096-a33065060c53'),
-('094432b0-a67d-46ec-b8dd-504be3d501e0', '31827','1983-05-18','1','9636bb2e-98da-4644-8856-dee994efc7f2','78d951b0-532d-4b13-bf70-96df4cf2e488'),
-('2ba3a821-e43e-4755-9337-a32095b40d31', '28246','1978-07-16','1','51e7f494-0a3c-48ad-91af-950bee41f94a','af0893af-85d9-4d4a-a096-a33065060c53'),
-('8f865163-a685-4c1c-8eb8-f716135ff753', '11496','1995-11-10','0','b8f1391f-ebeb-44ee-95a7-a74827248446','af0893af-85d9-4d4a-a096-a33065060c53'),
-('40f40dc3-a8fd-48ca-bde4-6d2c20edab62', '6695','1971-11-21','0','f94d9934-55da-4bdf-8eba-43aeedcbade5','af0893af-85d9-4d4a-a096-a33065060c53'),
-('a471c7b9-0acc-4971-ae7d-831303c65895', '12915','1995-04-25','0','09946b82-d2f0-4aae-82aa-b4777401487d','af0893af-85d9-4d4a-a096-a33065060c53'),
-('5d17dcf0-bda4-403e-9c26-cbbaab8283b6', '25370','1979-08-25','0','cb595266-3a16-4c7d-9ecb-7a258e85c7c6','78d951b0-532d-4b13-bf70-96df4cf2e488'),
-('9018c195-c396-4f76-af63-926136bd7b59', '28310','2008-03-19','0','2fac289c-5258-4b6c-b99a-0398c668dd41','78d951b0-532d-4b13-bf70-96df4cf2e488'),
-('cee72c53-2fca-4fb5-b10a-9235c55b0474', '3887','2010-01-25','0','35a25e33-a3ca-4b91-8bf2-553c86caa109','78d951b0-532d-4b13-bf70-96df4cf2e488'),
-('b8d99355-353b-4a83-807a-e46a397bafbd', '17163','1974-10-13','0','defee47a-e277-4a65-a68d-fe5c18c98b64','78d951b0-532d-4b13-bf70-96df4cf2e488');
+INSERT INTO Offer (id_offer, salary_min, salary_max, date_start, date_deadline, is_chosen, id_company, id_project) VALUES ('94695438-a86a-4710-8964-f76825da05d2', '8000', '12000', '2013-03-05', '2013-04-05','0','e48dcc2f-e0c7-4056-982c-97f50b0c553f','af0893af-85d9-4d4a-a096-a33065060c53'),
+('094432b0-a67d-46ec-b8dd-504be3d501e0', '10000', '14000', '1983-05-18', '2013-03-05','1','9636bb2e-98da-4644-8856-dee994efc7f2','78d951b0-532d-4b13-bf70-96df4cf2e488'),
+('2ba3a821-e43e-4755-9337-a32095b40d31', '12000', '16000', '1978-07-16', '2013-03-05','1','51e7f494-0a3c-48ad-91af-950bee41f94a','af0893af-85d9-4d4a-a096-a33065060c53'),
+('8f865163-a685-4c1c-8eb8-f716135ff753', '14000', '18000', '1995-11-10', '2013-03-05','0','b8f1391f-ebeb-44ee-95a7-a74827248446','af0893af-85d9-4d4a-a096-a33065060c53'),
+('40f40dc3-a8fd-48ca-bde4-6d2c20edab62', '16000', '20000', '1971-11-21', '2013-03-05','0','f94d9934-55da-4bdf-8eba-43aeedcbade5','af0893af-85d9-4d4a-a096-a33065060c53'),
+('a471c7b9-0acc-4971-ae7d-831303c65895', '18000', '22000', '1995-04-25', '2013-03-05','0','09946b82-d2f0-4aae-82aa-b4777401487d','af0893af-85d9-4d4a-a096-a33065060c53'),
+('5d17dcf0-bda4-403e-9c26-cbbaab8283b6', '20000', '24000', '1979-08-25', '2013-03-05','0','cb595266-3a16-4c7d-9ecb-7a258e85c7c6','78d951b0-532d-4b13-bf70-96df4cf2e488'),
+('9018c195-c396-4f76-af63-926136bd7b59', '22000', '26000', '2008-03-19', '2013-03-05','0','2fac289c-5258-4b6c-b99a-0398c668dd41','78d951b0-532d-4b13-bf70-96df4cf2e488'),
+('cee72c53-2fca-4fb5-b10a-9235c55b0474', '24000', '28000', '2010-01-25', '2013-03-05','0','35a25e33-a3ca-4b91-8bf2-553c86caa109','78d951b0-532d-4b13-bf70-96df4cf2e488'),
+('b8d99355-353b-4a83-807a-e46a397bafbd', '26000', '30000', '1974-10-13', '2013-03-05','0','defee47a-e277-4a65-a68d-fe5c18c98b64','78d951b0-532d-4b13-bf70-96df4cf2e488');
 
 INSERT INTO Opinion (id_opinion, grade, description, date_created, id_project) VALUES ('08330318-4209-4429-b853-bdaf850a6ba3', '3','Et iure beatae tempore atque ex vitae maiores eligendi. Quam sed voluptates debitis consectetur sunt dolore. Et magnam explicabo non. Ab repudiandae enim omnis ipsum sed consequatur. Ut quasi deserunt odit et sequi reprehenderit cupiditate.','2018-08-25','78d951b0-532d-4b13-bf70-96df4cf2e488'),
 ('6721361e-3005-4de8-a691-c53631cf2d75', '5','A cool description.','2018-08-25','78d951b0-532d-4b13-bf70-96df4cf2e488'),
 ('6159c4e6-8122-4497-b571-32225bc69ca7', '5','Nisi ratione et placeat sint voluptatum dolorem. At quia voluptatibus laborum reprehenderit illo. Autem ut aliquid non eos id accusantium molestias ratione. Saepe sapiente nobis et quia molestias magnam.','2018-08-25','af0893af-85d9-4d4a-a096-a33065060c53');
 
-INSERT INTO Agency_employee (position, id_user, id_company, role) VALUES ('Developer','063eb1f4-a1e3-4043-bdcf-6daf814f7e8c','2fac289c-5258-4b6c-b99a-0398c668dd41', 'Agency owner'),
-('Graphic Designer','3e049f97-6823-40c2-9f07-9e7578b398a8','35a25e33-a3ca-4b91-8bf2-553c86caa109', 'Employee'),
-('Developer','f71bed07-5339-41ad-b4d6-e7518514ecef','defee47a-e277-4a65-a68d-fe5c18c98b64', 'Employee');
+INSERT INTO Agency_role (id_agency_role, role) VALUES ('347b7766-9b9e-4fb7-81d9-1caf53c4c681', 'owner'),
+('947b830b-0608-49fd-be21-510bd2c09ade', 'employee'),
+('4659cc7b-51a2-44a0-8f91-63151bad2d36', 'guest');
+
+INSERT INTO Agency_employee (id_user, id_company, id_agency_role) VALUES ('063eb1f4-a1e3-4043-bdcf-6daf814f7e8c','2fac289c-5258-4b6c-b99a-0398c668dd41', '347b7766-9b9e-4fb7-81d9-1caf53c4c681'),
+('3e049f97-6823-40c2-9f07-9e7578b398a8','35a25e33-a3ca-4b91-8bf2-553c86caa109', '347b7766-9b9e-4fb7-81d9-1caf53c4c681'),
+('f71bed07-5339-41ad-b4d6-e7518514ecef','defee47a-e277-4a65-a68d-fe5c18c98b64', '347b7766-9b9e-4fb7-81d9-1caf53c4c681');
 
 INSERT INTO Agency_employee_phase (id_phase, id_user) VALUES ('8addd01a-2e63-49ce-8b7b-ffc9c82fe541','f71bed07-5339-41ad-b4d6-e7518514ecef'),
 ('d1ae281e-9974-4d55-babd-70e792d944eb','f71bed07-5339-41ad-b4d6-e7518514ecef'),
@@ -187,3 +191,8 @@ INSERT INTO Client_agency (id_user, id_company) VALUES ('8f1f45fa-2beb-44ba-9854
 ('87e95508-9ba4-4669-b858-dbe5d273b4e0','cb595266-3a16-4c7d-9ecb-7a258e85c7c6');
 
 INSERT INTO Client_project (id_user, id_project, date_created) VALUES ('3e049f97-6823-40c2-9f07-9e7578b398a8','78d951b0-532d-4b13-bf70-96df4cf2e488','1983-05-18');
+
+INSERT INTO Question (id_question, type, content, id_user, id_phase) VALUES ('8977edf3-e614-4c8e-9288-7a5ec2f7122f', '1', 'Some fun question', '3e049f97-6823-40c2-9f07-9e7578b398a8', '7a3808b1-2cf7-4a58-905b-10a77c6d976d');
+
+INSERT INTO Answer_option(id_answer_option, content, is_chosen, image_url, id_question) VALUES ('fb454f66-c34b-486a-9b40-7d9b4c0ccd8b', 'Fun answer 1.', '0', 'http://image_url1.com', '8977edf3-e614-4c8e-9288-7a5ec2f7122f');
+INSERT INTO Answer_option(id_answer_option, content, is_chosen, image_url, id_question) VALUES ('5ec3bbe3-333b-4e60-9193-397b9c1da1d4', 'Fun answer 2.', '0', 'http://image_url2.com', '8977edf3-e614-4c8e-9288-7a5ec2f7122f');

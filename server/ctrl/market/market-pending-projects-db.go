@@ -8,7 +8,7 @@ import (
 	"github.com/dkowalsky/brieefly/err"
 )
 
-// DbGetPendingProjects - get all offers
+// DbGetPendingProjects - get pending projects
 func DbGetPendingProjects(db *db.DB) ([]body.PendingProject, *err.Error) {
 	var projects []body.PendingProject
 
@@ -31,6 +31,9 @@ func DbGetPendingProjects(db *db.DB) ([]body.PendingProject, *err.Error) {
 									  INNER JOIN Status s ON p.id_status = s.id_status
 									  WHERE s.name = ?
 									  GROUP BY p.id_project;`, `Pending`)
+		if err != nil {
+			return db.HandleError(err)
+		}
 
 		for rows.Next() {
 			var pp body.PendingProject

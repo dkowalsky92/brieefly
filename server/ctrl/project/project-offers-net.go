@@ -18,7 +18,7 @@ func newOfferRouter(db *db.DB) *offerRouter {
 
 	mux := chi.NewRouter()
 	mux.Get("/{slug}", r.getOffersForSlug)
-
+	
 	r.mux = mux
 
 	return r

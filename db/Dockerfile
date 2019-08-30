@@ -1,7 +1,5 @@
 FROM mysql:latest
 
-EXPOSE 3306
-
 ENV MYSQL_ALLOW_EMPTY_PASSWORD=yes
 
 RUN apt-get update && \

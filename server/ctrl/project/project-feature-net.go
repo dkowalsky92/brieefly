@@ -17,11 +17,17 @@ func newFeatureRouter(db *db.DB) *featureRouter {
 	r := &featureRouter{db: db}
 
 	mux := chi.NewRouter()
+	mux.Get("/", r.getAllFeatures)
 	mux.Get("/{id}", r.getFeaturesForID)
 
 	r.mux = mux
 
 	return r
+}
+
+func (r *featureRouter) getAllFeatures(w http.ResponseWriter, req *http.Request) {
+	features, err := DbGetAllFeatures(r.db)
+	io.ParseAndWrite(w, features, err)
 }
 
 func (r *featureRouter) getFeaturesForID(w http.ResponseWriter, req *http.Request) {

@@ -9,7 +9,7 @@ import (
 // Body -
 type Body struct {
 	Project         ProjectBody          `json:"project" orm:"-"`
-	VisualIdentity  VisualIdentityBody   `json:"visualIdentity" orm:"-"`
+	VisualIdentity  *VisualIdentityBody   `json:"visualIdentity" orm:"-"`
 	Colors          []ColorBody          `json:"colors" orm:"-"`
 	Features        []FeatureBody        `json:"features" orm:"-"`
 	TargetGroups    []TargetGroupBody    `json:"targetGroups" orm:"-"`
@@ -26,7 +26,7 @@ type ProjectBody struct {
 	BudgetMin    db.NullInt64  `json:"budgetMin" orm:"budget_min"`
 	BudgetMax    db.NullInt64  `json:"budgetMax" orm:"budget_max"`
 	SubpageCount db.NullInt64  `json:"subpageCount" orm:"subpage_count"`
-	NameURL      db.NullString `json:"nameUrl" orm:"url_name"`
+	NameURL      db.NullString `json:"urlName" orm:"url_name"`
 	DateDeadline db.NullTime   `json:"dateDeadline" orm:"date_deadline"`
 	CmsID        db.NullString `json:"idCms" orm:"id_cms"`
 }
@@ -34,12 +34,12 @@ type ProjectBody struct {
 // Project -
 type Project struct {
 	model.Project
-	CmsID    string `json:"idCms" orm:"id_cms"`
+	CmsID    db.NullString `json:"idCms" orm:"id_cms"`
 	StatusID string `json:"idStatus" orm:"id_status"`
 }
 
 // NewProject -
-func NewProject(body ProjectBody, cmsid, status string) Project {
+func NewProject(body ProjectBody, cmsid db.NullString, status string) Project {
 	uuid := util.UUID().String()
 	var url string
 	if body.NameURL.Valid == false {
@@ -74,15 +74,12 @@ type ClientProjectBody struct {
 // ClientProject -
 type ClientProject struct {
 	ClientProjectBody
-	ID string `json:"idClientProject" orm:"id_client_project"`
 }
 
 // NewClientProject -
 func NewClientProject(body ClientProjectBody) ClientProject {
-	uuid := util.UUID().String()
 	return ClientProject{
 		body,
-		uuid,
 	}
 }
 
@@ -227,19 +224,3 @@ func NewTargetGroup(body TargetGroupBody, projectid string) TargetGroup {
 		projectid,
 	}
 }
-
-// - params
-// a) name
-// b) type
-// c) description
-// d) language - not required
-// e) budget_min - not required
-// f) budget_max - not required
-// g) subpage_count - not required
-// h) date_deadline - not required
-// i) custom_features : [{ name : "", description: ""}, { .. }]
-// j) features : [{ name : "", description: ""}, { .. }]
-// k) similar_projects : ["https://google.com","",""]
-// l) visual_identity - possible values : "All", "Logotype", "Layout", "Logotype, layout"
-// m) target_groups: { name: '', description: '', age_min: 1, age_max: 2 } - age_max must be higher than age_min, everything except name is nullable
-// n) colors: ['#fff', '#000', ...] - maximum array length of 5

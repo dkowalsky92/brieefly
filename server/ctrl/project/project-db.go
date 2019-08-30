@@ -7,6 +7,7 @@ import (
 	"github.com/dkowalsky/brieefly/ctrl/project/body"
 	"github.com/dkowalsky/brieefly/db"
 	"github.com/dkowalsky/brieefly/err"
+	"github.com/dkowalsky/brieefly/log"
 	"github.com/dkowalsky/brieefly/model"
 )
 
@@ -76,7 +77,24 @@ func DbGetNameForID(_db *db.DB, id string) (*db.NullString, *err.Error) {
 	return &name, err
 }
 
-// DbExists - Check if user exists, returns users id or nil
+// DbGetIDForSlug - gets the project's id for project slug
+func DbGetIDForSlug(_db *db.DB, slug string) (db.NullString, *err.Error) {
+	var id db.NullString
+
+	err := _db.WithTransaction(func(tx *sql.Tx) *err.Error {
+		row := tx.QueryRow(`SELECT id_project FROM Project WHERE url_name = ?;`, slug)
+		err := row.Scan(&id)
+		if err != nil {
+			return _db.HandleError(err)
+		}
+
+		return nil
+	})
+
+	return id, err
+}
+
+// DbExists - Check if project exists, returns users id or nil
 func DbExists(_db *db.DB, name, userid string) db.NullString {
 	var id db.NullString
 	_ = _db.WithTransaction(func(tx *sql.Tx) *err.Error {
@@ -107,30 +125,34 @@ func DbInsert(_db *db.DB, userid string, b *body.Body) (*model.Project, *err.Err
 			return sErr
 		}
 
-		project := body.NewProject(b.Project, b.Project.CmsID.String, status.ID)
-		projectStmt := db.InsertStmt(tx, project, "project")
+		project := body.NewProject(b.Project, b.Project.CmsID, status.ID)
+		projectStmt := db.InsertStmt(tx, project, "Project")
+
 		_, err := projectStmt.Stmt.Exec(projectStmt.Args...)
 		if err != nil {
 			return _db.HandleError(err)
 		}
 
 		clientProject := body.NewClientProject(body.ClientProjectBody{UserID: userid, ProjectID: project.ID})
-		clientProjectStmt := db.InsertStmt(tx, clientProject, "client_project")
+		clientProjectStmt := db.InsertStmt(tx, clientProject, "Client_project")
+		log.Debug(clientProjectStmt.Stmt)
 		_, err = clientProjectStmt.Stmt.Exec(clientProjectStmt.Args...)
 		if err != nil {
 			return _db.HandleError(err)
 		}
 
-		visualIdentity := body.NewVisualIdentity(b.VisualIdentity, project.ID)
-		visualIdentityStmt := db.InsertStmt(tx, visualIdentity, "visual_identity")
-		_, err = visualIdentityStmt.Stmt.Exec(visualIdentityStmt.Args...)
-		if err != nil {
-			return _db.HandleError(err)
+		if b.VisualIdentity != nil {
+			visualIdentity := body.NewVisualIdentity(*b.VisualIdentity, project.ID)
+			visualIdentityStmt := db.InsertStmt(tx, visualIdentity, "Visual_identity")
+			_, err = visualIdentityStmt.Stmt.Exec(visualIdentityStmt.Args...)
+			if err != nil {
+				return _db.HandleError(err)
+			}
 		}
 
 		for _, v := range b.Colors {
 			color := body.NewColor(v, project.ID)
-			colorStmt := db.InsertStmt(tx, color, "color")
+			colorStmt := db.InsertStmt(tx, color, "Color")
 			_, err = colorStmt.Stmt.Exec(colorStmt.Args...)
 			if err != nil {
 				return _db.HandleError(err)
@@ -139,7 +161,7 @@ func DbInsert(_db *db.DB, userid string, b *body.Body) (*model.Project, *err.Err
 
 		for _, v := range b.TargetGroups {
 			targetGroup := body.NewTargetGroup(v, project.ID)
-			targetGroupStmt := db.InsertStmt(tx, targetGroup, "target_group")
+			targetGroupStmt := db.InsertStmt(tx, targetGroup, "Target_group")
 			_, err = targetGroupStmt.Stmt.Exec(targetGroupStmt.Args...)
 			if err != nil {
 				return _db.HandleError(err)
@@ -148,7 +170,7 @@ func DbInsert(_db *db.DB, userid string, b *body.Body) (*model.Project, *err.Err
 
 		for _, v := range b.CustomFeatures {
 			customFeature := body.NewCustomFeature(v, project.ID)
-			customFeatureStmt := db.InsertStmt(tx, customFeature, "custom_feature")
+			customFeatureStmt := db.InsertStmt(tx, customFeature, "Custom_feature")
 			_, err = customFeatureStmt.Stmt.Exec(customFeatureStmt.Args...)
 			if err != nil {
 				return _db.HandleError(err)
@@ -157,7 +179,7 @@ func DbInsert(_db *db.DB, userid string, b *body.Body) (*model.Project, *err.Err
 
 		for _, v := range b.SimilarProjects {
 			similarProject := body.NewSimilarProject(v, project.ID)
-			similarProjectStmt := db.InsertStmt(tx, similarProject, "similar_project")
+			similarProjectStmt := db.InsertStmt(tx, similarProject, "Similar_project")
 			_, err = similarProjectStmt.Stmt.Exec(similarProjectStmt.Args...)
 			if err != nil {
 				return _db.HandleError(err)
@@ -166,7 +188,7 @@ func DbInsert(_db *db.DB, userid string, b *body.Body) (*model.Project, *err.Err
 
 		for _, v := range b.Features {
 			feature := body.NewFeature(v, project.ID)
-			featureStmt := db.InsertStmt(tx, feature, "project_feature")
+			featureStmt := db.InsertStmt(tx, feature, "Project_feature")
 			_, err = featureStmt.Stmt.Exec(featureStmt.Args...)
 			if err != nil {
 				return _db.HandleError(err)

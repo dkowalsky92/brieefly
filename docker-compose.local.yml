@@ -1,13 +1,13 @@
 version: "3.7"
 
-secrets:
-  config_local:
-    file: ./secrets/config-local.json
-
 services:
   server:
-    secrets:
-      - config_local
+    environment:
+      - "MYSQL_ENV=local"
+      - "BRIEEFLY_ENVIRONMENT=local"
+    ports:
+      - "80:5000"
   db:
-    secrets:
-      - config_local
+    environment:
+      - "MYSQL_ENV=local"
+      - "BRIEEFLY_ENVIRONMENT=local"

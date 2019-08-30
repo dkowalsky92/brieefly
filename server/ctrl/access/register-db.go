@@ -3,6 +3,7 @@ package access
 import (
 	"database/sql"
 
+	"github.com/dkowalsky/brieefly/crypto"
 	"github.com/dkowalsky/brieefly/ctrl/access/body"
 	"github.com/dkowalsky/brieefly/ctrl/user"
 	_db "github.com/dkowalsky/brieefly/db"
@@ -15,7 +16,11 @@ func DbRegister(db *_db.DB, email string, password string) (*body.BasicUser, *er
 	var u *body.BasicUser
 
 	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
-		id := user.DbExists(db, email, password)
+		hash, hErr := crypto.Hash(password)
+		if hErr != nil {
+			return db.HandleError(hErr)
+		}
+		id := user.DbExists(db, email, *hash)
 		if id.Valid == true {
 			return db.HandleTypedError(nil, _db.ErrAlreadyExists)
 		}
@@ -30,7 +35,7 @@ func DbRegister(db *_db.DB, email string, password string) (*body.BasicUser, *er
 			return db.HandleError(pErr)
 		}
 
-		_, eErr := stmt.Exec(newID.String(), email, password)
+		_, eErr := stmt.Exec(newID.String(), email, hash)
 		if eErr != nil {
 			return db.HandleError(eErr)
 		}

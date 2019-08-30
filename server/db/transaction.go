@@ -19,14 +19,13 @@ func (db *DB) WithTransaction(fn TxFn) *err.Error {
 		return err.New(errTx, err.ErrTxBegin, map[string]interface{}{})
 	}
 
+	txErr := fn(tx)
 	defer func() {
-		if errTx != nil {
+		if txErr != nil {
 			tx.Rollback()
 		} else {
 			tx.Commit()
 		}
 	}()
-
-	txErr := fn(tx)
 	return txErr
 }

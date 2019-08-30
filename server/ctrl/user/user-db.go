@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/dkowalsky/brieefly/crypto"
+	"github.com/dkowalsky/brieefly/ctrl/user/body"
 	"github.com/dkowalsky/brieefly/db"
 	"github.com/dkowalsky/brieefly/err"
 	"github.com/dkowalsky/brieefly/log"
@@ -59,14 +61,25 @@ func DbGet(db *db.DB, id string) (*model.User, *err.Error) {
 }
 
 // DbExists - Check if user exists, returns users id or nil
-func DbExists(_db *db.DB, email, password string) db.NullString {
+func DbExists(_db *db.DB, email, plainPass string) db.NullString {
 	var id db.NullString
 	_ = _db.WithTransaction(func(tx *sql.Tx) *err.Error {
-		row := tx.QueryRow(`SELECT u.id_user FROM User u
-							WHERE u.email = ? AND u.password = ?;`, email, password)
-		err := row.Scan(&id)
-		fmt.Println(err)
-		fmt.Println(id)
+		row := tx.QueryRow(`SELECT u.id_user, u.password FROM User u
+							WHERE u.email = ?`, email)
+		var hash string
+
+		err := row.Scan(&id, &hash)
+		if err != nil {
+			return nil
+		}
+
+		matches := crypto.CompareHash(plainPass, hash)
+
+		if matches != true {
+			id.String = ""
+			id.Valid = false
+		}
+
 		return nil
 	})
 
@@ -167,10 +180,46 @@ func DbInsert(db *db.DB, user *model.User) (*model.User, *err.Error) {
 	return user, err
 }
 
+// DbChangePassword -
+func DbChangePassword(db *db.DB, userid, password string) *err.Error {
+	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
+		stmt, err := tx.Prepare("UPDATE User SET password = ? WHERE id_user = ?")
+		if err != nil {
+			return db.HandleError(err)
+		}
+		hash, hErr := crypto.Hash(password)
+		if hErr != nil {
+			return db.HandleError(hErr)
+		}
+		res, err := stmt.Exec(hash, userid)
+		if err != nil {
+			return db.HandleError(err)
+		}
+
+		affected, _ := res.RowsAffected()
+		log.Info(fmt.Sprintf("Password updated, affected rows: %d", affected))
+
+		return nil
+	})
+
+	return err
+}
+
 // DbUpdate - updates user's details
-func DbUpdate(db *db.DB, update *model.User) (*model.User, *err.Error) {
-	// TODO: implement
-	return nil, nil
+func DbUpdate(_db *db.DB, update body.UserUpdate, userid string) *err.Error {
+	err := _db.WithTransaction(func(tx *sql.Tx) *err.Error {
+		condition := fmt.Sprintf("id_user = '%s'", userid)
+		updateStmt := db.UpdateStmt(tx, update, "User", &condition)
+		log.Debug(updateStmt.Stmt)
+		_, sqlErr := updateStmt.Stmt.Exec(updateStmt.Args...)
+		if sqlErr != nil {
+			return _db.HandleError(sqlErr)
+		}
+
+		return nil
+	})
+
+	return err
 }
 
 // DbDelete - deletes user

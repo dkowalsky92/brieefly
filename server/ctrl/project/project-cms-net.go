@@ -20,15 +20,22 @@ func newCMSRouter(db *db.DB) *cmsRouter {
 
 	mux := chi.NewRouter()
 	mux.Get("/{id}", r.getCMSForID)
-
+	mux.Get("/", r.getAllCMS)
+	
 	r.mux = mux
 
 	return r
 }
 
-// GetCMSForID - get project's cms for project id
+// getCMSForID - get project's cms for project id
 func (r *cmsRouter) getCMSForID(w http.ResponseWriter, req *http.Request) {
 	id := chi.URLParam(req, "id")
 	cms, err := DbGetCMSForID(r.db, id)
+	io.ParseAndWrite(w, cms, err)
+}
+
+// getAllCMS -
+func (r *cmsRouter) getAllCMS(w http.ResponseWriter, req *http.Request) {
+	cms, err := DbGetAllCMS(r.db)
 	io.ParseAndWrite(w, cms, err)
 }

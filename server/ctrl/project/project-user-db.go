@@ -16,6 +16,7 @@ func DbGetAllForUserID(db *db.DB, id string) ([]body.UserProject, *err.Error) {
 	err := db.WithTransaction(func(tx *sql.Tx) *err.Error {
 		rows, err := tx.Query(`SELECT p.id_project,
 									   p.name,
+									   p.url_name,
 									   p.type,
 									   p.description,
 									   p.image_url,
@@ -30,10 +31,9 @@ func DbGetAllForUserID(db *db.DB, id string) ([]body.UserProject, *err.Error) {
 									   c.name
 									   FROM Project p
 									   INNER JOIN Client_project cp ON p.id_project = cp.id_project
-									   INNER JOIN Offer o ON o.id_project = p.id_project
-									   INNER JOIN Agency a ON o.id_company = a.id_company  
-									   INNER JOIN Company c ON c.id_company = a.id_company
-									   WHERE cp.id_user = ? AND o.is_chosen = true`, id)
+									   INNER JOIN Client cl ON cl.id_user = cp.id_user
+									   INNER JOIN Company c ON cl.id_company = c.id_company
+									   WHERE cp.id_user = ?`, id)
 
 		if err != nil {
 			return db.HandleError(err)
@@ -45,6 +45,7 @@ func DbGetAllForUserID(db *db.DB, id string) ([]body.UserProject, *err.Error) {
 
 			err = rows.Scan(&p.ID,
 				&p.Name,
+				&p.NameURL,
 				&p.Type,
 				&p.Description,
 				&p.ImageURL,
@@ -62,10 +63,7 @@ func DbGetAllForUserID(db *db.DB, id string) ([]body.UserProject, *err.Error) {
 				return db.HandleError(err)
 			}
 
-			c, cErr := DbGetCMSForID(db, p.ID)
-			if cErr != nil {
-				return cErr
-			}
+			c, _ := DbGetCMSForID(db, p.ID)
 			s, sErr := DbGetStatusForID(db, p.ID)
 			if sErr != nil {
 				return sErr

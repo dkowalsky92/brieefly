@@ -3,7 +3,9 @@ package agency
 import (
 	"net/http"
 
+	"github.com/dkowalsky/brieefly/ctrl/agency/body"
 	"github.com/dkowalsky/brieefly/db"
+	"github.com/dkowalsky/brieefly/net/auth"
 	"github.com/dkowalsky/brieefly/net/io"
 	"github.com/go-chi/chi"
 )
@@ -19,32 +21,28 @@ func NewRouter(db *db.DB) *Router {
 	r := &Router{DB: db}
 
 	mux := chi.NewRouter()
-
+	mux.Post("/", r.Insert)
 	mux.Get("/", r.GetAll)
-	mux.Mount("/details", newDetailsRouter(db).mux)
 
+	mux.Mount("/details", newDetailsRouter(db).mux)
+	mux.Mount("/employees", newEmployeeRouter(db).mux)
+	
 	r.Mux = mux
 
 	return r
 }
 
-// // Get - get user for id
-// func (r *Router) Get(w http.ResponseWriter, req *http.Request) {
-// 	id := chi.URLParam(req, "id")
-// 	agency, err := agency.Get(r.db, id)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), 500)
-// 		return
-// 	}
-// 	err = json.NewEncoder(w).Encode(user)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), 500)
-// 		return
-// 	}
-// }
-
 // GetAll - get all agencies
 func (r *Router) GetAll(w http.ResponseWriter, req *http.Request) {
 	agencies, err := DbGetAll(r.DB)
 	io.ParseAndWrite(w, agencies, err)
+}
+
+// Insert -
+func (r *Router) Insert(w http.ResponseWriter, req *http.Request) {
+	ab := &body.AgencyBody{}
+	io.ParseBody(w, req, ab)
+	id := auth.UserIDFromContext(req.Context())
+	err := DbInsert(r.DB, *ab, *id)
+	io.WriteStatus(w, http.StatusNoContent, err)
 }

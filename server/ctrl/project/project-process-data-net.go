@@ -18,6 +18,7 @@ func newProcessDataRouter(db *db.DB) *processDataRouter {
 
 	mux := chi.NewRouter()
 	mux.Get("/{slug}", r.getProcessDataForURL)
+	mux.Put("/task/{task-id}/done", r.markTaskDone)
 
 	r.mux = mux
 
@@ -28,4 +29,10 @@ func (r *processDataRouter) getProcessDataForURL(w http.ResponseWriter, req *htt
 	slug := chi.URLParam(req, "slug")
 	processData, err := DbGetProcessDataForSlug(r.db, slug)
 	io.ParseAndWrite(w, processData, err)
+}
+
+func (r *processDataRouter) markTaskDone(w http.ResponseWriter, req *http.Request) {
+	taskid := chi.URLParam(req, "task-id")
+	err := DbMarkTaskDone(r.db, taskid)
+	io.WriteStatus(w, http.StatusNoContent, err)
 }

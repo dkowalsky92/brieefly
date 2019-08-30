@@ -4,30 +4,15 @@ import "github.com/dkowalsky/brieefly/db"
 
 // Company - a company struct
 type Company struct {
-	ID               string        `json:"idCompany"`
-	Email            string        `json:"email"`
-	Name             db.NullString `json:"name"`
-	Phone            db.NullString `json:"phone"`
-	Address          db.NullString `json:"address"`
-	NameURL          db.NullString `json:"nameUrl"`
-	WebsiteURL       db.NullString `json:"websiteUrl"`
-	ImageURL         db.NullString `json:"imageUrl"`
-	Description      db.NullString `json:"description"`
-	DateLastModified db.NullTime   `json:"dateLastModified"`
-	DateCreated      db.NullTime   `json:"dateCreated"`
+	ID               string        `json:"idCompany" orm:"id_company"`
+	Email            string        `json:"email" orm:"email"`
+	Name             db.NullString `json:"name" orm:"name"`
+	Phone            db.NullString `json:"phone" orm:"phone"`
+	Address          db.NullString `json:"address" orm:"address"`
+	NameURL          db.NullString `json:"urlName" orm:"url_name"`
+	WebsiteURL       db.NullString `json:"websiteUrl" orm:"website_url"`
+	ImageURL         db.NullString `json:"imageUrl" orm:"image_url"`
+	Description      db.NullString `json:"description" orm:"description"`
+	DateLastModified db.NullTime   `json:"dateLastModified" orm:"date_last_modified"`
+	DateCreated      db.NullTime   `json:"dateCreated" orm:"date_created"`
 }
-
-// -- Table: Company
-// CREATE TABLE Company (
-//     id_company int NOT NULL AUTO_INCREMENT,
-//     name varchar(100) NOT NULL,
-//     website_url varchar(300) NULL,
-//     phone varchar(20) NULL,
-//     email varchar(75) NOT NULL,
-//     address varchar(300) NULL,
-//     description varchar(300) NULL,
-//     image_url varchar(200) NULL,
-//     date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//     date_last_modified timestamp NULL ON UPDATE CURRENT_TIMESTAMP,
-//     CONSTRAINT Company_pk PRIMARY KEY (id_company)
-// );

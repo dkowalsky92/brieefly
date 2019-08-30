@@ -9,18 +9,12 @@ services:
     build: ./db
     ports:
       - "3306:3306"
-    environment:
-      - MYSQL_ENV=local
     networks:
       - net
-    hostname: db
   server:
     build: ./server
-    ports:
-      - "5001:443"
     networks:
       - net
-    hostname: server
     tty: true
     links:
       - db:db

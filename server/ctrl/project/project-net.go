@@ -1,7 +1,6 @@
 package project
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/dkowalsky/brieefly/ctrl/project/body"
@@ -24,6 +23,8 @@ func NewRouter(db *db.DB) *Router {
 	mux := chi.NewRouter()
 
 	mux.Post("/", r.Create)
+	mux.Put("/{slug}/offers/{idOffer}/choose", r.markOfferChosen)
+	mux.Post("/{slug}/process", r.insertProcessData)
 
 	mux.Route("/user", func(sr chi.Router) {
 		sr.Get("/{id}", r.GetAllForUserID)
@@ -32,6 +33,7 @@ func NewRouter(db *db.DB) *Router {
 	mux.Route("/name", func(sr chi.Router) {
 		sr.Get("/{id}", r.GetNameForID)
 	})
+
 	mux.Mount("/cms", newCMSRouter(db).mux)
 	mux.Mount("/status", newStatusRouter(db).mux)
 	mux.Mount("/features", newFeatureRouter(db).mux)
@@ -39,25 +41,12 @@ func NewRouter(db *db.DB) *Router {
 	mux.Mount("/offers", newOfferRouter(db).mux)
 	mux.Mount("/process", newProcessDataRouter(db).mux)
 
+	mux.Mount("/questions", newQuestionAnswerRouter(db).mux)
+
 	r.Mux = mux
 
 	return r
 }
-
-// // Get - get project for id
-// func (r *Router) Get(w http.ResponseWriter, req *http.Request) {
-// 	id := chi.URLParam(req, "id")
-// 	project, err := project.Get(r.db, id)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), 500)
-// 		return
-// 	}
-// 	err = json.NewEncoder(w).Encode(project)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), 500)
-// 		return
-// 	}
-// }
 
 // GetAllForUserID - get all projects for user id
 func (r *Router) GetAllForUserID(w http.ResponseWriter, req *http.Request) {
@@ -77,11 +66,22 @@ func (r *Router) GetNameForID(w http.ResponseWriter, req *http.Request) {
 func (r *Router) Create(w http.ResponseWriter, req *http.Request) {
 	pb := &body.Body{}
 	io.ParseBody(w, req, pb)
-	fmt.Println(pb)
 	id := auth.UserIDFromContext(req.Context())
-	if id == nil {
-		fmt.Println("ID IS NIL SHIEEET")
-	}
 	newProject, err := DbInsert(r.DB, *id, pb)
 	io.ParseAndWrite(w, newProject, err)
+}
+
+func (r *Router) markOfferChosen(w http.ResponseWriter, req *http.Request) {
+	idOffer := chi.URLParam(req, "idOffer")
+	slug := chi.URLParam(req, "slug")
+	err := DbMarkChosen(r.DB, idOffer, slug)
+	io.WriteStatus(w, http.StatusNoContent, err)
+}
+
+func (r *Router) insertProcessData(w http.ResponseWriter, req *http.Request) {
+	slug := chi.URLParam(req, "slug")
+	bd := &body.ProjectProcessDataBody{}
+	io.ParseBody(w, req, bd)
+	err := DbInsertProcessData(r.DB, *bd, slug)
+	io.WriteStatus(w, http.StatusCreated, err)
 }

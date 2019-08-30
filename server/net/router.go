@@ -96,6 +96,13 @@ func injectMiddlewareStack(r chi.Router, cnf *config.Config) {
 // Run - starts the server
 func (r *Router) Run() *err.Error {
 	path := config.MyPath(r.config)
-	httpErr := http.ListenAndServeTLS(path, r.config.TLSCert(), r.config.TLSKey(), r.mux)
+	var httpErr error
+
+	if r.config.Environment == config.Local {
+		httpErr = http.ListenAndServe(path, r.mux)
+	} else {
+		httpErr = http.ListenAndServeTLS(path, r.config.TLSCert(), r.config.TLSKey(), r.mux)
+	}
+
 	return err.New(httpErr, err.ErrInternal, nil)
 }

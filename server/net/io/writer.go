@@ -24,3 +24,13 @@ func ParseAndWrite(w http.ResponseWriter, obj interface{}, err *_err.Error) {
 		panic(mErr)
 	}
 }
+
+// WriteStatus -
+func WriteStatus(w http.ResponseWriter, status int, err *_err.Error) {
+	if err != nil {
+		_err.WriteError(err, w)
+		return
+	}
+
+	w.WriteHeader(status)
+}
